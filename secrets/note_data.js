@@ -41,4 +41,10 @@ export default class NoteData {
   cloneAsObject() {
     return $.extend(true, {}, this._data)
   }
+  getDomains() {
+    return []
+  }
+  getHostnames() {
+    return []
+  }
 }

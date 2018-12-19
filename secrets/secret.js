@@ -4,22 +4,32 @@ import NoteData from './note_data'
 import { DateTime } from 'luxon'
 
 export default class Secret {
-  constructor({secretId = '', vaultId = '', teamId = '', createdAt, updatedAt, vaultVersion, data} = {}) {
+  constructor({ secretId = '', vaultId = '', teamId = '', createdAt, updatedAt, vaultVersion, data } = {}) {
     this.secretId = secretId
     this.vaultId = vaultId
     this.teamId = teamId
     this.vaultVersion = vaultVersion
     this._createdAt = createdAt
     this._updatedAt = updatedAt
+    this.domains = []
     if(data) {
       if(data instanceof LocationData || data instanceof NoteData) {
         this.data = data
       } else {
         this.data = new SecretData( data )
       }
+      this.domains = this.data.getDomains()
     } else {
       throw new Error('Empty data')
     }
+  }
+  matchDomain(dom) {
+    for(var i = 0; i < this.domains.length; i++ ) {
+      if( dom === this.domains[i] ) {
+        return true
+      }
+    }
+    return false
   }
   get fullId() {
     return `${this.teamId}.${this.vaultId}.${this.secretId}`
@@ -43,10 +53,10 @@ export default class Secret {
   }
 
   static createLocation(){
-    return new Secret({data: new LocationData()})
+    return new Secret({ data: new LocationData() })
   }
 
   static createNote(){
-    return new Secret({data: new NoteData()})
+    return new Secret({ data: new NoteData() })
   }
 }

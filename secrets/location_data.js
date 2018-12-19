@@ -1,4 +1,5 @@
 import Credential from './credential'
+import UrlParse from '@/commonjs/helpers/urlparse'
 import $ from 'jquery'
 
 export default class LocationData {
@@ -62,5 +63,21 @@ export default class LocationData {
       c.creds[i] = this._data.creds[i].cloneAsObject()
     }
     return c
+  }
+  getDomains() {
+    var doms = this.urls.map( (val, index, array) => {
+      return UrlParse.getDomain(val)
+    }).filter( (val, index, array) => {
+      return typeof(val) === 'string' && val.length > 0
+    })
+    return [...new Set(doms)]
+  }
+  getHostnames() {
+    var doms = this.urls.map( (val, index, array) => {
+      return UrlParse.getHostname(val)
+    }).filter( (val, index, array) => {
+      return typeof(val) === 'string' && val.length > 0
+    })
+    return [...new Set(doms)]
   }
 }

@@ -15,15 +15,15 @@ async function keyPassword (keys, password) {
   return hHash.subarray(0, nacl.secretbox.keyLength)
   */
   var res = await argon2.hash({
-    // required
+    //required
     pass: util.decodeUTF8(password),
     salt: keys.sign.publicKey,
-    // optional
-    time: 3, // the number of iterations
-    mem: 2 * 1024, // used memory, in KiB
-    hashLen: nacl.secretbox.keyLength, // desired hash length
-    parallelism: 1, // desired parallelism (will be computed in parallel only for PNaCl)
-    type: argon2.ArgonType.Argon2i, // or argon2.ArgonType.Argon2d
+    //optional
+    time: 3, //the number of iterations
+    mem: 2 * 1024, //used memory, in KiB
+    hashLen: nacl.secretbox.keyLength, //desired hash length
+    parallelism: 1, //desired parallelism (will be computed in parallel only for PNaCl)
+    type: argon2.ArgonType.Argon2i, //or argon2.ArgonType.Argon2d
     distPath: '.'
   })
   return res.hash
@@ -39,21 +39,21 @@ async function loginPassword (username, password) {
     salt = salt + username
   }
   var res = await argon2.hash({
-    // required
+    //required
     pass: util.decodeUTF8(password),
     salt: util.decodeUTF8(salt),
-    // optional
-    time: 3, // the number of iterations
-    mem: 2 * 1024, // used memory, in KiB
-    hashLen: 18, // desired hash length
-    parallelism: 1, // desired parallelism (will be computed in parallel only for PNaCl)
-    type: argon2.ArgonType.Argon2i, // or argon2.ArgonType.Argon2d
+    //optional
+    time: 3, //the number of iterations
+    mem: 2 * 1024, //used memory, in KiB
+    hashLen: 18, //desired hash length
+    parallelism: 1, //desired parallelism (will be computed in parallel only for PNaCl)
+    type: argon2.ArgonType.Argon2i, //or argon2.ArgonType.Argon2d
     distPath: '.'
   })
   return util.encodeBase64(res.hash)
 }
 
-// signPub + sign( cipherPub ) + sign( nonce + secretbox( signPriv + cipherPriv ) )
+//signPub + sign( cipherPub ) + sign( nonce + secretbox( signPriv + cipherPriv ) )
 function closeUserKeysAndPack (keys, bKey) {
   var nonce = nacl.randomBytes(nacl.secretbox.nonceLength)
   var closedPrivate = merge(nonce, nacl.secretbox(merge(keys.sign.secretKey, keys.cipher.secretKey), nonce, bKey))
@@ -68,8 +68,8 @@ function packPublicKeys (keys) {
   return util.encodeBase64(merge(keys.sign.publicKey, nacl.sign(keys.cipher.publicKey, keys.sign.secretKey)))
 }
 
-// publickKeys is signPub + sign( cipherPub )
-// secretKeys is sign( nonce + secretbox( signPriv + cipherPriv ) )
+//publickKeys is signPub + sign( cipherPub )
+//secretKeys is sign( nonce + secretbox( signPriv + cipherPriv ) )
 async function unpackAndOpenKeys (srvKeys, password) {
   var pubKeys = util.decodeBase64(srvKeys.publicKeys)
   var keys = {
@@ -124,7 +124,7 @@ function hashObject(obj) {
     }
     for (var i = 0; i < s.length; i++) {
       hash = ((hash << 5) - hash) + s.charCodeAt(i)
-      hash = hash & hash // Convert to 32bit integer
+      hash = hash & hash //Convert to 32bit integer
     }
   }
   return hash
@@ -240,7 +240,7 @@ export default class KeyMgr {
       var closed = nacl.box(secretStub, nonce, pubKeys.cipher, vaultKeys.cipher.secretKey)
       data[vid] = util.encodeBase64(nacl.sign(merge(nonce, closed), vaultKeys.sign.secretKey))
     }
-    return {data: data}
+    return { data: data }
   }
   async passwordChange (password) {
     var bKey = await keyPassword(this.keys, password)
@@ -252,7 +252,7 @@ export default class KeyMgr {
     var tmpKeys = nacl.box.keyPair()
     var nonce = nacl.randomBytes(nacl.box.nonceLength)
     var closed = nacl.box(serialized, nonce, vaultKeys.cipher.publicKey, tmpKeys.secretKey)
-    return {data: util.encodeBase64(nacl.sign(merge(nonce, merge(tmpKeys.publicKey, closed)), vaultKeys.sign.secretKey))}
+    return { data: util.encodeBase64(nacl.sign(merge(nonce, merge(tmpKeys.publicKey, closed)), vaultKeys.sign.secretKey)) }
   }
   openAndDeserialize(vaultClosedKeys, closedData) {
     var vaultKeys = unpackAndOpenVaultKeys(vaultClosedKeys, this.keys)
@@ -261,7 +261,7 @@ export default class KeyMgr {
     var tmpPubKey = data.slice(nacl.box.nonceLength, nacl.box.nonceLength + nacl.box.publicKeyLength)
     data = data.slice(nacl.box.nonceLength + nacl.box.publicKeyLength)
     var opened = nacl.box.open(data, nonce, tmpPubKey, vaultKeys.cipher.secretKey)
-    return {data: JSON.parse(util.encodeUTF8(opened))}
+    return { data: JSON.parse(util.encodeUTF8(opened)) }
   }
   openAndDeserializeBulk(vsa) {
     return {
