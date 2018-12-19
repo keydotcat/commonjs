@@ -13,6 +13,9 @@ export default class XoredData {
       this.fromString(data)
     } else if(data instanceof Uint8Array) {
       this.fromBinary(data)
+    } else if(typeof(data) === 'object') {
+      this.__data = data.__data || data._data
+      this.__xor = data.__xor || data._xor
     } else {
       throw new Error('Expected either string of Uint8Array')
     }

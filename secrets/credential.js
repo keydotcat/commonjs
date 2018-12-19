@@ -46,8 +46,8 @@ export default class Credential {
         tp = obj.type
     }
     this._type = tp
-    this._name = obj.name || 'login'
-    this._username = obj.username
-    this._password = new XoredData(obj.password)
+    this._name = obj.name || obj._name || 'login'
+    this._username = obj.username || obj._username
+    this._password = new XoredData(obj.password || obj._password)
   }
 }

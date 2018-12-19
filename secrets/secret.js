@@ -16,6 +16,9 @@ export default class Secret {
       if(data instanceof LocationData || data instanceof NoteData) {
         this.data = data
       } else {
+        if( '_data' in data ) {
+          data = data._data
+        }
         this.data = new SecretData( data )
       }
       this.domains = this.data.getDomains()
@@ -50,6 +53,21 @@ export default class Secret {
       vaultVersion: this.vaultVersion,
       data: this.data.cloneAsObject()
     }
+  }
+
+  static fromObject(obj) {
+    if( obj instanceof Secret ) {
+      return obj
+    }
+    return new Secret({ 
+      secretId: obj.secretId,
+      vaultId: obj.vaultId,
+      teamId: obj.teamId,
+      createdAt: obj.createdAt,
+      updatedAt: obj.updatedAt,
+      vaultVersion: obj.vaultVersion,
+      data: obj.data
+    })
   }
 
   static createLocation(){
