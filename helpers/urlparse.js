@@ -14,7 +14,7 @@ export default class UrlParse {
     }
     unk = unk.trim()
     var p = unk.indexOf('://') > -1;
-    if (!p && p.indexOf('.') > -1) {
+    if (!p && unk.indexOf('.') > -1) {
       unk = 'http://' + unk;
     } else if (!p) {
       return null;
