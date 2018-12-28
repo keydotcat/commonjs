@@ -68,7 +68,7 @@ export default class LocationData {
     var doms = this.urls.map( (val, index, array) => {
       return UrlParse.getDomain(val)
     }).filter( (val, index, array) => {
-      return typeof(val) === 'string' && val.length > 0
+      return typeof (val) === 'string' && val.length > 0
     })
     return [...new Set(doms)]
   }
@@ -76,7 +76,7 @@ export default class LocationData {
     var doms = this.urls.map( (val, index, array) => {
       return UrlParse.getHostname(val)
     }).filter( (val, index, array) => {
-      return typeof(val) === 'string' && val.length > 0
+      return typeof (val) === 'string' && val.length > 0
     })
     return [...new Set(doms)]
   }

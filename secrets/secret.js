@@ -59,7 +59,7 @@ export default class Secret {
     if( obj instanceof Secret ) {
       return obj
     }
-    return new Secret({ 
+    return new Secret({
       secretId: obj.secretId,
       vaultId: obj.vaultId,
       teamId: obj.teamId,

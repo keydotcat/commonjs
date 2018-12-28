@@ -1,11 +1,10 @@
-import * as tldjs from 'tldjs';
+import * as tldjs from 'tldjs'
 
 export default class UrlParse {
-
   static isValidIp(unk) {
     // tslint:disable-next-line
-    const ipRegex = /^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/;
-    return ipRegex.test(unk);
+    const ipRegex = /^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/
+    return ipRegex.test(unk)
   }
 
   static sanitize(unk) {
@@ -13,11 +12,11 @@ export default class UrlParse {
       return null
     }
     unk = unk.trim()
-    var p = unk.indexOf('://') > -1;
+    var p = unk.indexOf('://') > -1
     if (!p && unk.indexOf('.') > -1) {
-      unk = 'http://' + unk;
+      unk = 'http://' + unk
     } else if (!p) {
-      return null;
+      return null
     }
     return unk
   }
@@ -37,9 +36,8 @@ export default class UrlParse {
 
   static getUrlObj(unk) {
     unk = this.sanitize(unk)
-    const anchor = window.document.createElement('a');
-    anchor.href = unk.trim();
+    const anchor = window.document.createElement('a')
+    anchor.href = unk.trim()
     return anchor
   }
-
 }
