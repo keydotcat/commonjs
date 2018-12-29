@@ -2,14 +2,14 @@ import nacl from 'tweetnacl'
 import util from 'tweetnacl-util'
 import argon2 from 'argon2-browser'
 
-function merge (a, b) {
+function merge(a, b) {
   var c = new Uint8Array(a.length + b.length)
   c.set(a)
   c.set(b, a.length)
   return c
 }
 
-async function keyPassword (keys, password) {
+async function keyPassword(keys, password) {
   /*var bPass = util.decodeUTF8(password)
   var hHash = nacl.hash(merge(keys.sign.publicKey, bPass))
   return hHash.subarray(0, nacl.secretbox.keyLength)
@@ -29,13 +29,13 @@ async function keyPassword (keys, password) {
   return res.hash
 }
 
-async function loginPassword (username, password) {
+async function loginPassword(username, password) {
   /*var bUser = util.decodeUTF8(username)
   var bPass = util.decodeUTF8(password)
   return util.encodeBase64(nacl.hash(merge(bUser, bPass)))
   */
   var salt = username
-  while(salt.length < 128) {
+  while (salt.length < 128) {
     salt = salt + username
   }
   var res = await argon2.hash({
@@ -54,7 +54,7 @@ async function loginPassword (username, password) {
 }
 
 //signPub + sign( cipherPub ) + sign( nonce + secretbox( signPriv + cipherPriv ) )
-function closeUserKeysAndPack (keys, bKey) {
+function closeUserKeysAndPack(keys, bKey) {
   var nonce = nacl.randomBytes(nacl.secretbox.nonceLength)
   var closedPrivate = merge(nonce, nacl.secretbox(merge(keys.sign.secretKey, keys.cipher.secretKey), nonce, bKey))
   var signedClosedPrivate = nacl.sign(closedPrivate, keys.sign.secretKey)
@@ -64,13 +64,13 @@ function closeUserKeysAndPack (keys, bKey) {
   }
 }
 
-function packPublicKeys (keys) {
+function packPublicKeys(keys) {
   return util.encodeBase64(merge(keys.sign.publicKey, nacl.sign(keys.cipher.publicKey, keys.sign.secretKey)))
 }
 
 //publickKeys is signPub + sign( cipherPub )
 //secretKeys is sign( nonce + secretbox( signPriv + cipherPriv ) )
-async function unpackAndOpenKeys (srvKeys, password) {
+async function unpackAndOpenKeys(srvKeys, password) {
   var pubKeys = util.decodeBase64(srvKeys.publicKeys)
   var keys = {
     sign: {
@@ -101,7 +101,7 @@ async function unpackAndOpenKeys (srvKeys, password) {
   return keys
 }
 
-function unpackPublicKeys (publicStub) {
+function unpackPublicKeys(publicStub) {
   var bData = util.decodeBase64(publicStub)
   var keys = {
     sign: bData.slice(0, nacl.sign.publicKeyLength)
@@ -117,22 +117,22 @@ var openedVaultKeys = {}
 
 function hashObject(obj) {
   var hash = 0
-  for(var k in obj) {
+  for (var k in obj) {
     var s = obj[k]
     if (s.length === 0) {
       return hash
     }
     for (var i = 0; i < s.length; i++) {
-      hash = ((hash << 5) - hash) + s.charCodeAt(i)
+      hash = (hash << 5) - hash + s.charCodeAt(i)
       hash = hash & hash //Convert to 32bit integer
     }
   }
   return hash
 }
 
-function unpackAndOpenVaultKeys (vCKeys, userKeys) {
+function unpackAndOpenVaultKeys(vCKeys, userKeys) {
   var vH = hashObject(vCKeys)
-  if( vH in openedVaultKeys ) {
+  if (vH in openedVaultKeys) {
     return openedVaultKeys[vH]
   }
   var pubKeys = util.decodeBase64(vCKeys.publicKeys)
@@ -163,10 +163,10 @@ function unpackAndOpenVaultKeys (vCKeys, userKeys) {
 }
 
 export default class KeyMgr {
-  constructor () {
+  constructor() {
     this.keys = { sign: {}, cipher: {} }
   }
-  async generateUserKeys (username, password) {
+  async generateUserKeys(username, password) {
     this.keys.sign = nacl.sign.keyPair()
     this.keys.cipher = nacl.box.keyPair()
     var bKey = await keyPassword(this.keys, password)
@@ -185,11 +185,11 @@ export default class KeyMgr {
       }
     }
   }
-  async hashLoginPassword (username, password) {
+  async hashLoginPassword(username, password) {
     var hPass = await loginPassword(username, password)
     return { data: hPass }
   }
-  async setKeysFromServer (password, storeToken, srvKeys) {
+  async setKeysFromServer(password, storeToken, srvKeys) {
     this.keys = { sign: {}, cipher: {} }
     this.keys = await unpackAndOpenKeys(srvKeys, password)
     if (this.keys == null) {
@@ -198,7 +198,7 @@ export default class KeyMgr {
     var bToken = await keyPassword(this.keys, storeToken)
     return { data: closeUserKeysAndPack(this.keys, bToken).keys }
   }
-  async setKeysFromStore (storedKeys, storeToken) {
+  async setKeysFromStore(storedKeys, storeToken) {
     this.keys = { sign: {}, cipher: {} }
     var bKeys = util.decodeBase64(storedKeys)
     var sep = nacl.sign.publicKeyLength + nacl.sign.signatureLength + nacl.box.publicKeyLength
@@ -212,7 +212,7 @@ export default class KeyMgr {
     }
     return { data: true }
   }
-  generateVaultKeys (admins) {
+  generateVaultKeys(admins) {
     var vaultKeys = { sign: {}, cipher: {} }
     vaultKeys.sign = nacl.sign.keyPair()
     vaultKeys.cipher = nacl.box.keyPair()
@@ -230,7 +230,7 @@ export default class KeyMgr {
     }
     return { data: data }
   }
-  cipherKeysForUser (vaultClosedKeys, userPubKeys) {
+  cipherKeysForUser(vaultClosedKeys, userPubKeys) {
     var pubKeys = unpackPublicKeys(userPubKeys)
     var data = {}
     for (var vid in vaultClosedKeys) {
@@ -242,7 +242,7 @@ export default class KeyMgr {
     }
     return { data: data }
   }
-  async passwordChange (password) {
+  async passwordChange(password) {
     var bKey = await keyPassword(this.keys, password)
     return { data: closeUserKeysAndPack(this.keys, bKey).secretKeys }
   }
@@ -265,7 +265,7 @@ export default class KeyMgr {
   }
   openAndDeserializeBulk(vsa) {
     return {
-      data: vsa.map((data) => {
+      data: vsa.map(data => {
         return this.openAndDeserialize(data.v, data.s).data
       })
     }

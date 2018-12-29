@@ -4,22 +4,22 @@ export default class Credential {
   constructor(obj) {
     this.fromJson(obj || {})
   }
-  set type(v){
+  set type(v) {
     this._type = v
   }
-  get type(){
+  get type() {
     return this._type
   }
-  set name(v){
+  set name(v) {
     this._name = v
   }
-  get name(){
+  get name() {
     return this._name
   }
-  set username(v){
+  set username(v) {
     this._username = v
   }
-  get username(){
+  get username() {
     return this._username
   }
   set password(v) {
@@ -37,11 +37,11 @@ export default class Credential {
     }
   }
   fromJson(obj) {
-    if(typeof obj === 'string'){
+    if (typeof obj === 'string') {
       obj = JSON.parse(obj)
     }
     var tp = 'password'
-    switch(obj.type){
+    switch (obj.type) {
       case 'keys':
         tp = obj.type
     }

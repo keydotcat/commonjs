@@ -8,30 +8,30 @@ export default class NoteData {
       data: '',
       labels: []
     }
-    if(obj){
+    if (obj) {
       this.fromJson(obj)
     }
   }
-  get type(){
+  get type() {
     return this._data.type
   }
-  set data(v){
+  set data(v) {
     this._data.data = v
   }
-  get data(){
+  get data() {
     return this._data.data
   }
-  get name(){
+  get name() {
     return this._data.name
   }
   get labels() {
     return this._data.labels
   }
   fromJson(obj) {
-    if(typeof obj === 'string'){
+    if (typeof obj === 'string') {
       obj = JSON.parse(obj)
     }
-    if(obj.type !== 'note'){
+    if (obj.type !== 'note') {
       throw new Error('Invalid object type ' + obj.type)
     }
     this._data.name = obj.name || ''

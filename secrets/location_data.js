@@ -12,23 +12,23 @@ export default class LocationData {
       note: '',
       labels: []
     }
-    if(obj){
+    if (obj) {
       this.fromJson(obj)
     }
   }
-  get type(){
+  get type() {
     return this._data.type
   }
-  set name(v){
+  set name(v) {
     this._data.name = v
   }
-  get name(){
+  get name() {
     return this._data.name
   }
-  set note(v){
+  set note(v) {
     this._data.note = v
   }
-  get note(){
+  get note() {
     return this._data.note
   }
   get urls() {
@@ -41,10 +41,10 @@ export default class LocationData {
     return this._data.labels
   }
   fromJson(obj) {
-    if(typeof obj === 'string'){
+    if (typeof obj === 'string') {
       obj = JSON.parse(obj)
     }
-    if(obj.type !== 'location'){
+    if (obj.type !== 'location') {
       throw new Error('Invalid object type ' + obj.type)
     }
     this._data.name = obj.name || []
@@ -53,31 +53,35 @@ export default class LocationData {
     this._data.note = obj.note || ''
     this._data.creds = []
     var sourceCreds = obj.creds || []
-    sourceCreds.forEach( cred => {
+    sourceCreds.forEach(cred => {
       this._data.creds.push(new Credential(cred))
     })
   }
   cloneAsObject() {
     var c = $.extend(true, {}, this._data)
-    for(var i = 0; i < this._data.creds.length; i++){
+    for (var i = 0; i < this._data.creds.length; i++) {
       c.creds[i] = this._data.creds[i].cloneAsObject()
     }
     return c
   }
   getDomains() {
-    var doms = this.urls.map( (val, index, array) => {
-      return UrlParse.getDomain(val)
-    }).filter( (val, index, array) => {
-      return typeof (val) === 'string' && val.length > 0
-    })
+    var doms = this.urls
+      .map((val, index, array) => {
+        return UrlParse.getDomain(val)
+      })
+      .filter((val, index, array) => {
+        return typeof val === 'string' && val.length > 0
+      })
     return [...new Set(doms)]
   }
   getHostnames() {
-    var doms = this.urls.map( (val, index, array) => {
-      return UrlParse.getHostname(val)
-    }).filter( (val, index, array) => {
-      return typeof (val) === 'string' && val.length > 0
-    })
+    var doms = this.urls
+      .map((val, index, array) => {
+        return UrlParse.getHostname(val)
+      })
+      .filter((val, index, array) => {
+        return typeof val === 'string' && val.length > 0
+      })
     return [...new Set(doms)]
   }
 }

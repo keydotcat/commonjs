@@ -12,14 +12,14 @@ export default class Secret {
     this._createdAt = createdAt
     this._updatedAt = updatedAt
     this.domains = []
-    if(data) {
-      if(data instanceof LocationData || data instanceof NoteData) {
+    if (data) {
+      if (data instanceof LocationData || data instanceof NoteData) {
         this.data = data
       } else {
-        if( '_data' in data ) {
+        if ('_data' in data) {
           data = data._data
         }
-        this.data = new SecretData( data )
+        this.data = new SecretData(data)
       }
       this.domains = this.data.getDomains()
     } else {
@@ -27,8 +27,8 @@ export default class Secret {
     }
   }
   matchDomain(dom) {
-    for(var i = 0; i < this.domains.length; i++ ) {
-      if( dom === this.domains[i] ) {
+    for (var i = 0; i < this.domains.length; i++) {
+      if (dom === this.domains[i]) {
         return true
       }
     }
@@ -56,7 +56,7 @@ export default class Secret {
   }
 
   static fromObject(obj) {
-    if( obj instanceof Secret ) {
+    if (obj instanceof Secret) {
       return obj
     }
     return new Secret({
@@ -70,11 +70,11 @@ export default class Secret {
     })
   }
 
-  static createLocation(){
+  static createLocation() {
     return new Secret({ data: new LocationData() })
   }
 
-  static createNote(){
+  static createNote() {
     return new Secret({ data: new NoteData() })
   }
 }

@@ -9,11 +9,11 @@ function getRandomArray(len) {
 
 export default class XoredData {
   constructor(data) {
-    if(typeof data === 'string'){
+    if (typeof data === 'string') {
       this.fromString(data)
-    } else if(data instanceof Uint8Array) {
+    } else if (data instanceof Uint8Array) {
       this.fromBinary(data)
-    } else if(typeof (data) === 'object') {
+    } else if (typeof data === 'object') {
       this.__data = data.__data || data._data
       this.__xor = data.__xor || data._xor
     } else {

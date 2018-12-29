@@ -8,7 +8,7 @@ export default class UrlParse {
   }
 
   static sanitize(unk) {
-    if(!unk) {
+    if (!unk) {
       return null
     }
     unk = unk.trim()
@@ -27,7 +27,7 @@ export default class UrlParse {
 
   static getHostname(unk) {
     unk = this.sanitize(unk)
-    if(!unk){
+    if (!unk) {
       return ''
     }
     var d = tldjs.parse(unk)
