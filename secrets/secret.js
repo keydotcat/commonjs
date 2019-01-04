@@ -46,7 +46,7 @@ export default class Secret {
   cloneAsObject() {
     return {
       secretId: this.secretId,
-      vaultId: this.vautId,
+      vaultId: this.vaultId,
       teamId: this.teamId,
       createdAt: this._createdAt,
       updatedAt: this._updatedAt,
