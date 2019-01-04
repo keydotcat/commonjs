@@ -75,9 +75,17 @@ class RequestBase {
     var merged = Object.assign(Object.assign({}, this.getHeaders()), config)
     return this._rend(axios.post(this.url + path, payload, merged))
   }
+  put(path, payload, config = {}) {
+    var merged = Object.assign(Object.assign({}, this.getHeaders()), config)
+    return this._rend(axios.put(this.url + path, payload, merged))
+  }
   get(path, config = {}) {
     var merged = Object.assign(Object.assign({}, this.getHeaders()), config)
     return this._rend(axios.get(this.url + path, merged))
+  }
+  delete(path, config = {}) {
+    var merged = Object.assign(Object.assign({}, this.getHeaders()), config)
+    return this._rend(axios.delete(this.url + path, merged))
   }
 }
 
