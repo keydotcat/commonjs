@@ -25,37 +25,37 @@
 </template>
 
 <script>
-  import LocationsPage from './data/locations-page'
-  import NotesPage from './data/notes-page'
+import LocationsPage from './data/locations-page'
+import NotesPage from './data/notes-page'
 
-  export default {
-    name: 'data-content',
-    components: {LocationsPage,NotesPage},
-    data () {
-      return {
+export default {
+  name: 'data-content',
+  components: { LocationsPage, NotesPage },
+  data() {
+    return {
       activePage: 'locations'
+    }
+  },
+  methods: {
+    defaultPage() {
+      if (this.activePage.length === 0) {
+        this.goto('locations')
       }
     },
-    methods: {
-      defaultPage() {
-        if( this.activePage.length === 0 ) {
-          this.goto('locations')
-        }
-      },
-      goto (where) {
-        this.activePage = where
-      }
+    goto(where) {
+      this.activePage = where
     }
   }
+}
 </script>
 
 <style>
-  /*
+/*
  * Sidebar
  */
 
 .sidebar {
-  box-shadow: inset -1px 0 0 rgba(0, 0, 0, .1);
+  box-shadow: inset -1px 0 0 rgba(0, 0, 0, 0.1);
 }
 
 .sidebar-sticky {
@@ -94,8 +94,7 @@
 }
 
 .sidebar-heading {
-  font-size: .75rem;
+  font-size: 0.75rem;
   text-transform: uppercase;
 }
-
 </style>

@@ -55,73 +55,73 @@
 </template>
 
 <script>
-  export default {
-    name: 'vault-access',
-    props: {
-      vault: Object,
-      tid: String
-    },
-    data () {
-      return {
-        showVault: false,
-        showConfirmGrant: false,
-        showConfirmRevoke: false,
-        userToGrant: {},
-        userToRevoke: {}
-      }
-    },
-    computed: {
-      allowedUsers() {
-        var vaultUsers = this.vault.users
-        return this.$store.getters[`team.${this.tid}/users`].filter( (u) => {
-          for(var i = 0; i < vaultUsers.length; i++){
-            if (vaultUsers[i] === u.id) {
-              return true
-            }
+export default {
+  name: 'vault-access',
+  props: {
+    vault: Object,
+    tid: String
+  },
+  data() {
+    return {
+      showVault: false,
+      showConfirmGrant: false,
+      showConfirmRevoke: false,
+      userToGrant: {},
+      userToRevoke: {}
+    }
+  },
+  computed: {
+    allowedUsers() {
+      var vaultUsers = this.vault.users
+      return this.$store.getters[`team.${this.tid}/users`].filter(u => {
+        for (var i = 0; i < vaultUsers.length; i++) {
+          if (vaultUsers[i] === u.id) {
+            return true
           }
-          return false
-        })
-      },
-      deniedUsers() {
-        var vaultUsers = this.vault.users
-        return this.$store.getters[`team.${this.tid}/users`].filter( (u) => {
-          for(var i = 0; i < vaultUsers.length; i++){
-            if (vaultUsers[i] === u.id) {
-              return false
-            }
-          }
-          return true
-        })
-      }
+        }
+        return false
+      })
     },
-    methods: {
-      toggleVault(){
-        this.showVault = !this.showVault
-      },
-      startRevoke(user){
-        this.showConfirmRevoke = true
-        this.userToRevoke = user
-      },
-      startGrant(user){
-        this.showConfirmGrant = true
-        this.userToGrant = user
-      },
-      cancelRevoke(){
-        this.showConfirmRevoke = false
-        this.userToRevoke = {}
-      },
-      cancelGrant(){
-        this.showConfirmGrant = false
-        this.userToGrant = {}
-      },
-      confirmRevoke(){
-        this.$store.dispatch( `team.${this.tid}/removeUsersFromVault`, { vaultId: this.vault.id, users: [this.userToRevoke.data] } )
-        this.cancelRevoke()
-      },
-      confirmGrant(){
-        this.$store.dispatch( `team.${this.tid}/addUsersToVault`, { vaultId: this.vault.id, users: [this.userToGrant.data] } )
-        this.cancelGrant()
-      }
+    deniedUsers() {
+      var vaultUsers = this.vault.users
+      return this.$store.getters[`team.${this.tid}/users`].filter(u => {
+        for (var i = 0; i < vaultUsers.length; i++) {
+          if (vaultUsers[i] === u.id) {
+            return false
+          }
+        }
+        return true
+      })
+    }
+  },
+  methods: {
+    toggleVault() {
+      this.showVault = !this.showVault
+    },
+    startRevoke(user) {
+      this.showConfirmRevoke = true
+      this.userToRevoke = user
+    },
+    startGrant(user) {
+      this.showConfirmGrant = true
+      this.userToGrant = user
+    },
+    cancelRevoke() {
+      this.showConfirmRevoke = false
+      this.userToRevoke = {}
+    },
+    cancelGrant() {
+      this.showConfirmGrant = false
+      this.userToGrant = {}
+    },
+    confirmRevoke() {
+      this.$store.dispatch(`team.${this.tid}/removeUsersFromVault`, { vaultId: this.vault.id, users: [this.userToRevoke.data] })
+      this.cancelRevoke()
+    },
+    confirmGrant() {
+      this.$store.dispatch(`team.${this.tid}/addUsersToVault`, { vaultId: this.vault.id, users: [this.userToGrant.data] })
+      this.cancelGrant()
     }
   }
+}
 </script>

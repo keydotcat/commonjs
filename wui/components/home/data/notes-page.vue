@@ -46,74 +46,74 @@
 </template>
 
 <script>
-  //Indent fix
-  import Note from './note'
-  import SecretFilter from './secret-filter'
-  import $ from 'jquery'
+//Indent fix
+import Note from './note'
+import SecretFilter from './secret-filter'
+import $ from 'jquery'
 
-  export default {
-    name: 'notes-page',
-    components: {Note, SecretFilter},
-    data () {
-      return {
-        filter: {},
-        secretToDel: {
-          name: '',
-          tid: '',
-          vid: '',
-          sid: ''
-        },
-        pageIdx: 0,
-        numLocs: 50
-      }
+export default {
+  name: 'notes-page',
+  components: { Note, SecretFilter },
+  data() {
+    return {
+      filter: {},
+      secretToDel: {
+        name: '',
+        tid: '',
+        vid: '',
+        sid: ''
+      },
+      pageIdx: 0,
+      numLocs: 50
+    }
+  },
+  computed: {
+    loading() {
+      return this.$store.state.secrets.loading > 0
     },
-    computed: {
-      loading() {
-        return this.$store.state.secrets.loading > 0
-      },
-      allNotes() {
-        return this.$store.getters['secrets/filteredSecrets']('note', this.filter)
-      },
-      pageNotes() {
-        var start = this.pageIdx * this.numLocs
-        return this.allNotes.slice(start, start + this.numLocs)
-      },
-      numPages() {
-        return Math.ceil( this.allNotes.length / this.numLocs )
-      },
-      pagesToFastJump() {
-        var pages = []
-        var jumps = [-10, -5, -2, -1, 0, 1, 2, 5, 10]
-        jumps.forEach((jump) => {
-          var t = this.pageIdx + jump
-          if( t >= 0 && t < this.numPages ) {
-            pages.push(t)
-          }
-        })
-        return pages
-      }
+    allNotes() {
+      return this.$store.getters['secrets/filteredSecrets']('note', this.filter)
     },
-    methods: {
-      requestDelete(secret) {
-        this.secretToDel.name = secret.data.name
-        this.secretToDel.tid = secret.teamId
-        this.secretToDel.vid = secret.vaultId
-        this.secretToDel.sid = secret.secretId
-        $('#deleteNoteModal').modal('show')
-      },
-      deleteSecret() {
-        this.$store.dispatch('secrets/delete', {
-          teamId: this.secretToDel.tid,
-          vaultId: this.secretToDel.vid,
-          secretId: this.secretToDel.sid
-        })
-        $('#deleteNoteModal').modal('hide')
-      },
-      createNote () {
-        this.$router.push( `/home/data/new_note` )
-      }
+    pageNotes() {
+      var start = this.pageIdx * this.numLocs
+      return this.allNotes.slice(start, start + this.numLocs)
+    },
+    numPages() {
+      return Math.ceil(this.allNotes.length / this.numLocs)
+    },
+    pagesToFastJump() {
+      var pages = []
+      var jumps = [-10, -5, -2, -1, 0, 1, 2, 5, 10]
+      jumps.forEach(jump => {
+        var t = this.pageIdx + jump
+        if (t >= 0 && t < this.numPages) {
+          pages.push(t)
+        }
+      })
+      return pages
+    }
+  },
+  methods: {
+    requestDelete(secret) {
+      this.secretToDel.name = secret.data.name
+      this.secretToDel.tid = secret.teamId
+      this.secretToDel.vid = secret.vaultId
+      this.secretToDel.sid = secret.secretId
+      $('#deleteNoteModal').modal('show')
+    },
+    deleteSecret() {
+      this.$store.dispatch('secrets/delete', {
+        teamId: this.secretToDel.tid,
+        vaultId: this.secretToDel.vid,
+        secretId: this.secretToDel.sid
+      })
+      $('#deleteNoteModal').modal('hide')
+    },
+    createNote() {
+      this.$router.push(`/home/data/new_note`)
     }
   }
+}
 </script>
 
 <style>

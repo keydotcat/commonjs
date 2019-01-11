@@ -12,30 +12,30 @@
 </template>
 
 <script>
-  export default {
-    name: 'new_team_page',
-    props: {
-      visible: Boolean
-    },
-    data () {
-      return {
-        team_name: '',
-        working: false
-      }
-    },
-    methods: {
-      submit () {
-        this.$store.dispatch('user/createTeam', this.team_name)
-      }
+export default {
+  name: 'new_team_page',
+  props: {
+    visible: Boolean
+  },
+  data() {
+    return {
+      team_name: '',
+      working: false
+    }
+  },
+  methods: {
+    submit() {
+      this.$store.dispatch('user/createTeam', this.team_name)
     }
   }
+}
 </script>
 
 <style>
-  .dialog-footer {
-    padding: 15px;
-    padding-top: 10px;
-    text-align: right;
-    box-sizing: border-box;
-  }
+.dialog-footer {
+  padding: 15px;
+  padding-top: 10px;
+  text-align: right;
+  box-sizing: border-box;
+}
 </style>

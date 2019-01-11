@@ -40,43 +40,43 @@
 </template>
 
 <script>
-  import TeamContent from './manage/team-content'
-  import UserInfo from './manage/user-info-page'
-  import UserImport from './manage/user-import-page'
-  import UserExport from './manage/user-export-page'
+import TeamContent from './manage/team-content'
+import UserInfo from './manage/user-info-page'
+import UserImport from './manage/user-import-page'
+import UserExport from './manage/user-export-page'
 
-  export default {
-    name: 'manage-content',
-    components: {TeamContent, UserInfo, UserExport, UserImport },
-    data () {
-      return {
-        activePage: 'userInfo',
-        activeTeam: ''
-      }
+export default {
+  name: 'manage-content',
+  components: { TeamContent, UserInfo, UserExport, UserImport },
+  data() {
+    return {
+      activePage: 'userInfo',
+      activeTeam: ''
+    }
+  },
+  methods: {
+    isAdmin(tid) {
+      var uid = this.$store.state.user.id
+      return this.$store.getters[`team.${tid}/admins`].filter(admin => admin.id === uid).length > 0
     },
-    methods: {
-      isAdmin(tid) {
-        var uid = this.$store.state.user.id
-        return this.$store.getters[`team.${tid}/admins`].filter((admin) => admin.id === uid).length > 0
-      },
-      setTeam (tid) {
-        this.activePage = 'team'
-        this.activeTid = tid
-      },
-      goto (where) {
-        this.activePage = where
-      }
+    setTeam(tid) {
+      this.activePage = 'team'
+      this.activeTid = tid
+    },
+    goto(where) {
+      this.activePage = where
     }
   }
+}
 </script>
 
 <style>
-  /*
+/*
  * Sidebar
  */
 
 .sidebar {
-  box-shadow: inset -1px 0 0 rgba(0, 0, 0, .1);
+  box-shadow: inset -1px 0 0 rgba(0, 0, 0, 0.1);
 }
 
 .sidebar-sticky {
@@ -115,8 +115,7 @@
 }
 
 .sidebar-heading {
-  font-size: .75rem;
+  font-size: 0.75rem;
   text-transform: uppercase;
 }
-
 </style>

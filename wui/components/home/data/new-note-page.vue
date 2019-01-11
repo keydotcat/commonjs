@@ -8,20 +8,19 @@
 </template>
 
 <script>
-  import Secret from '@/commonjs/secrets/secret'
-  import NoteDetail from '@/components/home/data/note_detail'
+import Secret from '@/commonjs/secrets/secret'
+import NoteDetail from '@/components/home/data/note_detail'
 
-  export default {
-    name: 'new-note-page',
-    components: {NoteDetail},
-    data () {
-      return {}
-    },
-    methods: {
-      newSecret() {
-        return Secret.createNote()
-      }
+export default {
+  name: 'new-note-page',
+  components: { NoteDetail },
+  data() {
+    return {}
+  },
+  methods: {
+    newSecret() {
+      return Secret.createNote()
     }
   }
+}
 </script>
-

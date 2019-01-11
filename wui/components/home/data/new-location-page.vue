@@ -8,20 +8,19 @@
 </template>
 
 <script>
-  import Secret from '@/commonjs/secrets/secret'
-  import LocationDetail from '@/components/home/data/location_detail'
+import Secret from '@/commonjs/secrets/secret'
+import LocationDetail from '@/components/home/data/location_detail'
 
-  export default {
-    name: 'new-location-page',
-    components: {LocationDetail},
-    data () {
-      return {}
-    },
-    methods: {
-      newSecret() {
-        return Secret.createLocation()
-      }
+export default {
+  name: 'new-location-page',
+  components: { LocationDetail },
+  data() {
+    return {}
+  },
+  methods: {
+    newSecret() {
+      return Secret.createLocation()
     }
   }
+}
 </script>
-

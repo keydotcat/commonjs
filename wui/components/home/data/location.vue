@@ -60,7 +60,7 @@ export default {
   props: {
     secret: Object
   },
-  data () {
+  data() {
     return {
       displayCreds: false
     }
@@ -70,7 +70,7 @@ export default {
       this.displayCreds = !this.displayCreds
     },
     editSecret() {
-      this.$router.push( `/home/data/location/${this.secret.fullId}` )
+      this.$router.push(`/home/data/location/${this.secret.fullId}`)
     },
     deleteSecret() {
       this.$emit('delete', this.secret)
@@ -87,7 +87,13 @@ export default {
 </script>
 
 <style>
-div > .border-bottom:last-child { border-bottom: none!important;  }
-.hide-input { width: 0px; }
-.secret-note { font-family: 'Lato'; }
+div > .border-bottom:last-child {
+  border-bottom: none !important;
+}
+.hide-input {
+  width: 0px;
+}
+.secret-note {
+  font-family: 'Lato';
+}
 </style>

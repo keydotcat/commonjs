@@ -8,19 +8,18 @@
 </template>
 
 <script>
-  import NoteDetail from '@/components/home/data/note_detail'
+import NoteDetail from '@/components/home/data/note_detail'
 
-  export default {
-    name: 'edit-note-page',
-    components: {NoteDetail},
-    data () {
-      return {}
-    },
-    computed: {
-      secret(){
-        return this.$store.state.secrets.secrets[this.$route.params.sid]
-      }
+export default {
+  name: 'edit-note-page',
+  components: { NoteDetail },
+  data() {
+    return {}
+  },
+  computed: {
+    secret() {
+      return this.$store.state.secrets.secrets[this.$route.params.sid]
     }
   }
+}
 </script>
-

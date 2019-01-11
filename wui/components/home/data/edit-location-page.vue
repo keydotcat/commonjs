@@ -8,19 +8,18 @@
 </template>
 
 <script>
-  import LocationDetail from '@/components/home/data/location_detail'
+import LocationDetail from '@/components/home/data/location_detail'
 
-  export default {
-    name: 'edit-location-page',
-    components: {LocationDetail},
-    data () {
-      return {}
-    },
-    computed: {
-      secret(){
-        return this.$store.state.secrets.secrets[this.$route.params.sid]
-      }
+export default {
+  name: 'edit-location-page',
+  components: { LocationDetail },
+  data() {
+    return {}
+  },
+  computed: {
+    secret() {
+      return this.$store.state.secrets.secrets[this.$route.params.sid]
     }
   }
+}
 </script>
-

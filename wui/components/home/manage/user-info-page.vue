@@ -46,43 +46,42 @@
 </template>
 
 <script>
-  export default {
-    name: 'user-info',
-    data () {
-      return {
-        newEmail: '',
-        newPass: '',
-        newPass2: '',
-        passChecked: false,
-        passWorking: false,
-        emailWorking: false
-      }
+export default {
+  name: 'user-info',
+  data() {
+    return {
+      newEmail: '',
+      newPass: '',
+      newPass2: '',
+      passChecked: false,
+      passWorking: false,
+      emailWorking: false
+    }
+  },
+  computed: {
+    isPassOk() {
+      return this.newPass.length > 0
     },
-    computed: {
-      isPassOk() {
-        return this.newPass.length > 0
-      },
-      isPassRepeatOk() {
-        return this.newPass === this.newPass2
-      }
+    isPassRepeatOk() {
+      return this.newPass === this.newPass2
+    }
+  },
+  methods: {
+    requestEmailChange() {
+      this.$store.dispatch('user/changeEmail', this.newEmail)
     },
-    methods: {
-      requestEmailChange() {
-        this.$store.dispatch('user/changeEmail', this.newEmail)
-      },
-      requestPasswordChange() {
-        this.passChecked = true
-        this.passWorking = true
-        if( this.isPassOk && this.isPassRepeatOk ) {
-          this.$store.dispatch('user/changePassword', this.newPass).then((ok) => {
-            this.passWorking = false
-          })
-        }
+    requestPasswordChange() {
+      this.passChecked = true
+      this.passWorking = true
+      if (this.isPassOk && this.isPassRepeatOk) {
+        this.$store.dispatch('user/changePassword', this.newPass).then(ok => {
+          this.passWorking = false
+        })
       }
     }
   }
+}
 </script>
 
 <style>
 </style>
-

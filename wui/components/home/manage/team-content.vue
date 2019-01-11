@@ -17,28 +17,27 @@
 </template>
 
 <script>
-  import TeamUsers from './team-users-page'
-  import TeamVaults from './team-vaults-page'
+import TeamUsers from './team-users-page'
+import TeamVaults from './team-vaults-page'
 
-  export default {
-    name: 'team-content',
-    components: { TeamUsers, TeamVaults },
-    props: {
-      tid: String
-    },
-    data() {
-      return {
-        activePage: 'users'
-      }
-    },
-    methods: {
-      goto( where ) {
-        this.activePage = where
-      }
+export default {
+  name: 'team-content',
+  components: { TeamUsers, TeamVaults },
+  props: {
+    tid: String
+  },
+  data() {
+    return {
+      activePage: 'users'
+    }
+  },
+  methods: {
+    goto(where) {
+      this.activePage = where
     }
   }
+}
 </script>
 
 <style>
 </style>
-

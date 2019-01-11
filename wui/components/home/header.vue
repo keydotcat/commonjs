@@ -36,26 +36,26 @@
 </template>
 
 <script>
-  import AutoLogout from './auto-logout'
+import AutoLogout from './auto-logout'
 
-  export default {
-    name: 'home-header',
-    components: {AutoLogout},
-    data() {
-      return {
-        activePage: 'data'
-      }
+export default {
+  name: 'home-header',
+  components: { AutoLogout },
+  data() {
+    return {
+      activePage: 'data'
+    }
+  },
+  methods: {
+    logout() {
+      this.$store.dispatch('session/logout')
     },
-    methods: {
-      logout() {
-        this.$store.dispatch('session/logout')
-      },
-      goto( where ) {
-        this.activePage = where
-        this.$emit('change',where)
-      },
+    goto(where) {
+      this.activePage = where
+      this.$emit('change', where)
     }
   }
+}
 </script>
 
 <style>

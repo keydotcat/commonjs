@@ -46,74 +46,74 @@
 </template>
 
 <script>
-  //Indent fix
-  import Location from './location'
-  import SecretFilter from './secret-filter'
-  import $ from 'jquery'
+//Indent fix
+import Location from './location'
+import SecretFilter from './secret-filter'
+import $ from 'jquery'
 
-  export default {
-    name: 'locations-page',
-    components: {Location, SecretFilter},
-    data () {
-      return {
-        filter: {},
-        secretToDel: {
-          name: '',
-          tid: '',
-          vid: '',
-          sid: ''
-        },
-        pageIdx: 0,
-        numLocs: 50
-      }
+export default {
+  name: 'locations-page',
+  components: { Location, SecretFilter },
+  data() {
+    return {
+      filter: {},
+      secretToDel: {
+        name: '',
+        tid: '',
+        vid: '',
+        sid: ''
+      },
+      pageIdx: 0,
+      numLocs: 50
+    }
+  },
+  computed: {
+    loading() {
+      return this.$store.state.secrets.loading > 0
     },
-    computed: {
-      loading() {
-        return this.$store.state.secrets.loading > 0
-      },
-      allLocations() {
-        return this.$store.getters['secrets/filteredSecrets']('location', this.filter)
-      },
-      pageLocations() {
-        var start = this.pageIdx * this.numLocs
-        return this.allLocations.slice(start, start + this.numLocs)
-      },
-      numPages() {
-        return Math.ceil( this.allLocations.length / this.numLocs )
-      },
-      pagesToFastJump() {
-        var pages = []
-        var jumps = [-10, -5, -2, -1, 0, 1, 2, 5, 10]
-        jumps.forEach((jump) => {
-          var t = this.pageIdx + jump
-          if( t >= 0 && t < this.numPages ) {
-            pages.push(t)
-          }
-        })
-        return pages
-      }
+    allLocations() {
+      return this.$store.getters['secrets/filteredSecrets']('location', this.filter)
     },
-    methods: {
-      requestDelete(secret) {
-        this.secretToDel.name = secret.data.name
-        this.secretToDel.tid = secret.teamId
-        this.secretToDel.vid = secret.vaultId
-        this.secretToDel.sid = secret.secretId
-        $('#deleteLocationModal').modal('show')
-      },
-      deleteSecret() {
-        this.$store.dispatch('secrets/delete', {
-          teamId: this.secretToDel.tid,
-          vaultId: this.secretToDel.vid,
-          secretId: this.secretToDel.sid
-        })
-        $('#deleteLocationModal').modal('hide')
-      },
-      createLocation () {
-        this.$router.push( `/home/data/new_location` )
-      }
+    pageLocations() {
+      var start = this.pageIdx * this.numLocs
+      return this.allLocations.slice(start, start + this.numLocs)
+    },
+    numPages() {
+      return Math.ceil(this.allLocations.length / this.numLocs)
+    },
+    pagesToFastJump() {
+      var pages = []
+      var jumps = [-10, -5, -2, -1, 0, 1, 2, 5, 10]
+      jumps.forEach(jump => {
+        var t = this.pageIdx + jump
+        if (t >= 0 && t < this.numPages) {
+          pages.push(t)
+        }
+      })
+      return pages
+    }
+  },
+  methods: {
+    requestDelete(secret) {
+      this.secretToDel.name = secret.data.name
+      this.secretToDel.tid = secret.teamId
+      this.secretToDel.vid = secret.vaultId
+      this.secretToDel.sid = secret.secretId
+      $('#deleteLocationModal').modal('show')
+    },
+    deleteSecret() {
+      this.$store.dispatch('secrets/delete', {
+        teamId: this.secretToDel.tid,
+        vaultId: this.secretToDel.vid,
+        secretId: this.secretToDel.sid
+      })
+      $('#deleteLocationModal').modal('hide')
+    },
+    createLocation() {
+      this.$router.push(`/home/data/new_location`)
     }
   }
+}
 </script>
 
 <style>
@@ -122,7 +122,11 @@
 }
 
 @keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
 </style>

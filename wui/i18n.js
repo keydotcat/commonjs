@@ -4,18 +4,18 @@ import VueI18n from 'vue-i18n'
 const messages = {
   en: {
     errors: {
-      'already_exists': 'Already exists',
-      'network': 'It seems the server is offline. Try again later',
-      'bad_request': 'Seems the request is not properly formed.',
-      'unknown': 'Wow. Something went wrong :P',
-      'invalid_signature': 'Could not properly sign request',
-      'invalid_email': 'Invalid email',
-      'invalid_username': 'Invalid username',
-      'invalid_fullname': 'Full name missing',
-      'invalid_password': 'Invalid password',
-      'invalid_password_repeat': 'Both passwords don\'t match',
-      'not_fount': 'This resource does not seem to exist',
-      'invalid_attributes': 'Invalid value'
+      already_exists: 'Already exists',
+      network: 'It seems the server is offline. Try again later',
+      bad_request: 'Seems the request is not properly formed.',
+      unknown: 'Wow. Something went wrong :P',
+      invalid_signature: 'Could not properly sign request',
+      invalid_email: 'Invalid email',
+      invalid_username: 'Invalid username',
+      invalid_fullname: 'Full name missing',
+      invalid_password: 'Invalid password',
+      invalid_password_repeat: "Both passwords don't match",
+      not_fount: 'This resource does not seem to exist',
+      invalid_attributes: 'Invalid value'
     },
     fields: {
       team_name: 'Team name',

@@ -134,7 +134,9 @@ function getRandomArray(len) {
 }
 
 jsspg.init({
-  entropyFxn: () => { return Array.from(getRandomArray(128)) }
+  entropyFxn: () => {
+    return Array.from(getRandomArray(128))
+  }
 })
 
 var charSets = {
@@ -144,17 +146,25 @@ var charSets = {
   sym: '!"#$%&\'()*+,-./:;<=>?@[\\]^_`{|}~'
 }
 
-function generateNormalPass(opts){
+function generateNormalPass(opts) {
   var gp = []
   var cs = ''
-  if(opts.num){ cs += charSets.num }
-  if(opts.lower){ cs += charSets.lower }
-  if(opts.upper){ cs += charSets.upper }
-  if(opts.sym){ cs += charSets.sym }
+  if (opts.num) {
+    cs += charSets.num
+  }
+  if (opts.lower) {
+    cs += charSets.lower
+  }
+  if (opts.upper) {
+    cs += charSets.upper
+  }
+  if (opts.sym) {
+    cs += charSets.sym
+  }
   var csl = cs.length
   var ra = getRandomArray(opts.len)
-  for( var i = 0; i < opts.len; i++ ){
-    gp.push( cs[Math.floor( ( ( 1.0 * ra[i] ) / Math.pow(2, 32) ) * csl )] )
+  for (var i = 0; i < opts.len; i++) {
+    gp.push(cs[Math.floor(((1.0 * ra[i]) / Math.pow(2, 32)) * csl)])
   }
   return gp.join('')
 }
@@ -165,7 +175,7 @@ export default {
     idcred: Number,
     cred: Object
   },
-  data () {
+  data() {
     return {
       changes: {
         type: this.cred.type || 'password',
@@ -214,7 +224,7 @@ export default {
       this.generated = ''
     },
     generatePassword() {
-      if( this.genOpts.unicode ) {
+      if (this.genOpts.unicode) {
         this.generated = jsspg.generate(this.genOpts.len)
       } else {
         this.generated = generateNormalPass(this.genOpts)

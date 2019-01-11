@@ -11,7 +11,7 @@ export default {
   props: {
     copy: String
   },
-  data () {
+  data() {
     return {
       btn: null
     }
@@ -27,7 +27,7 @@ export default {
         return self.copy
       }
     })
-    this.btn.on('success', (e) => {
+    this.btn.on('success', e => {
       self.$emit('copied', this.$el)
       $(this.$el).tooltip('enable')
       $(this.$el).tooltip('show')

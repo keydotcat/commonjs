@@ -1,12 +1,12 @@
 import toastSvc from './toast'
 
 function extractErrorMsg(httpError, prefix) {
-  if( !httpError.response ) {
+  if (!httpError.response) {
     return 'errors.network'
   }
   var data = httpError.response.data
-  if( data === null || !data.error ) {
-    switch( httpError.code ) {
+  if (data === null || !data.error) {
+    switch (httpError.code) {
       case '401':
         return 'errors.unauthorized'
       case '400':
@@ -20,7 +20,7 @@ function extractErrorMsg(httpError, prefix) {
 }
 
 const AutoToastSvc = {
-  toastAxiosError: (err) => {
+  toastAxiosError: err => {
     var idx = extractErrorMsg(err, err.config['errorPrefix'])
     toastSvc.error(idx)
     return err

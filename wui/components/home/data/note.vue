@@ -24,13 +24,12 @@
 </template>
 
 <script>
-
 export default {
   name: 'note',
   props: {
     secret: Object
   },
-  data () {
+  data() {
     return {
       expanded: false
     }
@@ -40,7 +39,7 @@ export default {
       this.expanded = !this.expanded
     },
     editSecret() {
-      this.$router.push( `/home/data/notes/${this.secret.fullId}` )
+      this.$router.push(`/home/data/notes/${this.secret.fullId}`)
     },
     deleteSecret() {
       this.$emit('delete', this.secret)
@@ -50,7 +49,13 @@ export default {
 </script>
 
 <style>
-div > .border-bottom:last-child { border-bottom: none!important;  }
-.hide-input { width: 0px; }
-.secret-note { font-family: 'Lato'; }
+div > .border-bottom:last-child {
+  border-bottom: none !important;
+}
+.hide-input {
+  width: 0px;
+}
+.secret-note {
+  font-family: 'Lato';
+}
 </style>

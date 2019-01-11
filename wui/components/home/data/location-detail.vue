@@ -58,8 +58,8 @@ import TextListEditor from '@/components/home/data/secret/text_list_editor'
 import SecretData from '@/commonjs/secrets/secret_data'
 
 function isObjEmpty(obj) {
-  for(var key in obj) {
-    if(obj.hasOwnProperty(key)) {
+  for (var key in obj) {
+    if (obj.hasOwnProperty(key)) {
       return false
     }
   }
@@ -68,11 +68,11 @@ function isObjEmpty(obj) {
 
 export default {
   name: 'location-detail',
-  components: {LocationCredentialEditor, TextListEditor},
+  components: { LocationCredentialEditor, TextListEditor },
   props: {
     secret: Object
   },
-  data () {
+  data() {
     var loc = this.secret.data.cloneAsObject()
     var v = {
       tid: this.secret.teamId,
@@ -93,8 +93,8 @@ export default {
   computed: {
     allVaults() {
       var vaults = []
-      this.$store.getters['user/team_ids'].forEach((tid) => {
-        this.$store.state[`team.${tid}`].vaults.forEach((vault) => {
+      this.$store.getters['user/team_ids'].forEach(tid => {
+        this.$store.state[`team.${tid}`].vaults.forEach(vault => {
           vaults.push({
             tid: tid,
             vid: vault.id,
@@ -106,15 +106,15 @@ export default {
     },
     linesInNote() {
       var nl = this.loc.note.split(/\r\n|\r|\n/).length
-      return (nl < 10 ? nl : 10)
+      return nl < 10 ? nl : 10
     },
-    isOkName(){
+    isOkName() {
       return this.loc.name.length > 0
     },
-    isOkCreds(){
+    isOkCreds() {
       return this.loc.creds.length > 0
     },
-    isOk(){
+    isOk() {
       return this.isOkName && this.isOkCreds && isObjEmpty(this.credsInEditMode) && isObjEmpty(this.urlsInEditMode)
     }
   },
@@ -126,11 +126,11 @@ export default {
         secretData: new SecretData(this.loc)
       }
       var action = 'secrets/create'
-      if( this.secret.secretId ) {
+      if (this.secret.secretId) {
         action = 'secrets/update'
         args.secretId = this.secret.secretId
       }
-      this.$store.dispatch(action, args).then((secret) => {
+      this.$store.dispatch(action, args).then(secret => {
         this.$router.push('/home/data/locations')
       })
     },
@@ -141,17 +141,17 @@ export default {
       this.$set(this.credsInEditMode, idcred, false)
     },
     cancelCredChangeCb(idcred) {
-      if( this.credsInEditMode[idcred] ) {
+      if (this.credsInEditMode[idcred]) {
         //New credential so has to be deleted
         this.loc.creds.splice(idcred, 1)
       }
       this.$delete(this.credsInEditMode, idcred)
     },
     credChangedCb(ev) {
-      for( var k in this.loc.creds[ev.idcred] ) {
+      for (var k in this.loc.creds[ev.idcred]) {
         this.$delete(this.loc.creds[ev.idcred], k)
       }
-      for( k in ev.cred ) {
+      for (k in ev.cred) {
         this.$set(this.loc.creds[ev.idcred], k, ev.cred[k])
       }
       this.$delete(this.credsInEditMode, ev.idcred)
@@ -163,7 +163,7 @@ export default {
     isCredBeingEdited(idc) {
       return idc in this.credsInEditMode
     },
-    addNewCredential () {
+    addNewCredential() {
       this.loc.creds.push({})
       var cid = this.loc.creds.length - 1
       this.$set(this.loc.creds[cid], 'type', 'login')
@@ -176,19 +176,19 @@ export default {
     isUrlBeingEdited(idurl) {
       return idurl in this.urlsInEditMode
     },
-    editUrl (idurl) {
+    editUrl(idurl) {
       this.$set(this.urlsInEditMode, idurl, this.loc.urls[idurl])
     },
-    addUrl () {
-      this.loc.urls.push( this.newUrl )
+    addUrl() {
+      this.loc.urls.push(this.newUrl)
       this.showNewUrlInput = false
     },
-    showNewUrl () {
+    showNewUrl() {
       this.showNewUrlInput = true
       this.newUrl = ''
     },
-    createLocation () {
-      this.$router.push( `/home/data/new_location` )
+    createLocation() {
+      this.$router.push(`/home/data/new_location`)
     }
   }
 }
@@ -199,7 +199,7 @@ export default {
   border-top: 0px;
 }
 
-  .url-group-item:last-child {
-    border-bottom: 0px;
-  }
+.url-group-item:last-child {
+  border-bottom: 0px;
+}
 </style>

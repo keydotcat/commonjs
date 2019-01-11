@@ -23,58 +23,60 @@
 </template>
 
 <script>
-  export default {
-    name: 'text-list-editor',
-    model: {
-      prop: 'list',
-      event: 'change'
+export default {
+  name: 'text-list-editor',
+  model: {
+    prop: 'list',
+    event: 'change'
+  },
+  props: {
+    list: Array,
+    name: String
+  },
+  data() {
+    //Make an editable copy of the text list
+    var l = this.list.map(l => {
+      return l
+    })
+    return {
+      inner: l,
+      showNew: false,
+      newEntry: '',
+      editing: {}
+    }
+  },
+  methods: {
+    save(il) {
+      this.inner[il] = this.editing[il]
+      this.$delete(this.editing, il)
+      this.$emit('change', this.inner)
     },
-    props: {
-      list: Array,
-      name: String
+    cancel(il) {
+      this.$delete(this.editing, il)
     },
-    data() {
-      //Make an editable copy of the text list
-      var l = this.list.map((l) => { return l })
-      return {
-        inner: l,
-        showNew: false,
-        newEntry: '',
-        editing: {}
+    remove(il) {
+      this.inner.splice(il, 1)
+      this.$delete(this.editing, il)
+      this.$emit('change', this.inner)
+    },
+    isEditing(il) {
+      return il in this.editing
+    },
+    edit(il) {
+      if (!(il in this.editing)) {
+        this.$set(this.editing, il, this.inner[il])
       }
     },
-    methods: {
-      save( il ) {
-        this.inner[il] = this.editing[il]
-        this.$delete(this.editing, il)
-        this.$emit('change', this.inner)
-      },
-      cancel( il ) {
-        this.$delete(this.editing, il)
-      },
-      remove( il ) {
-        this.inner.splice(il, 1)
-        this.$delete(this.editing, il)
-        this.$emit('change', this.inner)
-      },
-      isEditing( il ) {
-        return il in this.editing
-      },
-      edit( il ) {
-        if( !( il in this.editing ) ) {
-          this.$set( this.editing, il, this.inner[il] )
-        }
-      },
-      addEntry () {
-        this.inner.push( this.newEntry )
-        this.newEntry = ''
-        this.showNew = false
-        this.$emit('change', this.inner)
-      },
-      cancelAdd () {
-        this.newEntry = ''
-        this.showNew = false
-      }
+    addEntry() {
+      this.inner.push(this.newEntry)
+      this.newEntry = ''
+      this.showNew = false
+      this.$emit('change', this.inner)
+    },
+    cancelAdd() {
+      this.newEntry = ''
+      this.showNew = false
     }
   }
+}
 </script>

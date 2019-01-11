@@ -7,28 +7,28 @@
 </template>
 
 <script>
-  import HomeHeader from './home/header'
-  import DataContent from './home/data-content'
-  import ManageContent from './home/manage-content'
+import HomeHeader from './home/header'
+import DataContent from './home/data-content'
+import ManageContent from './home/manage-content'
 
-  export default {
-    name: 'home-page',
-    components: { HomeHeader,DataContent, ManageContent },
-    data() {
-      return {
-        activePage: 'data'
-      }
-    },
-    methods: {
-      changePage(page) {
-        console.log('even!', page)
-        this.activePage = page
-      }
-    },
-    beforeMount() {
-      if (this.$store.state.user.id.length === 0) {
-        this.$store.dispatch('user/loadInfo')
-      }
+export default {
+  name: 'home-page',
+  components: { HomeHeader, DataContent, ManageContent },
+  data() {
+    return {
+      activePage: 'data'
+    }
+  },
+  methods: {
+    changePage(page) {
+      console.log('even!', page)
+      this.activePage = page
+    }
+  },
+  beforeMount() {
+    if (this.$store.state.user.id.length === 0) {
+      this.$store.dispatch('user/loadInfo')
     }
   }
+}
 </script>

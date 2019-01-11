@@ -33,64 +33,64 @@
 </template>
 
 <script>
-  export default {
-    name: 'secret-filter',
-    data () {
-      return {
-        filter: {
-          search: '',
-          labels: [],
-          teams: [],
-          vaults: []
-        }
-      }
-    },
-    computed: {
-      loading() {
-        return this.$store.state.secrets.loading > 0
-      }
-    },
-    methods: {
-      emitChanges() {
-        this.$emit('update:filter', this.filter)
-      },
-      isActiveLabel(label) {
-        return this.filter.labels.indexOf(label) > -1
-      },
-      toggleLabel(label) {
-        var it = this.filter.labels.indexOf(label)
-        if( it > -1 ) {
-          this.filter.labels.splice(it, 1)
-        } else {
-          this.filter.labels.push(label)
-        }
-        this.emitChanges()
-      },
-      isActiveVault(tid, vid) {
-        var k = `${tid}/${vid}`
-        return this.filter.teams.indexOf(tid) > -1 || this.filter.vaults.indexOf(k) > -1
-      },
-      toggleActiveVault(tid, vid){
-        var k = `${tid}/${vid}`
-        var it = this.filter.vaults.indexOf(k)
-        if( it > -1 ) {
-          this.filter.vaults.splice(it, 1)
-        } else {
-          this.filter.vaults.push(k)
-        }
-        this.emitChanges()
-      },
-      toggleActiveTeam(tid){
-        var it = this.filter.teams.indexOf(tid)
-        if( it > -1 ) {
-          this.filter.teams.splice(it, 1)
-        } else {
-          this.filter.teams.push(tid)
-        }
-        this.emitChanges()
+export default {
+  name: 'secret-filter',
+  data() {
+    return {
+      filter: {
+        search: '',
+        labels: [],
+        teams: [],
+        vaults: []
       }
     }
+  },
+  computed: {
+    loading() {
+      return this.$store.state.secrets.loading > 0
+    }
+  },
+  methods: {
+    emitChanges() {
+      this.$emit('update:filter', this.filter)
+    },
+    isActiveLabel(label) {
+      return this.filter.labels.indexOf(label) > -1
+    },
+    toggleLabel(label) {
+      var it = this.filter.labels.indexOf(label)
+      if (it > -1) {
+        this.filter.labels.splice(it, 1)
+      } else {
+        this.filter.labels.push(label)
+      }
+      this.emitChanges()
+    },
+    isActiveVault(tid, vid) {
+      var k = `${tid}/${vid}`
+      return this.filter.teams.indexOf(tid) > -1 || this.filter.vaults.indexOf(k) > -1
+    },
+    toggleActiveVault(tid, vid) {
+      var k = `${tid}/${vid}`
+      var it = this.filter.vaults.indexOf(k)
+      if (it > -1) {
+        this.filter.vaults.splice(it, 1)
+      } else {
+        this.filter.vaults.push(k)
+      }
+      this.emitChanges()
+    },
+    toggleActiveTeam(tid) {
+      var it = this.filter.teams.indexOf(tid)
+      if (it > -1) {
+        this.filter.teams.splice(it, 1)
+      } else {
+        this.filter.teams.push(tid)
+      }
+      this.emitChanges()
+    }
   }
+}
 </script>
 
 <style>
@@ -99,7 +99,11 @@
 }
 
 @keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
 </style>

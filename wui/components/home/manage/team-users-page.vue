@@ -81,86 +81,85 @@
 </template>
 
 <script>
-  export default {
-    name: 'team-users',
-    props: {
-      tid: String
+export default {
+  name: 'team-users',
+  props: {
+    tid: String
+  },
+  data() {
+    return {
+      invite: '',
+      showConfirmInvite: false,
+      showConfirmDemote: false,
+      showConfirmPromote: false,
+      userToDemote: {},
+      userToPromote: {}
+    }
+  },
+  computed: {
+    mid() {
+      return `team.${this.tid}`
     },
-    data () {
-      return {
-        invite: '',
-        showConfirmInvite: false,
-        showConfirmDemote: false,
-        showConfirmPromote: false,
-        userToDemote: {},
-        userToPromote: {}
+    invites() {
+      return this.$store.state[this.mid].invites
+    },
+    admins() {
+      return this.$store.getters[`${this.mid}/admins`]
+    },
+    users() {
+      return this.$store.getters[`${this.mid}/users`]
+    }
+  },
+  methods: {
+    startDemote(user) {
+      this.showConfirmDemote = true
+      this.userToDemote = user
+    },
+    startPromote(user) {
+      this.showConfirmPromote = true
+      this.userToPromote = user
+    },
+    cancelPromote() {
+      this.showConfirmPromote = false
+      this.userToPromote = {}
+    },
+    cancelDemote() {
+      this.showConfirmDemote = false
+      this.userToDemote = {}
+    },
+    confirmPromote() {
+      this.$store.dispatch(`${this.mid}/promoteUsers`, [this.userToPromote.data])
+      this.showConfirmPromote = false
+      this.userToPromote = {}
+    },
+    confirmDemote() {
+      this.$store.dispatch(`${this.mid}/demoteUsers`, [this.userToDemote.data])
+      this.showConfirmDemote = false
+      this.userToDemote = {}
+    },
+    uninvite(email) {
+      console.log(email, 'TODO')
+    },
+    startInvite() {
+      if (this.invite.length > 0) {
+        this.showConfirmInvite = true
       }
     },
-    computed: {
-      mid() {
-        return `team.${this.tid}`
-      },
-      invites () {
-        return this.$store.state[this.mid].invites
-      },
-      admins() {
-        return this.$store.getters[`${this.mid}/admins`]
-      },
-      users () {
-        return this.$store.getters[`${this.mid}/users`]
-      }
+    cancelInvite() {
+      this.invite = ''
+      this.showConfirmInvite = false
     },
-    methods: {
-      startDemote(user){
-        this.showConfirmDemote = true
-        this.userToDemote = user
-      },
-      startPromote(user){
-        this.showConfirmPromote = true
-        this.userToPromote = user
-      },
-      cancelPromote(){
-        this.showConfirmPromote = false
-        this.userToPromote = {}
-      },
-      cancelDemote(){
-        this.showConfirmDemote = false
-        this.userToDemote = {}
-      },
-      confirmPromote(){
-        this.$store.dispatch(`${this.mid}/promoteUsers`, [this.userToPromote.data])
-        this.showConfirmPromote = false
-        this.userToPromote = {}
-      },
-      confirmDemote(){
-        this.$store.dispatch( `${this.mid}/demoteUsers`, [this.userToDemote.data])
-        this.showConfirmDemote = false
-        this.userToDemote = {}
-      },
-      uninvite(email){
-        console.log(email, 'TODO')
-      },
-      startInvite() {
-        if(this.invite.length > 0){
-          this.showConfirmInvite = true
-        }
-      },
-      cancelInvite() {
-        this.invite = ''
-        this.showConfirmInvite = false
-      },
-      confirmInvite() {
-        this.$store.dispatch(`${this.mid}/invite`, this.invite)
-        this.invite = ''
-        this.showConfirmInvite = false
-      }
+    confirmInvite() {
+      this.$store.dispatch(`${this.mid}/invite`, this.invite)
+      this.invite = ''
+      this.showConfirmInvite = false
     }
   }
+}
 </script>
 
 <style>
-  .confirm {
-    margin-bottom: 20px;
-  }
+.confirm {
+  margin-bottom: 20px;
+}
 </style>
-

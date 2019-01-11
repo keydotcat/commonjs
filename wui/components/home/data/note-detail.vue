@@ -47,11 +47,11 @@ import NoteData from '@/commonjs/secrets/note_data'
 
 export default {
   name: 'note-detail',
-  components: {TextListEditor},
+  components: { TextListEditor },
   props: {
     secret: Object
   },
-  data () {
+  data() {
     var note = this.secret.data.cloneAsObject()
     var v = {
       tid: this.secret.teamId,
@@ -67,8 +67,8 @@ export default {
   computed: {
     allVaults() {
       var vaults = []
-      this.$store.getters['user/team_ids'].forEach((tid) => {
-        this.$store.state[`team.${tid}`].vaults.forEach((vault) => {
+      this.$store.getters['user/team_ids'].forEach(tid => {
+        this.$store.state[`team.${tid}`].vaults.forEach(vault => {
           vaults.push({
             tid: tid,
             vid: vault.id,
@@ -80,12 +80,12 @@ export default {
     },
     linesInNote() {
       var nl = this.note.data.split(/\r\n|\r|\n/).length
-      return (nl < 10 ? nl : 10)
+      return nl < 10 ? nl : 10
     },
-    isOkName(){
+    isOkName() {
       return this.note.name.length > 0
     },
-    isOk(){
+    isOk() {
       return this.isOkName
     }
   },
@@ -97,11 +97,11 @@ export default {
         secretData: new NoteData(this.note)
       }
       var action = 'secrets/create'
-      if( this.secret.secretId ) {
+      if (this.secret.secretId) {
         action = 'secrets/update'
         args.secretId = this.secret.secretId
       }
-      this.$store.dispatch(action, args).then((secret) => {
+      this.$store.dispatch(action, args).then(secret => {
         this.$router.push('/home/data/notes')
       })
     },
@@ -117,7 +117,7 @@ export default {
   border-top: 0px;
 }
 
-  .url-group-item:last-child {
-    border-bottom: 0px;
-  }
+.url-group-item:last-child {
+  border-bottom: 0px;
+}
 </style>
