@@ -7,10 +7,18 @@ import eventSync from '@/commonjs/store/services/eventsync'
 const SESSION_STORE_NAME = 'kcSession'
 
 const state = {
-  uid: ''
+  uid: '',
+  isWebExt: false,
+  loading: false
 }
 
 const mutations = {
+  [mt.SESSION_SET_WEBEXT](state) {
+    state.isWebExt = true
+  },
+  [mt.SESSION_WORKING](state) {
+    state.loading = true
+  },
   [mt.SESSION_LOGIN](state, { url, data, keys }) {
     var sData = {
       sessionToken: data.session_token,
@@ -23,15 +31,18 @@ const mutations = {
     browser.storage.local.set(container)
     request.fromJson(sData)
     state.uid = sData.uid
+    state.loading = false
     eventSync.connect()
   },
   [mt.SESSION_EXISTS](state, uid) {
     state.uid = uid
     console.log('sync', eventSync)
+    state.loading = false
     eventSync.connect()
   },
   [mt.SESSION_LOGOUT](state) {
     state.uid = ''
+    state.loading = false
     browser.storage.local.remove(SESSION_STORE_NAME)
   }
 }
@@ -43,7 +54,9 @@ const getters = {
 }
 
 const actions = {
-  loadFromStorage(context) {
+  loadFromExtensionStorage(context) {
+    context.commit(mt.SESSION_SET_WEBEXT)
+    context.commit(mt.SESSION_WORKING)
     return browser.storage.local.get(SESSION_STORE_NAME).then(data => {
       if (!(SESSION_STORE_NAME in data)) {
         return
