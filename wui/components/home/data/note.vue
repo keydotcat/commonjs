@@ -1,13 +1,13 @@
 <template>
   <div class="w-100">
     <div class="w-100 p-2 d-flex align-items-center">
-      <i @click="toggle" v-if="!expanded" class="fas fa-caret-right"></i>
-      <i @click="toggle" v-if="expanded" class="fas fa-caret-down"></i>
+      <i @click="toggle" v-if="!expanded" class="material-icons">chevron_right</i>
+      <i @click="toggle" v-if="expanded" class="material-icons">expand_less</i>
       <span @click="toggle" class="h5 m-0 ml-1">{{secret.data.name}}</span>
       <span class="badge badge-dark ml-1" v-for="label in secret.data.labels">{{label}}</span>
       <small class="text-muted ml-auto">{{$store.getters[`team.${secret.teamId}/name`]}}/{{secret.vaultId}}</small>
       <div class="dropdown ml-1">
-        <i class="text-muted ml-1 fas fa-bars" data-toggle="dropdown" id="dropdownMenuIcon"></i>
+        <i class="text-muted ml-1 material-icons" data-toggle="dropdown" id="dropdownMenuIcon">menu</i>
         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuIcon">
           <a class="dropdown-item" @click="editSecret" href="#">Edit</a>
           <a class="dropdown-item" @click="deleteSecret" href="#">Delete</a>
@@ -39,10 +39,10 @@ export default {
       this.expanded = !this.expanded
     },
     editSecret() {
-      this.$router.push(`/home/data/notes/${this.secret.fullId}`)
+      this.$emit('edit-note',this.secret.fullId)
     },
     deleteSecret() {
-      this.$emit('delete', this.secret)
+      this.$emit('delete-note', this.secret)
     }
   }
 }

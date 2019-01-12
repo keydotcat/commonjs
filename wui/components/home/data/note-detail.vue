@@ -42,7 +42,7 @@
 </template>
 
 <script>
-import TextListEditor from '@/components/home/data/secret/text_list_editor'
+import TextListEditor from './secret/text-list-editor'
 import NoteData from '@/commonjs/secrets/note_data'
 
 export default {
@@ -102,11 +102,11 @@ export default {
         args.secretId = this.secret.secretId
       }
       this.$store.dispatch(action, args).then(secret => {
-        this.$router.push('/home/data/notes')
+        this.$emit('done')
       })
     },
     cancelChanges() {
-      this.$router.push('/home/data/notes')
+        this.$emit('done')
     }
   }
 }

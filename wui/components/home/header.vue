@@ -22,9 +22,6 @@
             <span class="sr-only" v-if="activePage=='manage'">(current)</span>
           </a>
         </li>
-        <!--li class="nav-item">
-          <a class="dropdown-item" href="#" @click="goto('new_team')">{{$t('create_new_team')}}</a>
-        </li-->
         <li class="nav-item">
           <a href="#" class="nav-link" @click="logout()">
             {{$t('logout')}}

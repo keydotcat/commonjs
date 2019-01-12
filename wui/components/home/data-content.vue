@@ -18,7 +18,9 @@
 
         <main role="main" class="col-10 col-xl-11 ml-sm-auto px-4">
           <locations-page v-if="activePage == 'locations'"></locations-page>
-          <notes-page v-if="activePage == 'notes'"></notes-page>
+          <notes-page v-on:new-note="activePage='new-note'" v-on:edit-note="editNote" v-if="activePage == 'notes'"></notes-page>
+          <new-note-page v-on:done="activePage='notes'" v-if="activePage == 'new-note'"></new-note-page>
+          <edit-note-page v-on:done="activePage='notes'" :fullsecretid="fullsid" v-if="activePage == 'edit-note'"></edit-note-page>
         </main>
       </div>
     </div>
@@ -27,13 +29,16 @@
 <script>
 import LocationsPage from './data/locations-page'
 import NotesPage from './data/notes-page'
+import NewNotePage from './data/new-note-page'
+import EditNotePage from './data/edit-note-page'
 
 export default {
   name: 'data-content',
-  components: { LocationsPage, NotesPage },
+  components: { LocationsPage, NotesPage, NewNotePage, EditNotePage },
   data() {
     return {
-      activePage: 'locations'
+      activePage: 'locations',
+      fullsid: ''
     }
   },
   methods: {
@@ -44,6 +49,10 @@ export default {
     },
     goto(where) {
       this.activePage = where
+    },
+    editNote(fullsid) {
+      this.activePage = 'edit-note'
+      this.fullsid = fullsid
     }
   }
 }
