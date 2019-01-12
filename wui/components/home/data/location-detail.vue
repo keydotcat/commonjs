@@ -53,8 +53,8 @@
 </template>
 
 <script>
-import LocationCredentialEditor from '@/components/home/data/location_credential_editor'
-import TextListEditor from '@/components/home/data/secret/text_list_editor'
+import LocationCredentialEditor from './location-credential-editor'
+import TextListEditor from './secret/text-list-editor'
 import SecretData from '@/commonjs/secrets/secret_data'
 
 function isObjEmpty(obj) {
@@ -131,11 +131,11 @@ export default {
         args.secretId = this.secret.secretId
       }
       this.$store.dispatch(action, args).then(secret => {
-        this.$router.push('/home/data/locations')
+        this.$emit('done')
       })
     },
     cancelChanges() {
-      this.$router.push('/home/data/locations')
+      this.$emit('done')
     },
     editCredential(idcred) {
       this.$set(this.credsInEditMode, idcred, false)

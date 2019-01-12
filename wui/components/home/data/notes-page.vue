@@ -46,57 +46,57 @@
 </template>
 
 <script>
-  //Indent fix
-  import Note from './note'
-  import SecretFilter from './secret-filter'
-  import $ from 'jquery'
+//Indent fix
+import Note from './note'
+import SecretFilter from './secret-filter'
+import $ from 'jquery'
 
-  export default {
-    name: 'notes-page',
-    components: { Note, SecretFilter },
-    data() {
-      return {
-        filter: {},
-        secretToDel: {
-          name: '',
-          tid: '',
-          vid: '',
-          sid: ''
-        },
-        pageIdx: 0,
-        numLocs: 50
-      }
+export default {
+  name: 'notes-page',
+  components: { Note, SecretFilter },
+  data() {
+    return {
+      filter: {},
+      secretToDel: {
+        name: '',
+        tid: '',
+        vid: '',
+        sid: ''
+      },
+      pageIdx: 0,
+      numLocs: 50
+    }
+  },
+  computed: {
+    loading() {
+      return this.$store.state.secrets.loading > 0
     },
-    computed: {
-      loading() {
-        return this.$store.state.secrets.loading > 0
-      },
-      allNotes() {
-        return this.$store.getters['secrets/filteredSecrets']('note', this.filter)
-      },
-      pageNotes() {
-        var start = this.pageIdx * this.numLocs
-        return this.allNotes.slice(start, start + this.numLocs)
-      },
-      numPages() {
-        return Math.ceil(this.allNotes.length / this.numLocs)
-      },
-      pagesToFastJump() {
-        var pages = []
-        var jumps = [-10, -5, -2, -1, 0, 1, 2, 5, 10]
-        jumps.forEach(jump => {
-          var t = this.pageIdx + jump
-          if (t >= 0 && t < this.numPages) {
-            pages.push(t)
-          }
-        })
-        return pages
-      }
+    allNotes() {
+      return this.$store.getters['secrets/filteredSecrets']('note', this.filter)
     },
-    methods: {
-      editNote(fullId) {
-        this.$emit('edit-note',fullId)
-      },
+    pageNotes() {
+      var start = this.pageIdx * this.numLocs
+      return this.allNotes.slice(start, start + this.numLocs)
+    },
+    numPages() {
+      return Math.ceil(this.allNotes.length / this.numLocs)
+    },
+    pagesToFastJump() {
+      var pages = []
+      var jumps = [-10, -5, -2, -1, 0, 1, 2, 5, 10]
+      jumps.forEach(jump => {
+        var t = this.pageIdx + jump
+        if (t >= 0 && t < this.numPages) {
+          pages.push(t)
+        }
+      })
+      return pages
+    }
+  },
+  methods: {
+    editNote(fullId) {
+      this.$emit('edit-note', fullId)
+    },
     requestDelete(secret) {
       this.secretToDel.name = secret.data.name
       this.secretToDel.tid = secret.teamId

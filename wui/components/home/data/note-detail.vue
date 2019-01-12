@@ -106,7 +106,7 @@ export default {
       })
     },
     cancelChanges() {
-        this.$emit('done')
+      this.$emit('done')
     }
   }
 }

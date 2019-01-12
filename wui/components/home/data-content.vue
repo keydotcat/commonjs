@@ -17,7 +17,9 @@
         </nav>
 
         <main role="main" class="col-10 col-xl-11 ml-sm-auto px-4">
-          <locations-page v-if="activePage == 'locations'"></locations-page>
+          <locations-page v-on:new-location="activePage='new-location'" v-on:edit-location="editLocation" v-if="activePage == 'locations'"></locations-page>
+          <new-location-page v-on:done="activePage='locations'" v-if="activePage == 'new-location'"></new-location-page>
+          <edit-location-page v-on:done="activePage='locations'" :fullsecretid="fullsid" v-if="activePage == 'edit-location'"></edit-location-page>
           <notes-page v-on:new-note="activePage='new-note'" v-on:edit-note="editNote" v-if="activePage == 'notes'"></notes-page>
           <new-note-page v-on:done="activePage='notes'" v-if="activePage == 'new-note'"></new-note-page>
           <edit-note-page v-on:done="activePage='notes'" :fullsecretid="fullsid" v-if="activePage == 'edit-note'"></edit-note-page>
@@ -28,13 +30,15 @@
 
 <script>
 import LocationsPage from './data/locations-page'
+import NewLocationPage from './data/new-location-page'
+import EditLocationPage from './data/edit-location-page'
 import NotesPage from './data/notes-page'
 import NewNotePage from './data/new-note-page'
 import EditNotePage from './data/edit-note-page'
 
 export default {
   name: 'data-content',
-  components: { LocationsPage, NotesPage, NewNotePage, EditNotePage },
+  components: { LocationsPage, NewLocationPage, EditLocationPage, NotesPage, NewNotePage, EditNotePage },
   data() {
     return {
       activePage: 'locations',
@@ -49,6 +53,10 @@ export default {
     },
     goto(where) {
       this.activePage = where
+    },
+    editLocation(fullsid) {
+      this.activePage = 'edit-location'
+      this.fullsid = fullsid
     },
     editNote(fullsid) {
       this.activePage = 'edit-note'

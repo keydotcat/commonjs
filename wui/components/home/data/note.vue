@@ -39,7 +39,7 @@ export default {
       this.expanded = !this.expanded
     },
     editSecret() {
-      this.$emit('edit-note',this.secret.fullId)
+      this.$emit('edit-note', this.secret.fullId)
     },
     deleteSecret() {
       this.$emit('delete-note', this.secret)

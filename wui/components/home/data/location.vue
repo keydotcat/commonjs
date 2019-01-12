@@ -70,10 +70,10 @@ export default {
       this.displayCreds = !this.displayCreds
     },
     editSecret() {
-      this.$router.push(`/home/data/location/${this.secret.fullId}`)
+      this.$emit('edit-location', this.secret.fullId)
     },
     deleteSecret() {
-      this.$emit('delete', this.secret)
+      this.$emit('delete-location', this.secret)
     },
     copy(text) {
       var ref = this.$refs.copyHelper[0]

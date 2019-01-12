@@ -8,7 +8,7 @@
     </div>
     <div class="rounded border w-90 mb-2">
       <secret-filter v-on:update:filter="filter = $event"></secret-filter>
-      <location class="border-bottom" v-for="secret in pageLocations" :key="secret.fullId" :secret="secret" v-on:delete="requestDelete"></location>
+      <location v-on:edit-location="editLocation" class="border-bottom" v-for="secret in pageLocations" :key="secret.fullId" :secret="secret" v-on:delete-location="requestDelete"></location>
       <div class="border-bottom p-3 text-center" v-if="loading && pageLocations.length == 0">
         Decrypting {{$store.state.secrets.loading}} secrets...
       </div>
@@ -94,6 +94,9 @@ export default {
     }
   },
   methods: {
+    editLocation(fullId) {
+      this.$emit('edit-location', fullId)
+    },
     requestDelete(secret) {
       this.secretToDel.name = secret.data.name
       this.secretToDel.tid = secret.teamId
@@ -110,7 +113,7 @@ export default {
       $('#deleteLocationModal').modal('hide')
     },
     createLocation() {
-      this.$router.push(`/home/data/new_location`)
+      this.$emit('new-location')
     }
   }
 }
