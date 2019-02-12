@@ -21,6 +21,9 @@ class EventSync {
     }
     console.log('Got event ', payload)
     switch (payload.action) {
+      case 'vaults:version':
+        store.dispatch('secrets/syncWhenNeeded', payload.data)
+        break
       case 'secret:new':
       case 'secret:change':
         req.secret = payload.secret

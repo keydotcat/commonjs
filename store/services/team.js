@@ -79,5 +79,11 @@ export default {
       .get(`/team/${tid}/secret`)
       .then(response => Promise.resolve(response.data))
       .catch(error => Promise.reject(error))
+  },
+  loadVaultSecrets(tid,vid) {
+    return request
+      .get(`/team/${tid}/vault/${vid}/secret`)
+      .then(response => Promise.resolve(response.data))
+      .catch(error => Promise.reject(error))
   }
 }
