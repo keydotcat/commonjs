@@ -24,9 +24,14 @@
               <small class="text-muted">{{cred.name}}</small>
             </div>
             <div class="flex-grow-1 d-flex justify-content-end">
-              <copy-button class="btn btn-sm btn-outline-secondary align-self-center" :copy="cred.username"><i
-                           class="material-icons">account_circle</i> Copy username</copy-button>
-                       <copy-button class="btn btn-sm btn-outline-secondary align-self-center ml-2" :copy="cred.password.toString()"><i class="material-icons">vpn_key</i> Copy password</copy-button>
+              <copy-button class="btn btn-sm btn-outline-secondary align-self-center d-flex" :copy="cred.username">
+                <i class="material-icons mr-1">account_circle</i>
+                Copy username
+              </copy-button>
+              <copy-button class="btn btn-sm btn-outline-secondary align-self-center ml-2 d-flex" :copy="cred.password.toString()">
+                <i class="material-icons mr-1">vpn_key</i> 
+                Copy password
+              </copy-button>
             </div>
           </div>
         </div>
