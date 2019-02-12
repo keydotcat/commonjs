@@ -1,7 +1,7 @@
 <template>
   <div class="rounded bg-light border-bottom w-100 d-flex align-items-center justify-content-end p-1">
     <input type="text" v-model="filter.search" @keyup="emitChanges" class="form-control mr-5" placeholder="Search">
-    <i v-if="loading" class="fas fa-spinner spinner"></i>
+    <i v-if="loading" class="material-icons spinner">autorenew</i>
     <div class="dropdown mr-2 d-flex align-items-center">
       <button class="btn btn-sm dropdown-toggle" :class="{'bg-success':filter.teams.length>0,'bg-transparent':filter.teams.length===0}" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
         Teams 

@@ -25,8 +25,8 @@
             </div>
             <div class="flex-grow-1 d-flex justify-content-end">
               <copy-button class="btn btn-sm btn-outline-secondary align-self-center" :copy="cred.username"><i
-                  class="material-icons">account_circle</i> Copy username</copy-button>
-              <copy-button class="btn btn-sm btn-outline-secondary align-self-center ml-2" :copy="cred.password.toString()"><i class="material-icons">vpn_key</i> Copy password</copy-button>
+                           class="material-icons">account_circle</i> Copy username</copy-button>
+                       <copy-button class="btn btn-sm btn-outline-secondary align-self-center ml-2" :copy="cred.password.toString()"><i class="material-icons">vpn_key</i> Copy password</copy-button>
             </div>
           </div>
         </div>
@@ -37,7 +37,10 @@
         <div class="col-sm-2 p-1 mr-2 text-right">Urls</div>
         <div class="col-sm border-left p-0">
           <div v-for="url in secret.data.urls" class="border-bottom p-1 d-flex justify-content-left lh-condensed">
-            {{url}} <a class="ml-2 text-muted" :href="url" target="_blank"><i class="fa fa-external-link" aria-hidden="true"></i></a>
+            <a class="ml-2 text-muted" :href="url" target="_blank">
+              <i class="material-icons mt-auto mb-auto mr-2">open_in_new</i>
+            </a>
+            {{url}} 
           </div>
         </div>
       </div>
@@ -52,38 +55,38 @@
 </template>
 
 <script>
-import CopyButton from './copy-button'
+  import CopyButton from './copy-button'
 
-export default {
-  name: 'location',
-  components: { CopyButton },
-  props: {
-    secret: Object
-  },
-  data() {
-    return {
-      displayCreds: false
-    }
-  },
-  methods: {
-    toggleCreds() {
-      this.displayCreds = !this.displayCreds
+  export default {
+    name: 'location',
+    components: { CopyButton },
+    props: {
+      secret: Object
     },
-    editSecret() {
-      this.$emit('edit-location', this.secret.fullId)
+    data() {
+      return {
+        displayCreds: false
+      }
     },
-    deleteSecret() {
-      this.$emit('delete-location', this.secret)
-    },
-    copy(text) {
-      var ref = this.$refs.copyHelper[0]
-      ref.value = text
-      ref.select()
-      document.execCommand('copy')
-      //ref.value = ''
+    methods: {
+      toggleCreds() {
+        this.displayCreds = !this.displayCreds
+      },
+      editSecret() {
+        this.$emit('edit-location', this.secret.fullId)
+      },
+      deleteSecret() {
+        this.$emit('delete-location', this.secret)
+      },
+      copy(text) {
+        var ref = this.$refs.copyHelper[0]
+        ref.value = text
+        ref.select()
+        document.execCommand('copy')
+        //ref.value = ''
+      }
     }
   }
-}
 </script>
 
 <style>

@@ -34,9 +34,9 @@
           <div class="input-group col-md-9">
             <input :type="revealPass ? 'text' : 'password'" v-model="changes.password" class="form-control"  :class="{'is-invalid':!isOkPassword}" aria-label="password"></input>
             <div class="input-group-append">
-              <button class="btn btn-outline-secondary" type="button" @click="revealPass=!revealPass">
-                <i class="fa fa-eye" v-if="!revealPass"></i>
-                <i class="fa fa-eye-slash" v-if="revealPass"></i>
+              <button class="btn btn-outline-secondary d-flex" type="button" @click="revealPass=!revealPass">
+                <i class="material-icons" v-if="!revealPass">visibility_off</i>
+                <i class="material-icons" v-if="revealPass">visibility</i>
               </button>
             </div>
             <div v-if="!isOkPassword" class="invalid-feedback">
@@ -45,11 +45,11 @@
           </div>
         </div>
         <div class="form-group row">
-          <label for="password" class="col-md col-form-label">Repeat password</label>
+          <label for="password" class="col-md col-form-label">Repeat</label>
           <div class="input-group col-md-9">
             <input :type="revealPass ? 'text' : 'password'" v-model="password_repeat" class="form-control" aria-label="password"></input>
             <div class="input-group-append">
-              <button class="btn btn-primary" :class="{'btn-info':showGenerate}"type="button" @click="toggleGeneratePanel">
+              <button class="btn btn-primary" :class="{'btn-info':showGenerate}" type="button" @click="toggleGeneratePanel">
                 Generate
               </button>
             </div>
@@ -97,9 +97,9 @@
                 <div class="input-group">
                   <input :type="revealGenerated ? 'text' : 'password'" v-model="generated" class="form-control"  aria-label="password"></input>
                   <div class="input-group-append">
-                    <button class="btn btn-outline-secondary" type="button" @click="revealGenerated=!revealGenerated">
-                      <i class="fa fa-eye" v-if="!revealGenerated"></i>
-                      <i class="fa fa-eye-slash" v-if="revealGenerated"></i>
+                    <button class="btn btn-outline-secondary d-flex" type="button" @click="revealGenerated=!revealGenerated">
+                      <i class="material-icons" v-if="!revealGenerated">visibility_off</i>
+                      <i class="material-icons" v-if="revealGenerated">visibility</i>
                     </button>
                   </div>
                 </div>
@@ -115,132 +115,141 @@
       </form>
     </div>
     <div class="card-footer d-flex justify-content-end">
-      <button type="button" class="btn btn-warning mr-auto" @click="deleteCredential">Delete</button>
-      <button type="button" :disabled="!isOkName || !isOkUsername || !isOkPassword" class="btn btn-success" @click="saveChanges">Save</button>
-      <button type="button" class="btn btn-danger ml-2" @click="cancelChanges">Cancel</button>
+      <button type="button" class="btn btn-warning mr-auto d-flex" @click="deleteCredential">
+        <i class="material-icons" aria-hidden="true">delete</i>
+        Delete
+      </button>
+      <button type="button" :disabled="!isOkName || !isOkUsername || !isOkPassword" class="btn btn-success d-flex" @click="saveChanges">
+        <i class="material-icons mr-1" aria-hidden="true">save_alt</i>
+        Save
+      </button>
+      <button type="button" class="btn btn-danger ml-2 d-flex" @click="cancelChanges">
+        <i class="material-icons" aria-hidden="true">clear</i>
+        Cancel
+      </button>
     </div>
   </div>
 </template>
 
 
 <script>
-import jsspg from 'javascript-strong-password-generator'
+  import jsspg from 'javascript-strong-password-generator'
 
-function getRandomArray(len) {
-  const crypto = window.crypto || window.msCrypto
-  const randomValues = new Uint32Array(len)
-  crypto.getRandomValues(randomValues)
-  return randomValues
-}
+  function getRandomArray(len) {
+    const crypto = window.crypto || window.msCrypto
+    const randomValues = new Uint32Array(len)
+    crypto.getRandomValues(randomValues)
+    return randomValues
+  }
 
-jsspg.init({
-  entropyFxn: () => {
-    return Array.from(getRandomArray(128))
-  }
-})
+  jsspg.init({
+    entropyFxn: () => {
+      return Array.from(getRandomArray(128))
+    }
+  })
 
-var charSets = {
-  num: '0123456789',
-  lower: 'abcdefghijklmnopqrstuvwxyz',
-  upper: 'ABCDEFGHIJKLMNOPQRSTUVWXYZ',
-  sym: '!"#$%&\'()*+,-./:;<=>?@[\\]^_`{|}~'
-}
+  var charSets = {
+    num: '0123456789',
+    lower: 'abcdefghijklmnopqrstuvwxyz',
+    upper: 'ABCDEFGHIJKLMNOPQRSTUVWXYZ',
+    sym: '!"#$%&\'()*+,-./:;<=>?@[\\]^_`{|}~'
+  }
 
-function generateNormalPass(opts) {
-  var gp = []
-  var cs = ''
-  if (opts.num) {
-    cs += charSets.num
+  function generateNormalPass(opts) {
+    var gp = []
+    var cs = ''
+    if (opts.num) {
+      cs += charSets.num
+    }
+    if (opts.lower) {
+      cs += charSets.lower
+    }
+    if (opts.upper) {
+      cs += charSets.upper
+    }
+    if (opts.sym) {
+      cs += charSets.sym
+    }
+    var csl = cs.length
+    var ra = getRandomArray(opts.len)
+    for (var i = 0; i < opts.len; i++) {
+      gp.push(cs[Math.floor(((1.0 * ra[i]) / Math.pow(2, 32)) * csl)])
+    }
+    return gp.join('')
   }
-  if (opts.lower) {
-    cs += charSets.lower
-  }
-  if (opts.upper) {
-    cs += charSets.upper
-  }
-  if (opts.sym) {
-    cs += charSets.sym
-  }
-  var csl = cs.length
-  var ra = getRandomArray(opts.len)
-  for (var i = 0; i < opts.len; i++) {
-    gp.push(cs[Math.floor(((1.0 * ra[i]) / Math.pow(2, 32)) * csl)])
-  }
-  return gp.join('')
-}
 
-export default {
-  name: 'location-credential-editor',
-  props: {
-    idcred: Number,
-    cred: Object
-  },
-  data() {
-    return {
-      changes: {
-        type: this.cred.type || 'password',
-        name: this.cred.name || 'login',
-        username: this.cred.username || '',
-        password: this.cred.password || ''
+  export default {
+    name: 'location-credential-editor',
+    props: {
+      idcred: Number,
+      cred: Object
+    },
+    data() {
+      return {
+        changes: {
+          type: this.cred.type || 'password',
+          name: this.cred.name || 'login',
+          username: this.cred.username || '',
+          password: this.cred.password || ''
+        },
+        revealPass: false,
+        revealGenerated: false,
+        showGenerate: false,
+        password_repeat: this.cred.password || '',
+        generated: '',
+        genOpts: {
+          lower: true,
+          upper: true,
+          num: true,
+          sym: false,
+          unicode: false,
+          len: 15
+        }
+      }
+    },
+    methods: {
+      deleteCredential() {
+        this.$emit('delete', {
+          idcred: this.idcred
+        })
       },
-      revealPass: false,
-      revealGenerated: false,
-      showGenerate: false,
-      password_repeat: this.cred.password || '',
-      generated: '',
-      genOpts: {
-        lower: true,
-        upper: true,
-        num: true,
-        sym: false,
-        unicode: false,
-        len: 15
+      saveChanges() {
+        this.$emit('change', {
+          idcred: this.idcred,
+          cred: this.changes
+        })
+      },
+      cancelChanges() {
+        this.$emit('cancel', this.idcred)
+      },
+      toggleGeneratePanel() {
+        this.showGenerate = !this.showGenerate
+        this.generatePassword()
+      },
+      saveGeneratedPassword() {
+        this.password_repeat = this.generated
+        this.changes.password = this.generated
+        this.showGenerate = false
+        this.generated = ''
+      },
+      generatePassword() {
+        if (this.genOpts.unicode) {
+          this.generated = jsspg.generate(this.genOpts.len)
+        } else {
+          this.generated = generateNormalPass(this.genOpts)
+        }
       }
-    }
-  },
-  methods: {
-    deleteCredential() {
-      this.$emit('delete', {
-        idcred: this.idcred
-      })
     },
-    saveChanges() {
-      this.$emit('change', {
-        idcred: this.idcred,
-        cred: this.changes
-      })
-    },
-    cancelChanges() {
-      this.$emit('cancel', this.idcred)
-    },
-    toggleGeneratePanel() {
-      this.showGenerate = !this.showGenerate
-      this.generatePassword()
-    },
-    saveGeneratedPassword() {
-      this.password_repeat = this.generated
-      this.changes.password = this.generated
-      this.showGenerate = false
-      this.generated = ''
-    },
-    generatePassword() {
-      if (this.genOpts.unicode) {
-        this.generated = jsspg.generate(this.genOpts.len)
-      } else {
-        this.generated = generateNormalPass(this.genOpts)
+    computed: {
+      isOkName() {
+        return (this.changes.name || '').length > 0
+      },
+      isOkUsername() {
+        return (this.changes.username || '').length > 0
+      },
+      isOkPassword() {
+        return (this.changes.password || '').length > 0 && this.changes.password === this.password_repeat
       }
-    }
-  },
-  computed: {
-    isOkName() {
-      return (this.changes.name || '').length > 0
-    },
-    isOkUsername() {
-      return (this.changes.username || '').length > 0
-    },
-    isOkPassword() {
-      return (this.changes.password || '').length > 0 && this.changes.password === this.password_repeat
     }
   }
-}
 </script>

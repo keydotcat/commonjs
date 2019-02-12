@@ -2,7 +2,7 @@
   <div class="card">
     <div class="card-body">
      <h5 class="card-title" @click="bEditingName=true" :class="{'text-danger':!isOkName}" v-if='!bEditingName'>{{ note.name || 'Note name' }}
-        <i class="fas fa-edit float-right" @click='bEditingName=true'></i>
+        <i class="material-icons text-muted mt-auto mb-auto float-right" @click='bEditingName=true'>edit</i>
       </h5>
       <h5 class="card-title" v-if='bEditingName'>
         <div class="input-group w-100">
