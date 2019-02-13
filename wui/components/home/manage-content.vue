@@ -9,20 +9,20 @@
 </template>
 
 <script>
-  import TeamContent from './manage/team-content'
-  import UserInfo from './manage/user-info-page'
-  import UserImport from './manage/user-import-page'
-  import UserExport from './manage/user-export-page'
-  import NewTeam from './new-team-page'
+import TeamContent from './manage/team-content'
+import UserInfo from './manage/user-info-page'
+import UserImport from './manage/user-import-page'
+import UserExport from './manage/user-export-page'
+import NewTeam from './new-team-page'
 
-  export default {
-    name: 'manage-content',
-    components: { TeamContent, UserInfo, UserExport, UserImport, NewTeam },
-    props: {
-      section: String,
-      page: String
-    }
+export default {
+  name: 'manage-content',
+  components: { TeamContent, UserInfo, UserExport, UserImport, NewTeam },
+  props: {
+    section: String,
+    page: String
   }
+}
 </script>
 
 <style>

@@ -10,41 +10,41 @@
 </template>
 
 <script>
-  import LocationsPage from './data/locations-page'
-  import NewLocationPage from './data/new-location-page'
-  import EditLocationPage from './data/edit-location-page'
-  import NotesPage from './data/notes-page'
-  import NewNotePage from './data/new-note-page'
-  import EditNotePage from './data/edit-note-page'
+import LocationsPage from './data/locations-page'
+import NewLocationPage from './data/new-location-page'
+import EditLocationPage from './data/edit-location-page'
+import NotesPage from './data/notes-page'
+import NewNotePage from './data/new-note-page'
+import EditNotePage from './data/edit-note-page'
 
-  export default {
-    name: 'data-content',
-    components: { LocationsPage, NewLocationPage, EditLocationPage, NotesPage, NewNotePage, EditNotePage },
-    props: {
-      page: String
+export default {
+  name: 'data-content',
+  components: { LocationsPage, NewLocationPage, EditLocationPage, NotesPage, NewNotePage, EditNotePage },
+  props: {
+    page: String
+  },
+  data() {
+    return {
+      fullsid: '',
+      activePage: this.page
+    }
+  },
+  watch: {
+    page: function(newV, oldV) {
+      this.activePage = newV
+    }
+  },
+  methods: {
+    editLocation(fullsid) {
+      this.activePage = 'edit-location'
+      this.fullsid = fullsid
     },
-    data() {
-      return {
-        fullsid: '',
-        activePage: this.page
-      }
-    },
-    watch: {
-      page: function (newV, oldV) {
-        this.activePage = newV
-      }
-    },
-    methods: {
-      editLocation(fullsid) {
-        this.activePage = 'edit-location'
-        this.fullsid = fullsid
-      },
-      editNote(fullsid) {
-        this.activePage = 'edit-note'
-        this.fullsid = fullsid
-      }
+    editNote(fullsid) {
+      this.activePage = 'edit-note'
+      this.fullsid = fullsid
     }
   }
+}
 </script>
 
 <style>
@@ -65,34 +65,34 @@
   overflow-y: auto; /* Scrollable contents if viewport is shorter than content. */
 }
 
-  @supports ((position: -webkit-sticky) or (position: sticky)) {
-    .sidebar-sticky {
-      position: -webkit-sticky;
-      position: sticky;
-    }
+@supports ((position: -webkit-sticky) or (position: sticky)) {
+  .sidebar-sticky {
+    position: -webkit-sticky;
+    position: sticky;
   }
+}
 
-  .sidebar .nav-link {
-    font-weight: 500;
-    color: #333;
-  }
+.sidebar .nav-link {
+  font-weight: 500;
+  color: #333;
+}
 
-  .sidebar .nav-link .feather {
-    margin-right: 4px;
-    color: #999;
-  }
+.sidebar .nav-link .feather {
+  margin-right: 4px;
+  color: #999;
+}
 
-  .sidebar .nav-link.active {
-    color: #007bff;
-  }
+.sidebar .nav-link.active {
+  color: #007bff;
+}
 
-  .sidebar .nav-link:hover .feather,
-  .sidebar .nav-link.active .feather {
-    color: inherit;
-  }
+.sidebar .nav-link:hover .feather,
+.sidebar .nav-link.active .feather {
+  color: inherit;
+}
 
-  .sidebar-heading {
-    font-size: 0.75rem;
-    text-transform: uppercase;
-  }
+.sidebar-heading {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+}
 </style>

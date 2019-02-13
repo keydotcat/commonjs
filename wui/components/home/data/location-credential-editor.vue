@@ -133,123 +133,123 @@
 
 
 <script>
-  import jsspg from 'javascript-strong-password-generator'
+import jsspg from 'javascript-strong-password-generator'
 
-  function getRandomArray(len) {
-    const crypto = window.crypto || window.msCrypto
-    const randomValues = new Uint32Array(len)
-    crypto.getRandomValues(randomValues)
-    return randomValues
+function getRandomArray(len) {
+  const crypto = window.crypto || window.msCrypto
+  const randomValues = new Uint32Array(len)
+  crypto.getRandomValues(randomValues)
+  return randomValues
+}
+
+jsspg.init({
+  entropyFxn: () => {
+    return Array.from(getRandomArray(128))
   }
+})
 
-  jsspg.init({
-    entropyFxn: () => {
-      return Array.from(getRandomArray(128))
-    }
-  })
+var charSets = {
+  num: '0123456789',
+  lower: 'abcdefghijklmnopqrstuvwxyz',
+  upper: 'ABCDEFGHIJKLMNOPQRSTUVWXYZ',
+  sym: '!"#$%&\'()*+,-./:;<=>?@[\\]^_`{|}~'
+}
 
-  var charSets = {
-    num: '0123456789',
-    lower: 'abcdefghijklmnopqrstuvwxyz',
-    upper: 'ABCDEFGHIJKLMNOPQRSTUVWXYZ',
-    sym: '!"#$%&\'()*+,-./:;<=>?@[\\]^_`{|}~'
+function generateNormalPass(opts) {
+  var gp = []
+  var cs = ''
+  if (opts.num) {
+    cs += charSets.num
   }
-
-  function generateNormalPass(opts) {
-    var gp = []
-    var cs = ''
-    if (opts.num) {
-      cs += charSets.num
-    }
-    if (opts.lower) {
-      cs += charSets.lower
-    }
-    if (opts.upper) {
-      cs += charSets.upper
-    }
-    if (opts.sym) {
-      cs += charSets.sym
-    }
-    var csl = cs.length
-    var ra = getRandomArray(opts.len)
-    for (var i = 0; i < opts.len; i++) {
-      gp.push(cs[Math.floor(((1.0 * ra[i]) / Math.pow(2, 32)) * csl)])
-    }
-    return gp.join('')
+  if (opts.lower) {
+    cs += charSets.lower
   }
+  if (opts.upper) {
+    cs += charSets.upper
+  }
+  if (opts.sym) {
+    cs += charSets.sym
+  }
+  var csl = cs.length
+  var ra = getRandomArray(opts.len)
+  for (var i = 0; i < opts.len; i++) {
+    gp.push(cs[Math.floor(((1.0 * ra[i]) / Math.pow(2, 32)) * csl)])
+  }
+  return gp.join('')
+}
 
-  export default {
-    name: 'location-credential-editor',
-    props: {
-      idcred: Number,
-      cred: Object
-    },
-    data() {
-      return {
-        changes: {
-          type: this.cred.type || 'password',
-          name: this.cred.name || 'login',
-          username: this.cred.username || '',
-          password: this.cred.password || ''
-        },
-        revealPass: false,
-        revealGenerated: false,
-        showGenerate: false,
-        password_repeat: this.cred.password || '',
-        generated: '',
-        genOpts: {
-          lower: true,
-          upper: true,
-          num: true,
-          sym: false,
-          unicode: false,
-          len: 15
-        }
-      }
-    },
-    methods: {
-      deleteCredential() {
-        this.$emit('delete', {
-          idcred: this.idcred
-        })
+export default {
+  name: 'location-credential-editor',
+  props: {
+    idcred: Number,
+    cred: Object
+  },
+  data() {
+    return {
+      changes: {
+        type: this.cred.type || 'password',
+        name: this.cred.name || 'login',
+        username: this.cred.username || '',
+        password: this.cred.password || ''
       },
-      saveChanges() {
-        this.$emit('change', {
-          idcred: this.idcred,
-          cred: this.changes
-        })
-      },
-      cancelChanges() {
-        this.$emit('cancel', this.idcred)
-      },
-      toggleGeneratePanel() {
-        this.showGenerate = !this.showGenerate
-        this.generatePassword()
-      },
-      saveGeneratedPassword() {
-        this.password_repeat = this.generated
-        this.changes.password = this.generated
-        this.showGenerate = false
-        this.generated = ''
-      },
-      generatePassword() {
-        if (this.genOpts.unicode) {
-          this.generated = jsspg.generate(this.genOpts.len)
-        } else {
-          this.generated = generateNormalPass(this.genOpts)
-        }
-      }
-    },
-    computed: {
-      isOkName() {
-        return (this.changes.name || '').length > 0
-      },
-      isOkUsername() {
-        return (this.changes.username || '').length > 0
-      },
-      isOkPassword() {
-        return (this.changes.password || '').length > 0 && this.changes.password === this.password_repeat
+      revealPass: false,
+      revealGenerated: false,
+      showGenerate: false,
+      password_repeat: this.cred.password || '',
+      generated: '',
+      genOpts: {
+        lower: true,
+        upper: true,
+        num: true,
+        sym: false,
+        unicode: false,
+        len: 15
       }
     }
+  },
+  methods: {
+    deleteCredential() {
+      this.$emit('delete', {
+        idcred: this.idcred
+      })
+    },
+    saveChanges() {
+      this.$emit('change', {
+        idcred: this.idcred,
+        cred: this.changes
+      })
+    },
+    cancelChanges() {
+      this.$emit('cancel', this.idcred)
+    },
+    toggleGeneratePanel() {
+      this.showGenerate = !this.showGenerate
+      this.generatePassword()
+    },
+    saveGeneratedPassword() {
+      this.password_repeat = this.generated
+      this.changes.password = this.generated
+      this.showGenerate = false
+      this.generated = ''
+    },
+    generatePassword() {
+      if (this.genOpts.unicode) {
+        this.generated = jsspg.generate(this.genOpts.len)
+      } else {
+        this.generated = generateNormalPass(this.genOpts)
+      }
+    }
+  },
+  computed: {
+    isOkName() {
+      return (this.changes.name || '').length > 0
+    },
+    isOkUsername() {
+      return (this.changes.username || '').length > 0
+    },
+    isOkPassword() {
+      return (this.changes.password || '').length > 0 && this.changes.password === this.password_repeat
+    }
   }
+}
 </script>

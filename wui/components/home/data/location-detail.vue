@@ -60,145 +60,145 @@
 </template>
 
 <script>
-  import LocationCredentialEditor from './location-credential-editor'
-  import TextListEditor from './secret/text-list-editor'
-  import SecretData from '@/commonjs/secrets/secret_data'
+import LocationCredentialEditor from './location-credential-editor'
+import TextListEditor from './secret/text-list-editor'
+import SecretData from '@/commonjs/secrets/secret_data'
 
-  function isObjEmpty(obj) {
-    for (var key in obj) {
-      if (obj.hasOwnProperty(key)) {
-        return false
-      }
+function isObjEmpty(obj) {
+  for (var key in obj) {
+    if (obj.hasOwnProperty(key)) {
+      return false
     }
-    return true
   }
+  return true
+}
 
-  export default {
-    name: 'location-detail',
-    components: { LocationCredentialEditor, TextListEditor },
-    props: {
-      secret: Object
-    },
-    data() {
-      var loc = this.secret.data.cloneAsObject()
-      var v = {
-        tid: this.secret.teamId,
-        vid: this.secret.vaultId
-      }
-      return {
-        loc: loc,
-        bEditingName: false,
-        bSelectingVault: this.secret.secretId.length === 0,
-        parentVault: v,
-        newUrl: '',
-        showNewUrlInput: false,
-        urlsInEditMode: {},
-        showNewCredentialInput: false,
-        credsInEditMode: {}
-      }
-    },
-    computed: {
-      allVaults() {
-        var vaults = []
-        this.$store.getters['user/team_ids'].forEach(tid => {
-          this.$store.state[`team.${tid}`].vaults.forEach(vault => {
-            vaults.push({
-              tid: tid,
-              vid: vault.id,
-              teamName: this.$store.state[`team.${tid}`].name
-            })
+export default {
+  name: 'location-detail',
+  components: { LocationCredentialEditor, TextListEditor },
+  props: {
+    secret: Object
+  },
+  data() {
+    var loc = this.secret.data.cloneAsObject()
+    var v = {
+      tid: this.secret.teamId,
+      vid: this.secret.vaultId
+    }
+    return {
+      loc: loc,
+      bEditingName: false,
+      bSelectingVault: this.secret.secretId.length === 0,
+      parentVault: v,
+      newUrl: '',
+      showNewUrlInput: false,
+      urlsInEditMode: {},
+      showNewCredentialInput: false,
+      credsInEditMode: {}
+    }
+  },
+  computed: {
+    allVaults() {
+      var vaults = []
+      this.$store.getters['user/team_ids'].forEach(tid => {
+        this.$store.state[`team.${tid}`].vaults.forEach(vault => {
+          vaults.push({
+            tid: tid,
+            vid: vault.id,
+            teamName: this.$store.state[`team.${tid}`].name
           })
         })
-        return vaults
-      },
-      linesInNote() {
-        var nl = this.loc.note.split(/\r\n|\r|\n/).length
-        return nl < 10 ? nl : 10
-      },
-      isOkName() {
-        return this.loc.name.length > 0
-      },
-      isOkCreds() {
-        return this.loc.creds.length > 0
-      },
-      isOk() {
-        return this.isOkName && this.isOkCreds && isObjEmpty(this.credsInEditMode) && isObjEmpty(this.urlsInEditMode)
-      }
+      })
+      return vaults
     },
-    methods: {
-      saveChanges() {
-        var args = {
-          teamId: this.parentVault.tid,
-          vaultId: this.parentVault.vid,
-          secretData: new SecretData(this.loc)
-        }
-        var action = 'secrets/create'
-        if (this.secret.secretId) {
-          action = 'secrets/update'
-          args.secretId = this.secret.secretId
-        }
-        this.$store.dispatch(action, args).then(secret => {
-          this.$emit('done')
-        })
-      },
-      cancelChanges() {
-        this.$emit('done')
-      },
-      editCredential(idcred) {
-        this.$set(this.credsInEditMode, idcred, false)
-      },
-      cancelCredChangeCb(idcred) {
-        if (this.credsInEditMode[idcred]) {
-          //New credential so has to be deleted
-          this.loc.creds.splice(idcred, 1)
-        }
-        this.$delete(this.credsInEditMode, idcred)
-      },
-      credChangedCb(ev) {
-        for (var k in this.loc.creds[ev.idcred]) {
-          this.$delete(this.loc.creds[ev.idcred], k)
-        }
-        for (k in ev.cred) {
-          this.$set(this.loc.creds[ev.idcred], k, ev.cred[k])
-        }
-        this.$delete(this.credsInEditMode, ev.idcred)
-      },
-      credDeletedCb(ev) {
-        this.$delete(this.credsInEditMode, ev.idcred)
-        this.$delete(this.loc.creds, ev.idcred)
-      },
-      isCredBeingEdited(idc) {
-        return idc in this.credsInEditMode
-      },
-      addNewCredential() {
-        this.loc.creds.push({})
-        var cid = this.loc.creds.length - 1
-        this.$set(this.loc.creds[cid], 'type', 'login')
-        this.$set(this.credsInEditMode, cid, true)
-      },
-      saveUrl(idurl) {
-        this.loc.urls[idurl] = this.urlsInEditMode[idurl]
-        this.$delete(this.urlsInEditMode, idurl)
-      },
-      isUrlBeingEdited(idurl) {
-        return idurl in this.urlsInEditMode
-      },
-      editUrl(idurl) {
-        this.$set(this.urlsInEditMode, idurl, this.loc.urls[idurl])
-      },
-      addUrl() {
-        this.loc.urls.push(this.newUrl)
-        this.showNewUrlInput = false
-      },
-      showNewUrl() {
-        this.showNewUrlInput = true
-        this.newUrl = ''
-      },
-      createLocation() {
-        this.$router.push(`/home/data/new_location`)
+    linesInNote() {
+      var nl = this.loc.note.split(/\r\n|\r|\n/).length
+      return nl < 10 ? nl : 10
+    },
+    isOkName() {
+      return this.loc.name.length > 0
+    },
+    isOkCreds() {
+      return this.loc.creds.length > 0
+    },
+    isOk() {
+      return this.isOkName && this.isOkCreds && isObjEmpty(this.credsInEditMode) && isObjEmpty(this.urlsInEditMode)
+    }
+  },
+  methods: {
+    saveChanges() {
+      var args = {
+        teamId: this.parentVault.tid,
+        vaultId: this.parentVault.vid,
+        secretData: new SecretData(this.loc)
       }
+      var action = 'secrets/create'
+      if (this.secret.secretId) {
+        action = 'secrets/update'
+        args.secretId = this.secret.secretId
+      }
+      this.$store.dispatch(action, args).then(secret => {
+        this.$emit('done')
+      })
+    },
+    cancelChanges() {
+      this.$emit('done')
+    },
+    editCredential(idcred) {
+      this.$set(this.credsInEditMode, idcred, false)
+    },
+    cancelCredChangeCb(idcred) {
+      if (this.credsInEditMode[idcred]) {
+        //New credential so has to be deleted
+        this.loc.creds.splice(idcred, 1)
+      }
+      this.$delete(this.credsInEditMode, idcred)
+    },
+    credChangedCb(ev) {
+      for (var k in this.loc.creds[ev.idcred]) {
+        this.$delete(this.loc.creds[ev.idcred], k)
+      }
+      for (k in ev.cred) {
+        this.$set(this.loc.creds[ev.idcred], k, ev.cred[k])
+      }
+      this.$delete(this.credsInEditMode, ev.idcred)
+    },
+    credDeletedCb(ev) {
+      this.$delete(this.credsInEditMode, ev.idcred)
+      this.$delete(this.loc.creds, ev.idcred)
+    },
+    isCredBeingEdited(idc) {
+      return idc in this.credsInEditMode
+    },
+    addNewCredential() {
+      this.loc.creds.push({})
+      var cid = this.loc.creds.length - 1
+      this.$set(this.loc.creds[cid], 'type', 'login')
+      this.$set(this.credsInEditMode, cid, true)
+    },
+    saveUrl(idurl) {
+      this.loc.urls[idurl] = this.urlsInEditMode[idurl]
+      this.$delete(this.urlsInEditMode, idurl)
+    },
+    isUrlBeingEdited(idurl) {
+      return idurl in this.urlsInEditMode
+    },
+    editUrl(idurl) {
+      this.$set(this.urlsInEditMode, idurl, this.loc.urls[idurl])
+    },
+    addUrl() {
+      this.loc.urls.push(this.newUrl)
+      this.showNewUrlInput = false
+    },
+    showNewUrl() {
+      this.showNewUrlInput = true
+      this.newUrl = ''
+    },
+    createLocation() {
+      this.$router.push(`/home/data/new_location`)
     }
   }
+}
 </script>
 
 <style>

@@ -59,12 +59,12 @@ function addSecret(state, teamId, secret, openData) {
   }
   Vue.set(state.secrets, secretObj.fullId, secretObj)
   addLabelsToState(state, secretObj)
-  setMaximumVaultVersion(state,teamId,secret.vault,secret.vault_version)
+  setMaximumVaultVersion(state, teamId, secret.vault, secret.vault_version)
 }
 
 function setMaximumVaultVersion(state, teamId, vaultId, vaultVersion) {
   var tvid = `${teamId}/${vaultId}`
-  if(!(tvid in state.vaultVersion) || state.vaultVersion[tvid] < vaultVersion){
+  if (!(tvid in state.vaultVersion) || state.vaultVersion[tvid] < vaultVersion) {
     Vue.set(state.vaultVersion, tvid, vaultVersion)
   }
 }
@@ -79,13 +79,13 @@ function getVaultVersion(state, teamId, vaultId) {
   return state.vaultVersion[tvid] || 0
 }
 
-function deleteVaultSecrets(state, teamId, vaultId){
+function deleteVaultSecrets(state, teamId, vaultId) {
   var toDelete = []
-  for(var key in state.secrets) {  
+  for (var key in state.secrets) {
     var secretObj = state.secrets[key]
-    if(secretObj.teamId == teamId && secretObj.vaultId == vaultId) {
+    if (secretObj.teamId == teamId && secretObj.vaultId == vaultId) {
       toDelete.push(key)
-      removeLabelsFromState(state,secretObj)
+      removeLabelsFromState(state, secretObj)
     }
   }
   toDelete.forEach(key => {
@@ -115,12 +115,12 @@ const mutations = {
     removeLabelsFromState(state, secret)
     Vue.delete(state.secrets, sid)
   },
-  [mt.SECRET_PURGE_VAULT](state, {teamId, vaultId}){
-    deleteVaultSecrets(state,teamId,vaultId)
-    deleteVaultVersion(state,teamId,vaultId)
+  [mt.SECRET_PURGE_VAULT](state, { teamId, vaultId }) {
+    deleteVaultSecrets(state, teamId, vaultId)
+    deleteVaultVersion(state, teamId, vaultId)
   },
-  [mt.SECRET_SET_VAULT_VERSION](state, {teamId, vaultId, vaultVersion}){
-    setMaximumVaultVersion(state, teamId,vaultId,vaultVersion)
+  [mt.SECRET_SET_VAULT_VERSION](state, { teamId, vaultId, vaultVersion }) {
+    setMaximumVaultVersion(state, teamId, vaultId, vaultVersion)
   }
 }
 
@@ -293,35 +293,35 @@ const actions = {
   },
   async syncWhenNeeded(context, teamVaultIds) {
     var checked = []
-    for(var tid in teamVaultIds){
-      for(var vid in teamVaultIds[tid]){
+    for (var tid in teamVaultIds) {
+      for (var vid in teamVaultIds[tid]) {
         checked.push(`${tid}/${vid}`)
-        if(!(`team.${tid}` in context.rootState)) {
+        if (!(`team.${tid}` in context.rootState)) {
           console.log(`Team ${tid} not yet initialized. Skippping..`)
           continue
         }
         var vaultVersion = teamVaultIds[tid][vid]
-        if(getVaultVersion(context.state, tid,vid) >= vaultVersion) {
+        if (getVaultVersion(context.state, tid, vid) >= vaultVersion) {
           continue
         }
         console.log(`Syncing vault ${tid}/${vid}`)
-        async function reloadVaultSecrets(teamId,vaultId,vaultVersion) {
+        async function reloadVaultSecrets(teamId, vaultId, vaultVersion) {
           var vKeys = getVaultKeyFromList(context.rootState[`team.${teamId}`].vaults, teamId, vaultId)
-          context.commit(mt.SECRET_PURGE_VAULT,{teamId,vaultId})
-          var secretsResp = await teamSvc.loadVaultSecrets(teamId,vaultId)
+          context.commit(mt.SECRET_PURGE_VAULT, { teamId, vaultId })
+          var secretsResp = await teamSvc.loadVaultSecrets(teamId, vaultId)
           secretsResp.secrets.forEach(secret => {
             keyMgr.openAndDeserialize(vKeys, secret.data).then(opened => {
               context.commit(mt.SECRET_SET, { teamId: teamId, secret: secret, openData: opened })
             })
           })
-          context.commit(mt.SECRET_SET_VAULT_VERSION,{teamId,vaultId,vaultVersion})
+          context.commit(mt.SECRET_SET_VAULT_VERSION, { teamId, vaultId, vaultVersion })
         }
-        reloadVaultSecrets(tid,vid,vaultVersion)
+        reloadVaultSecrets(tid, vid, vaultVersion)
       }
     }
     var toDel = []
-    for(var key in context.state.vaultVersion){
-      if(checked.indexOf(key) == -1){
+    for (var key in context.state.vaultVersion) {
+      if (checked.indexOf(key) == -1) {
         toDel.push(key)
       }
     }
@@ -330,7 +330,7 @@ const actions = {
       var tid = sp[0]
       var vid = sp.splice(1).join('/')
       console.log(`Deleting vault ${tid}/${vid}`)
-      context.commit(mt.SECRET_PURGE_VAULT,{tid,vid})
+      context.commit(mt.SECRET_PURGE_VAULT, { tid, vid })
     })
   }
 }

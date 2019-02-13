@@ -49,28 +49,28 @@
 </template>
 
 <script>
-  import AutoLogout from './auto-logout'
+import AutoLogout from './auto-logout'
 
-  export default {
-    name: 'home-header',
-    components: { AutoLogout },
-    data() {
-      return {
-        section: 'data',
-        page: 'locations'
-      }
+export default {
+  name: 'home-header',
+  components: { AutoLogout },
+  data() {
+    return {
+      section: 'data',
+      page: 'locations'
+    }
+  },
+  methods: {
+    logout() {
+      this.$store.dispatch('session/logout')
     },
-    methods: {
-      logout() {
-        this.$store.dispatch('session/logout')
-      },
-      goto(section,page) {
-        this.section = section
-        this.page = page
-        this.$emit('change', section, page)
-      }
+    goto(section, page) {
+      this.section = section
+      this.page = page
+      this.$emit('change', section, page)
     }
   }
+}
 </script>
 
 <style>

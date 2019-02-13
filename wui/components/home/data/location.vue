@@ -60,38 +60,38 @@
 </template>
 
 <script>
-  import CopyButton from './copy-button'
+import CopyButton from './copy-button'
 
-  export default {
-    name: 'location',
-    components: { CopyButton },
-    props: {
-      secret: Object
+export default {
+  name: 'location',
+  components: { CopyButton },
+  props: {
+    secret: Object
+  },
+  data() {
+    return {
+      displayCreds: false
+    }
+  },
+  methods: {
+    toggleCreds() {
+      this.displayCreds = !this.displayCreds
     },
-    data() {
-      return {
-        displayCreds: false
-      }
+    editSecret() {
+      this.$emit('edit-location', this.secret.fullId)
     },
-    methods: {
-      toggleCreds() {
-        this.displayCreds = !this.displayCreds
-      },
-      editSecret() {
-        this.$emit('edit-location', this.secret.fullId)
-      },
-      deleteSecret() {
-        this.$emit('delete-location', this.secret)
-      },
-      copy(text) {
-        var ref = this.$refs.copyHelper[0]
-        ref.value = text
-        ref.select()
-        document.execCommand('copy')
-        //ref.value = ''
-      }
+    deleteSecret() {
+      this.$emit('delete-location', this.secret)
+    },
+    copy(text) {
+      var ref = this.$refs.copyHelper[0]
+      ref.value = text
+      ref.select()
+      document.execCommand('copy')
+      //ref.value = ''
     }
   }
+}
 </script>
 
 <style>
