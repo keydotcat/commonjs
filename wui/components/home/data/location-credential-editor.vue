@@ -14,7 +14,7 @@
         <div class="form-group row">
           <label for="name" class="col-md col-form-label">Name</label>
           <div class="col-md-9">
-            <input id="user" class="form-control" :class="{'is-invalid':!isOkName}" type="text" v-model="changes.name" placeholder="Name" aria-label="name"></input>
+            <input id="user" class="form-control" :class="{ 'is-invalid': !isOkName }" type="text" v-model="changes.name" placeholder="Name" aria-label="name" />
             <div v-if="!isOkName" class="invalid-feedback">
               Please choose credential name.
             </div>
@@ -23,7 +23,15 @@
         <div class="form-group row">
           <label for="username" class="col-md col-form-label">Username</label>
           <div class="col-md-9">
-            <input id="username" class="form-control" :class="{'is-invalid':!isOkUsername}" type="text" v-model="changes.username" placeholder="Username" aria-label="username"></input>
+            <input
+              id="username"
+              class="form-control"
+              :class="{ 'is-invalid': !isOkUsername }"
+              type="text"
+              v-model="changes.username"
+              placeholder="Username"
+              aria-label="username"
+            />
             <div v-if="!isOkUsername" class="invalid-feedback">
               Please choose a username.
             </div>
@@ -32,9 +40,9 @@
         <div class="form-group row">
           <label for="password" class="col-md col-form-label">Password</label>
           <div class="input-group col-md-9">
-            <input :type="revealPass ? 'text' : 'password'" v-model="changes.password" class="form-control"  :class="{'is-invalid':!isOkPassword}" aria-label="password"></input>
+            <input :type="revealPass ? 'text' : 'password'" v-model="changes.password" class="form-control" :class="{ 'is-invalid': !isOkPassword }" aria-label="password" />
             <div class="input-group-append">
-              <button class="btn btn-outline-secondary d-flex" type="button" @click="revealPass=!revealPass">
+              <button class="btn btn-outline-secondary d-flex" type="button" @click="revealPass = !revealPass">
                 <i class="material-icons" v-if="!revealPass">visibility_off</i>
                 <i class="material-icons" v-if="revealPass">visibility</i>
               </button>
@@ -47,9 +55,9 @@
         <div class="form-group row">
           <label for="password" class="col-md col-form-label">Repeat</label>
           <div class="input-group col-md-9">
-            <input :type="revealPass ? 'text' : 'password'" v-model="password_repeat" class="form-control" aria-label="password"></input>
+            <input :type="revealPass ? 'text' : 'password'" v-model="password_repeat" class="form-control" aria-label="password" />
             <div class="input-group-append">
-              <button class="btn btn-primary" :class="{'btn-info':showGenerate}" type="button" @click="toggleGeneratePanel">
+              <button class="btn btn-primary" :class="{ 'btn-info': showGenerate }" type="button" @click="toggleGeneratePanel">
                 Generate
               </button>
             </div>
@@ -65,28 +73,28 @@
               <div class="col">
                 <form>
                   <div class="form-group">
-                    <input type="range" v-model="genOpts.len" min="5" max="40" class="form-control-range" id="formControlRange"/>
+                    <input type="range" v-model="genOpts.len" min="5" max="40" class="form-control-range" id="formControlRange" />
                   </div>
                 </form>
               </div>
               <div class="col-2">
-                <input type="number" v-model="genOpts.len" class="form-control mx-auto" style="width:70px"></input>
+                <input type="number" v-model="genOpts.len" class="form-control mx-auto" style="width:70px" />
               </div>
             </div>
             <div class="row d-flex align-items-center">
               <div class="col-2">
-                Characters 
+                Characters
               </div>
               <div class="col d-flex align-content-justify">
                 <div class="btn-group mx-auto" role="group" aria-label="Basic example">
-                  <button type="button" class="btn" :disabled="genOpts.unicode" :class="{'btn-info':genOpts.lower}" @click="genOpts.lower=!genOpts.lower">a-z</button>
-                  <button type="button" class="btn" :disabled="genOpts.unicode" :class="{'btn-info':genOpts.upper}" @click="genOpts.upper=!genOpts.upper">A-Z</button>
-                  <button type="button" class="btn" :disabled="genOpts.unicode" :class="{'btn-info':genOpts.num}" @click="genOpts.num=!genOpts.num">0-9</button>
-                  <button type="button" class="btn" :disabled="genOpts.unicode" :class="{'btn-info':genOpts.sym}" @click="genOpts.sym=!genOpts.sym">symbols</button>
+                  <button type="button" class="btn" :disabled="genOpts.unicode" :class="{ 'btn-info': genOpts.lower }" @click="genOpts.lower = !genOpts.lower">a-z</button>
+                  <button type="button" class="btn" :disabled="genOpts.unicode" :class="{ 'btn-info': genOpts.upper }" @click="genOpts.upper = !genOpts.upper">A-Z</button>
+                  <button type="button" class="btn" :disabled="genOpts.unicode" :class="{ 'btn-info': genOpts.num }" @click="genOpts.num = !genOpts.num">0-9</button>
+                  <button type="button" class="btn" :disabled="genOpts.unicode" :class="{ 'btn-info': genOpts.sym }" @click="genOpts.sym = !genOpts.sym">symbols</button>
                 </div>
               </div>
               <div class="col d-flex align-content-justify">
-                <button type="button" class="btn mx-auto" :class="{'btn-info':genOpts.unicode}" @click="genOpts.unicode=!genOpts.unicode">full unicode</button>
+                <button type="button" class="btn mx-auto" :class="{ 'btn-info': genOpts.unicode }" @click="genOpts.unicode = !genOpts.unicode">full unicode</button>
               </div>
             </div>
             <div class="row d-flex align-items-center p-3">
@@ -95,9 +103,9 @@
               </div>
               <div class="col">
                 <div class="input-group">
-                  <input :type="revealGenerated ? 'text' : 'password'" v-model="generated" class="form-control"  aria-label="password"></input>
+                  <input :type="revealGenerated ? 'text' : 'password'" v-model="generated" class="form-control" aria-label="password" />
                   <div class="input-group-append">
-                    <button class="btn btn-outline-secondary d-flex" type="button" @click="revealGenerated=!revealGenerated">
+                    <button class="btn btn-outline-secondary d-flex" type="button" @click="revealGenerated = !revealGenerated">
                       <i class="material-icons" v-if="!revealGenerated">visibility_off</i>
                       <i class="material-icons" v-if="revealGenerated">visibility</i>
                     </button>
@@ -130,7 +138,6 @@
     </div>
   </div>
 </template>
-
 
 <script>
 import jsspg from 'javascript-strong-password-generator'

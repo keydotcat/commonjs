@@ -7,16 +7,16 @@
       <form enctype="multipart/form-data">
         <label>Vaults to export</label>
         <div class="form-check ml-2" v-for="vt in $store.getters['user/allVaults']">
-            <input class="form-check-input" type="checkbox" id="vaults" v-model="selectedVaults" :value="{tid:vt.tid, vid:vt.vid}">
-            <label class="form-check-label" for="inlineCheckbox1">{{vt.teamName}} / {{vt.vid}}</label>
+          <input class="form-check-input" type="checkbox" id="vaults" v-model="selectedVaults" :value="{ tid: vt.tid, vid: vt.vid }" />
+          <label class="form-check-label" for="inlineCheckbox1">{{ vt.teamName }} / {{ vt.vid }}</label>
         </div>
         <div class="form-group mt-2">
           <label>Password</label>
-          <input class="form-control" type="password" :class="{'is-invalid':checked && !isOkPass}" v-model="pass"></input>
+          <input class="form-control" type="password" :class="{ 'is-invalid': checked && !isOkPass }" v-model="pass" />
         </div>
         <div class="form-group">
           <label>Password repeat</label>
-          <input class="form-control" type="password" :class="{'is-invalid':checked && !isOkPass}" v-model="pass_repeat"></input>
+          <input class="form-control" type="password" :class="{ 'is-invalid': checked && !isOkPass }" v-model="pass_repeat" />
         </div>
         <div class="form-group d-flex justify-content-end">
           <button type="button" class="btn btn-primary" @click="exportDatabase" :disabled="!allOk">Export</button>
@@ -95,5 +95,4 @@ export default {
 }
 </script>
 
-<style>
-</style>
+<style></style>

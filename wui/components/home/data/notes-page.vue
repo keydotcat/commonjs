@@ -9,15 +9,15 @@
     <div class="rounded border w-90 mb-2">
       <secret-filter v-on:update:filter="filter = $event"></secret-filter>
       <note v-on:edit-note="editNote" class="border-bottom" v-for="secret in pageNotes" :key="secret.fullId" :secret="secret" v-on:delete-note="requestDelete"></note>
-      <div class="border-bottom p-3 text-center" v-if="loading && pageNotes.length == 0">
-        Decrypting {{$store.state.secrets.loading}} secrets...
-      </div>
+      <div class="border-bottom p-3 text-center" v-if="loading && pageNotes.length == 0">Decrypting {{ $store.state.secrets.loading }} secrets...</div>
       <div class="rounded bg-light border-bottom w-100 d-flex align-items-cender justify-content-end p-1">
         <nav aria-label="Page navigation">
           <ul class="pagination m-0">
-            <li class="page-item" :class="{disabled:pageIdx==0}"><a class="page-link" @click="pageIdx-=1" href="#">Previous</a></li>
-            <li class="page-item" v-for="pid in pagesToFastJump" :class="{active:pageIdx==pid}"><a class="page-link" @click="pageIdx=pid" href="#">{{pid}}</a></li>
-            <li class="page-item" :class="{disabled:pageIdx==numPages-1}"><a class="page-link" @click="pageIdx+=1" href="#">Next</a></li>
+            <li class="page-item" :class="{ disabled: pageIdx == 0 }"><a class="page-link" @click="pageIdx -= 1" href="#">Previous</a></li>
+            <li class="page-item" v-for="pid in pagesToFastJump" :class="{ active: pageIdx == pid }">
+              <a class="page-link" @click="pageIdx = pid" href="#">{{ pid }}</a>
+            </li>
+            <li class="page-item" :class="{ disabled: pageIdx == numPages - 1 }"><a class="page-link" @click="pageIdx += 1" href="#">Next</a></li>
           </ul>
         </nav>
       </div>
@@ -26,14 +26,12 @@
       <div class="modal-dialog" role="document">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLabel">Delete note {{secretToDel.name}}</h5>
+            <h5 class="modal-title" id="exampleModalLabel">Delete note {{ secretToDel.name }}</h5>
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
               <span aria-hidden="true">&times;</span>
             </button>
           </div>
-          <div class="modal-body">
-            Are you sure you want to delete {{secretToDel.name}} note?
-          </div>
+          <div class="modal-body">Are you sure you want to delete {{ secretToDel.name }} note?</div>
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-dismiss="modal">No, keep it</button>
             <button type="button" class="btn btn-primary" @click="deleteSecret">Yes, delete it</button>
@@ -41,7 +39,6 @@
         </div>
       </div>
     </div>
-
   </div>
 </template>
 
@@ -119,5 +116,4 @@ export default {
 }
 </script>
 
-<style>
-</style>
+<style></style>

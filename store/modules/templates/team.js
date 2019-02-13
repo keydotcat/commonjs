@@ -60,14 +60,16 @@ const getters = {
   },
   admins(state, getters, rootState) {
     var me = rootState.user.id
-    return state.users.filter(u => u.admin).map(u => {
-      return {
-        id: u.id,
-        label: `${u.fullname} (${u.id})`,
-        canBeDemoted: u.id !== state.owner && u.id !== me,
-        data: u
-      }
-    })
+    return state.users
+      .filter(u => u.admin)
+      .map(u => {
+        return {
+          id: u.id,
+          label: `${u.fullname} (${u.id})`,
+          canBeDemoted: u.id !== state.owner && u.id !== me,
+          data: u
+        }
+      })
   },
   users(state, getters, rootState) {
     var me = rootState.user.id

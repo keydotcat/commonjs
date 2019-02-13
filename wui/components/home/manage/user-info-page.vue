@@ -6,9 +6,9 @@
     <div class="card">
       <div class="card-body">
         <h6 class="card-title">Name</h6>
-        <p class="ml-2">{{$store.state.user.fullname}} ({{$store.state.user.id}})</p>
+        <p class="ml-2">{{ $store.state.user.fullname }} ({{ $store.state.user.id }})</p>
         <h6 class="card-title">Email</h6>
-        <p class="ml-2">{{$store.state.user.email}}</p>
+        <p class="ml-2">{{ $store.state.user.email }}</p>
       </div>
     </div>
 
@@ -18,7 +18,7 @@
         <form>
           <div class="form-group">
             <label for="email1">New email address</label>
-            <input type="email" class="form-control" v-model="newEmail" id="email1" placeholder="Enter new email">
+            <input type="email" class="form-control" v-model="newEmail" id="email1" placeholder="Enter new email" />
           </div>
           <button type="submit" class="btn btn-primary float-right" @click="requestEmailChange">Submit</button>
         </form>
@@ -31,11 +31,11 @@
         <form>
           <div class="form-group">
             <label for="pass1">New password</label>
-            <input type="password" class="form-control" :class="{'is-invalid':passChecked && !isPassOk}" v-model="newPass" id="pass1">
+            <input type="password" class="form-control" :class="{ 'is-invalid': passChecked && !isPassOk }" v-model="newPass" id="pass1" />
           </div>
           <div class="form-group">
             <label for="pass2">Repeat password</label>
-            <input type="password" class="form-control" :class="{'is-invalid':passChecked && !isPassRepeatOk}" v-model="newPass2" id="pass2">
+            <input type="password" class="form-control" :class="{ 'is-invalid': passChecked && !isPassRepeatOk }" v-model="newPass2" id="pass2" />
           </div>
           <button type="submit" v-if="!passWorking" class="btn btn-primary float-right" @click="requestPasswordChange">Submit</button>
           <button type="submit" v-if="passWorking" disabled class="btn btn-primary float-right">Working...</button>
@@ -83,5 +83,4 @@ export default {
 }
 </script>
 
-<style>
-</style>
+<style></style>

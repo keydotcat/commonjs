@@ -1,11 +1,11 @@
 <template>
   <div class="container-fluid">
-    <locations-page v-on:new-location="activePage='new-location'" v-on:edit-location="editLocation" v-if="activePage == 'locations'"></locations-page>
-    <new-location-page v-on:done="activePage='locations'" v-if="activePage == 'new-location'"></new-location-page>
-    <edit-location-page v-on:done="activePage='locations'" :fullsecretid="fullsid" v-if="activePage == 'edit-location'"></edit-location-page>
-    <notes-page v-on:new-note="activePage='new-note'" v-on:edit-note="editNote" v-if="activePage == 'notes'"></notes-page>
-    <new-note-page v-on:done="activePage='notes'" v-if="activePage == 'new-note'"></new-note-page>
-    <edit-note-page v-on:done="activePage='notes'" :fullsecretid="fullsid" v-if="activePage == 'edit-note'"></edit-note-page>
+    <locations-page v-on:new-location="activePage = 'new-location'" v-on:edit-location="editLocation" v-if="activePage == 'locations'"></locations-page>
+    <new-location-page v-on:done="activePage = 'locations'" v-if="activePage == 'new-location'"></new-location-page>
+    <edit-location-page v-on:done="activePage = 'locations'" :fullsecretid="fullsid" v-if="activePage == 'edit-location'"></edit-location-page>
+    <notes-page v-on:new-note="activePage = 'new-note'" v-on:edit-note="editNote" v-if="activePage == 'notes'"></notes-page>
+    <new-note-page v-on:done="activePage = 'notes'" v-if="activePage == 'new-note'"></new-note-page>
+    <edit-note-page v-on:done="activePage = 'notes'" :fullsecretid="fullsid" v-if="activePage == 'edit-note'"></edit-note-page>
   </div>
 </template>
 

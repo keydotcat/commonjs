@@ -1,7 +1,7 @@
 <template>
   <div class="card">
     <div class="card-header">
-      Vault {{vault.id}}
+      Vault {{ vault.id }}
       <i class="material-icons float-right" @click="toggleVault" v-if="!showVault">expand_more</i>
       <i class="material-icons float-right" @click="toggleVault" v-if="showVault">expand_less</i>
     </div>
@@ -17,14 +17,12 @@
               <li class="list-group-item" v-for="user in allowedUsers" :key="user.id">
                 <i class="material-icons" v-if="!user.admin" @click="startRevoke(user)">arrow_forward_ios</i>
                 <i class="material-icons" v-if="user.admin">grade</i>
-                {{user.label}}
+                {{ user.label }}
               </li>
             </ul>
           </div>
           <div class="card-footer" v-if="showConfirmRevoke">
-            <div class='confirm'>
-              Revoke access to {{userToRevoke.label}}?
-            </div>
+            <div class="confirm">Revoke access to {{ userToRevoke.label }}?</div>
             <button type="button" @click="cancelRevoke" class="btn btn-secondary btn-danger">No</button>
             <button type="button" @click="confirmRevoke" class="btn btn-secondary btn-success float-right">Yes</button>
           </div>
@@ -37,14 +35,12 @@
             <ul class="list-group list-group-flush">
               <li class="list-group-item" v-for="user in deniedUsers" :key="user.id">
                 <i class="material-icons" @click="startGrant(user)">arrow_back_ios</i>
-                {{user.label}}
+                {{ user.label }}
               </li>
             </ul>
           </div>
           <div class="card-footer" v-if="showConfirmGrant">
-            <div class='confirm'>
-              Grant access to {{userToGrant.label}}?
-            </div>
+            <div class="confirm">Grant access to {{ userToGrant.label }}?</div>
             <button type="button" @click="cancelGrant" class="btn btn-secondary btn-danger">No</button>
             <button type="button" @click="confirmGrant" class="btn btn-secondary btn-success float-right">Yes</button>
           </div>

@@ -1,15 +1,15 @@
 <template>
   <div class="card">
     <div class="card-body">
-      <h5 class="card-title d-flex" @click="bEditingName=true" :class="{'text-danger':!isOkName}" v-if='!bEditingName'>
-        <i class="material-icons text-muted mr-2" @click='bEditingName=true'>edit</i>
+      <h5 class="card-title d-flex" @click="bEditingName = true" :class="{ 'text-danger': !isOkName }" v-if="!bEditingName">
+        <i class="material-icons text-muted mr-2" @click="bEditingName = true">edit</i>
         {{ loc.name || 'Location name' }}
       </h5>
-      <h5 class="card-title" v-if='bEditingName'>
+      <h5 class="card-title" v-if="bEditingName">
         <div class="input-group w-100">
-          <input type="text" v-model="loc.name" v-on:keyup.enter="bEditingName=false" class="form-control" placeholder="Location name" aria-label="name">
+          <input type="text" v-model="loc.name" v-on:keyup.enter="bEditingName = false" class="form-control" placeholder="Location name" aria-label="name" />
           <div class="input-group-append">
-            <button class="btn btn-outline-secondary" type="button" @click="bEditingName=false">Set name</button>
+            <button class="btn btn-outline-secondary" type="button" @click="bEditingName = false">Set name</button>
           </div>
         </div>
       </h5>
@@ -19,19 +19,29 @@
             <div class="form-group">
               <label>Choose which vault to store the secret </label>
               <select class="form-control form-control-sm" v-model="parentVault">
-                <option :value="{tid: vt.tid, vid: vt.vid}" v-for="vt in allVaults">{{vt.teamName}} / {{vt.vid}}</option>
+                <option :value="{ tid: vt.tid, vid: vt.vid }" v-for="vt in allVaults">{{ vt.teamName }} / {{ vt.vid }}</option>
               </select>
             </div>
           </h6>
-          <h6 class="card-subtitle m-2 text-muted" v-if="!bSelectingVault">Vault {{$store.getters[`team.${parentVault.tid}/name`]}} / {{parentVault.vid}}</h6>
-          <h6 class="card-subtitle m-2">URLs </h6>
-          <text-list-editor :name='"URL"' v-model="loc.urls"></text-list-editor>
-          <h6 class="card-subtitle m-2" :class="{'text-danger':!isOkCreds}">Credentials</h6>
+          <h6 class="card-subtitle m-2 text-muted" v-if="!bSelectingVault">Vault {{ $store.getters[`team.${parentVault.tid}/name`] }} / {{ parentVault.vid }}</h6>
+          <h6 class="card-subtitle m-2">URLs</h6>
+          <text-list-editor :name="'URL'" v-model="loc.urls"></text-list-editor>
+          <h6 class="card-subtitle m-2" :class="{ 'text-danger': !isOkCreds }">Credentials</h6>
           <ul class="list-group list-group-flush">
-            <li class="list-group-item url-group-item d-flex" v-for="(cred,idcred) in loc.creds">
-              <span v-if="!isCredBeingEdited(idcred)" class="d-flex"><i @click="editCredential(idcred)" class="material-icons text-muted mr-1">edit</i>{{cred.type.charAt(0).toUpperCase() + cred.type.slice(1)}} for {{cred.username}}</span>
-              <location-credential-editor :idcred="idcred" :cred="cred" v-on:delete="credDeletedCb($event)" v-on:change="credChangedCb($event)"
-                v-on:cancel="cancelCredChangeCb($event)" v-if="isCredBeingEdited(idcred)" class="w-100"></location-credential-editor>
+            <li class="list-group-item url-group-item d-flex" v-for="(cred, idcred) in loc.creds">
+              <span v-if="!isCredBeingEdited(idcred)" class="d-flex"
+                ><i @click="editCredential(idcred)" class="material-icons text-muted mr-1">edit</i>{{ cred.type.charAt(0).toUpperCase() + cred.type.slice(1) }} for
+                {{ cred.username }}</span
+              >
+              <location-credential-editor
+                :idcred="idcred"
+                :cred="cred"
+                v-on:delete="credDeletedCb($event)"
+                v-on:change="credChangedCb($event)"
+                v-on:cancel="cancelCredChangeCb($event)"
+                v-if="isCredBeingEdited(idcred)"
+                class="w-100"
+              ></location-credential-editor>
             </li>
             <li class="list-group-item url-group-item d-flex" @click="addNewCredential"><i class="material-icons text-muted mr-1">add_box</i> Add new credential</li>
           </ul>
@@ -42,7 +52,7 @@
         </div>
         <div class="col col-sm-3 border-left">
           <h6 class="card-subtitle m-2">Labels</h6>
-          <text-list-editor :name='"label"' v-model="loc.labels"></text-list-editor>
+          <text-list-editor :name="'label'" v-model="loc.labels"></text-list-editor>
         </div>
       </div>
     </div>

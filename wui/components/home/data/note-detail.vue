@@ -1,14 +1,15 @@
 <template>
   <div class="card">
     <div class="card-body">
-     <h5 class="card-title" @click="bEditingName=true" :class="{'text-danger':!isOkName}" v-if='!bEditingName'>{{ note.name || 'Note name' }}
-        <i class="material-icons text-muted mt-auto mb-auto float-right" @click='bEditingName=true'>edit</i>
+      <h5 class="card-title" @click="bEditingName = true" :class="{ 'text-danger': !isOkName }" v-if="!bEditingName">
+        {{ note.name || 'Note name' }}
+        <i class="material-icons text-muted mt-auto mb-auto float-right" @click="bEditingName = true">edit</i>
       </h5>
-      <h5 class="card-title" v-if='bEditingName'>
+      <h5 class="card-title" v-if="bEditingName">
         <div class="input-group w-100">
-          <input type="text" v-model="note.name" v-on:keyup.enter="bEditingName=false" class="form-control" placeholder="Note name" aria-label="name">
+          <input type="text" v-model="note.name" v-on:keyup.enter="bEditingName = false" class="form-control" placeholder="Note name" aria-label="name" />
           <div class="input-group-append">
-            <button class="btn btn-outline-secondary" type="button" @click="bEditingName=false">Set name</button>
+            <button class="btn btn-outline-secondary" type="button" @click="bEditingName = false">Set name</button>
           </div>
         </div>
       </h5>
@@ -18,11 +19,11 @@
             <div class="form-group">
               <label>Choose which vault to store the secret </label>
               <select class="form-control form-control-sm" v-model="parentVault">
-                <option :value="{tid: vt.tid, vid: vt.vid}" v-for="vt in allVaults">{{vt.teamName}} / {{vt.vid}}</option>
+                <option :value="{ tid: vt.tid, vid: vt.vid }" v-for="vt in allVaults">{{ vt.teamName }} / {{ vt.vid }}</option>
               </select>
             </div>
           </h6>
-          <h6 class="card-subtitle m-2 text-muted" v-if="!bSelectingVault">Vault {{$store.getters[`team.${parentVault.tid}/name`]}} / {{parentVault.vid}}</h6>
+          <h6 class="card-subtitle m-2 text-muted" v-if="!bSelectingVault">Vault {{ $store.getters[`team.${parentVault.tid}/name`] }} / {{ parentVault.vid }}</h6>
           <h6 class="card-subtitle m-2">Contents</h6>
           <div class="form-group pl-2">
             <textarea class="form-control" :rows="linesInNote" v-model="note.data"></textarea>
@@ -30,7 +31,7 @@
         </div>
         <div class="col col-sm-3 border-left">
           <h6 class="card-subtitle m-2">Labels</h6>
-          <text-list-editor :name='"label"' v-model="note.labels"></text-list-editor>
+          <text-list-editor :name="'label'" v-model="note.labels"></text-list-editor>
         </div>
       </div>
     </div>

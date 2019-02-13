@@ -15,14 +15,12 @@
               <li class="list-group-item" v-for="user in admins" :key="user.id">
                 <i class="material-icons" v-if="user.canBeDemoted" @click="startDemote(user)">arrow_forward_ios</i>
                 <i class="material-icons" v-if="!user.canBeDemoted">grade</i>
-                {{user.label}}
+                {{ user.label }}
               </li>
             </ul>
           </div>
           <div class="card-footer" v-if="showConfirmDemote">
-            <div class='confirm'>
-              Demote {{userToDemote.label}}?
-            </div>
+            <div class="confirm">Demote {{ userToDemote.label }}?</div>
             <button type="button" @click="cancelDemote" class="btn btn-secondary btn-danger">No</button>
             <button type="button" @click="confirmDemote" class="btn btn-secondary btn-success float-right">Yes</button>
           </div>
@@ -33,17 +31,15 @@
           </div>
           <div class="card-body">
             <ul class="list-group list-group-flush">
-              <li class="list-group-item" v-for="user in users" :key='user.id' v-if="!user.admin">
+              <li class="list-group-item" v-for="user in users" :key="user.id" v-if="!user.admin">
                 <i class="material-icons" v-if="user.canBePromoted" @click="startPromote(user)">arrow_back_ios</i>
                 <i class="material-icons" v-if="!user.canBePromoted">account_circle</i>
-                {{user.label}}
+                {{ user.label }}
               </li>
             </ul>
           </div>
           <div class="card-footer" v-if="showConfirmPromote">
-            <div class='confirm'>
-              Promote {{userToPromote.label}}?
-            </div>
+            <div class="confirm">Promote {{ userToPromote.label }}?</div>
             <button type="button" @click="cancelPromote" class="btn btn-secondary btn-danger">No</button>
             <button type="button" @click="confirmPromote" class="btn btn-secondary btn-success float-right">Yes</button>
           </div>
@@ -54,23 +50,19 @@
           </div>
           <div class="card-body">
             <ul class="list-group list-group-flush">
-              <li class="list-group-item" v-for="invite in invites" :key="invite.email">
-                <i class="material-icons" @click="uninvite(invite.email)">delete</i> {{invite.email}}
-              </li>
+              <li class="list-group-item" v-for="invite in invites" :key="invite.email"><i class="material-icons" @click="uninvite(invite.email)">delete</i> {{ invite.email }}</li>
             </ul>
           </div>
           <div class="card-footer" v-if="!showConfirmInvite">
             <div class="input-group">
-              <input type="text" v-model="invite" class="form-control" placeholder="email" aria-label="email">
+              <input type="text" v-model="invite" class="form-control" placeholder="email" aria-label="email" />
               <div class="input-group-append">
                 <button class="btn btn-outline-secondary" type="button" @click="startInvite">Invite</button>
               </div>
             </div>
           </div>
           <div class="card-footer" v-if="showConfirmInvite">
-            <div class='confirm'>
-              Invite {{invite}}?
-            </div>
+            <div class="confirm">Invite {{ invite }}?</div>
             <button type="button" @click="cancelInvite" class="btn btn-secondary btn-danger">No</button>
             <button type="button" @click="confirmInvite" class="btn btn-secondary btn-success float-right">Yes</button>
           </div>

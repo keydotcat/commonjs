@@ -1,7 +1,7 @@
 <template>
   <span class="switch switch-sm nav-link">
-    <input type="checkbox" @change="saveAutoLogout" v-model="enableAutoLogout" class="switch" id="switch-id">
-    <label class="m-0"for="switch-id">Auto-logout</label>
+    <input type="checkbox" @change="saveAutoLogout" v-model="enableAutoLogout" class="switch" id="switch-id" />
+    <label class="m-0" for="switch-id">Auto-logout</label>
   </span>
 </template>
 

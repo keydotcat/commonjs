@@ -1,10 +1,10 @@
 <template>
   <div class="container-fluid">
-    <user-info v-if="section == 'user' && page=='info'"></user-info>
+    <user-info v-if="section == 'user' && page == 'info'"></user-info>
     <user-import v-if="section == 'user' && page == 'import'"></user-import>
-    <user-export v-if="section=='user' && page == 'export'"></user-export>
-    <team-content v-if="section=='team'" :tid="page"></team-content>
-    <new-team v-if="section=='new-team'"></new-team>
+    <user-export v-if="section == 'user' && page == 'export'"></user-export>
+    <team-content v-if="section == 'team'" :tid="page"></team-content>
+    <new-team v-if="section == 'new-team'"></new-team>
   </div>
 </template>
 
@@ -25,5 +25,4 @@ export default {
 }
 </script>
 
-<style>
-</style>
+<style></style>

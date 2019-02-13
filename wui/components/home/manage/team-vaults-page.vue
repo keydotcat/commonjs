@@ -3,7 +3,7 @@
     <div class="header px-3 py-3 pt-md-5 pb-md-4 d-flex justify-content-between">
       <h3 class="display-9">Vaults</h3>
       <div class="input-group w-50">
-        <input type="text" v-model="vaultName" class="form-control" placeholder="vault name" aria-label="name">
+        <input type="text" v-model="vaultName" class="form-control" placeholder="vault name" aria-label="name" />
         <div class="input-group-append">
           <button class="btn btn-outline-secondary" type="button" @click.prevent="createVault">Create vault</button>
         </div>
@@ -41,5 +41,4 @@ export default {
 }
 </script>
 
-<style>
-</style>
+<style></style>

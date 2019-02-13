@@ -8,29 +8,24 @@
         <div class="form-group">
           <label>Vault to import to</label>
           <select class="form-control form-control-sm" v-model="parentVault">
-            <option :value="{tid: vt.tid, vid: vt.vid}" v-for="vt in $store.getters['user/allVaults']">{{vt.teamName}} / {{vt.vid}}</option>
+            <option :value="{ tid: vt.tid, vid: vt.vid }" v-for="vt in $store.getters['user/allVaults']">{{ vt.teamName }} / {{ vt.vid }}</option>
           </select>
         </div>
         <div class="form-group">
           <label>Password</label>
-          <input class="form-control" type="password" v-model="importPass"></input>
+          <input class="form-control" type="password" v-model="importPass" />
         </div>
         <div class="form-group">
           <label for="vaultSelector">Keepass db file</label>
           <div class="dropbox">
-            <input type="file" name="uploadFile" :disabled="!isInitial" @change="filesChange" class="input-file">
+            <input type="file" name="uploadFile" :disabled="!isInitial" @change="filesChange" class="input-file" />
             <p v-if="isInitial">
-              Drag your file(s) here to begin<br> or click to browse
+              Drag your file(s) here to begin<br />
+              or click to browse
             </p>
-            <p v-if="isSaving">
-              Uploading {{ fileName }}... (this may take a while)
-            </p>
-            <p v-if="isLoaded">
-              Uploaded {{ fileName }}
-            </p>
-            <p v-if="isProcessing">
-              Decoding {{ fileName }}...
-            </p>
+            <p v-if="isSaving">Uploading {{ fileName }}... (this may take a while)</p>
+            <p v-if="isLoaded">Uploaded {{ fileName }}</p>
+            <p v-if="isProcessing">Decoding {{ fileName }}...</p>
           </div>
         </div>
         <div class="form-group d-flex justify-content-end">

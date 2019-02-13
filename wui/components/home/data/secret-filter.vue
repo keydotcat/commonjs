@@ -1,32 +1,65 @@
 <template>
   <div class="rounded bg-light border-bottom w-100 d-flex align-items-center justify-content-end p-1">
-    <input type="text" v-model="filter.search" @keyup="emitChanges" class="form-control mr-5" placeholder="Search">
+    <input type="text" v-model="filter.search" @keyup="emitChanges" class="form-control mr-5" placeholder="Search" />
     <i v-if="loading" class="material-icons spinner">autorenew</i>
     <div class="dropdown mr-2 d-flex align-items-center">
-      <button class="btn btn-sm dropdown-toggle" :class="{'bg-success':filter.teams.length>0,'bg-transparent':filter.teams.length===0}" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-        Teams 
+      <button
+        class="btn btn-sm dropdown-toggle"
+        :class="{ 'bg-success': filter.teams.length > 0, 'bg-transparent': filter.teams.length === 0 }"
+        type="button"
+        id="dropdownMenuButton"
+        data-toggle="dropdown"
+        aria-haspopup="true"
+        aria-expanded="false"
+      >
+        Teams
       </button>
       <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
-        <a class="dropdown-item" :class="{active: filter.teams.indexOf(team.id) > -1}" v-for="team in $store.getters['user/teams']" href="#" @click="toggleActiveTeam(team.id)">{{team.name}}</a>
+        <a class="dropdown-item" :class="{ active: filter.teams.indexOf(team.id) > -1 }" v-for="team in $store.getters['user/teams']" href="#" @click="toggleActiveTeam(team.id)">{{
+          team.name
+        }}</a>
       </div>
     </div>
     <div class="dropdown mr-2 d-flex align-items-center">
-      <button class="btn btn-sm dropdown-toggle" :class="{'bg-success':filter.vaults.length>0,'bg-transparent':filter.vaults.length===0}" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-        Vaults 
+      <button
+        class="btn btn-sm dropdown-toggle"
+        :class="{ 'bg-success': filter.vaults.length > 0, 'bg-transparent': filter.vaults.length === 0 }"
+        type="button"
+        id="dropdownMenuButton"
+        data-toggle="dropdown"
+        aria-haspopup="true"
+        aria-expanded="false"
+      >
+        Vaults
       </button>
       <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
         <div v-for="team in $store.getters['user/teams']">
-          <a class="dropdown-item" :class="{active: isActiveVault(team.id,vault.id)}" v-for="vault in $store.getters[`team.${team.id}/vaults`]" href="#" @click="toggleActiveVault(team.id, vault.id)">{{team.name}}/{{vault.id}}</a>
+          <a
+            class="dropdown-item"
+            :class="{ active: isActiveVault(team.id, vault.id) }"
+            v-for="vault in $store.getters[`team.${team.id}/vaults`]"
+            href="#"
+            @click="toggleActiveVault(team.id, vault.id)"
+            >{{ team.name }}/{{ vault.id }}</a
+          >
         </div>
       </div>
     </div>
 
     <div class="dropdown mr-2 d-flex align-items-center">
-      <button class="btn btn-sm dropdown-toggle" :class="{'bg-success':filter.labels.length>0,'bg-transparent':filter.labels.length===0}" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+      <button
+        class="btn btn-sm dropdown-toggle"
+        :class="{ 'bg-success': filter.labels.length > 0, 'bg-transparent': filter.labels.length === 0 }"
+        type="button"
+        id="dropdownMenuButton"
+        data-toggle="dropdown"
+        aria-haspopup="true"
+        aria-expanded="false"
+      >
         Labels
       </button>
       <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
-        <a class="dropdown-item" v-for="label in $store.getters['secrets/allLabels']" @click="toggleLabel(label)" :class="{active:isActiveLabel(label)}" href="#">{{label}}</a>
+        <a class="dropdown-item" v-for="label in $store.getters['secrets/allLabels']" @click="toggleLabel(label)" :class="{ active: isActiveLabel(label) }" href="#">{{ label }}</a>
       </div>
     </div>
   </div>
