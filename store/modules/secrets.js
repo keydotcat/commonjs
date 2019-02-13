@@ -83,7 +83,7 @@ function deleteVaultSecrets(state, teamId, vaultId) {
   var toDelete = []
   for (var key in state.secrets) {
     var secretObj = state.secrets[key]
-    if (secretObj.teamId == teamId && secretObj.vaultId == vaultId) {
+    if (secretObj.teamId === teamId && secretObj.vaultId === vaultId) {
       toDelete.push(key)
       removeLabelsFromState(state, secretObj)
     }
@@ -236,6 +236,18 @@ function unpackTeamSecrets(context, teamId, vaults, resp) {
   })
 }
 
+async function reloadVaultSecrets(context, teamId, vaultId, vaultVersion) {
+  var vKeys = getVaultKeyFromList(context.rootState[`team.${teamId}`].vaults, teamId, vaultId)
+  context.commit(mt.SECRET_PURGE_VAULT, { teamId, vaultId })
+  var secretsResp = await teamSvc.loadVaultSecrets(teamId, vaultId)
+  secretsResp.secrets.forEach(secret => {
+    keyMgr.openAndDeserialize(vKeys, secret.data).then(opened => {
+      context.commit(mt.SECRET_SET, { teamId: teamId, secret: secret, openData: opened })
+    })
+  })
+  context.commit(mt.SECRET_SET_VAULT_VERSION, { teamId, vaultId, vaultVersion })
+}
+
 const actions = {
   loadSecretsFromTeam(context, { teamId, vaults }) {
     teamSvc.loadSecrets(teamId).then(resp => {
@@ -305,23 +317,12 @@ const actions = {
           continue
         }
         console.log(`Syncing vault ${tid}/${vid}`)
-        async function reloadVaultSecrets(teamId, vaultId, vaultVersion) {
-          var vKeys = getVaultKeyFromList(context.rootState[`team.${teamId}`].vaults, teamId, vaultId)
-          context.commit(mt.SECRET_PURGE_VAULT, { teamId, vaultId })
-          var secretsResp = await teamSvc.loadVaultSecrets(teamId, vaultId)
-          secretsResp.secrets.forEach(secret => {
-            keyMgr.openAndDeserialize(vKeys, secret.data).then(opened => {
-              context.commit(mt.SECRET_SET, { teamId: teamId, secret: secret, openData: opened })
-            })
-          })
-          context.commit(mt.SECRET_SET_VAULT_VERSION, { teamId, vaultId, vaultVersion })
-        }
-        reloadVaultSecrets(tid, vid, vaultVersion)
+        reloadVaultSecrets(context, tid, vid, vaultVersion)
       }
     }
     var toDel = []
     for (var key in context.state.vaultVersion) {
-      if (checked.indexOf(key) == -1) {
+      if (checked.indexOf(key) === -1) {
         toDel.push(key)
       }
     }

@@ -26,9 +26,13 @@ const mutations = {
       url: url,
       keys: keys.data
     }
-    var container = {}
-    container[SESSION_STORE_NAME] = sData
-    browser.storage.local.set(container)
+    if (state.isWebExt) {
+      var container = {}
+      container[SESSION_STORE_NAME] = sData
+      browser.storage.local.set(container)
+    } else {
+      localStorage.addItem(SESSION_STORE_NAME, JSON.stringify(sData))
+    }
     request.fromJson(sData)
     state.uid = sData.uid
     state.loading = false
@@ -36,14 +40,17 @@ const mutations = {
   },
   [mt.SESSION_EXISTS](state, uid) {
     state.uid = uid
-    console.log('sync', eventSync)
     state.loading = false
     eventSync.connect()
   },
   [mt.SESSION_LOGOUT](state) {
     state.uid = ''
     state.loading = false
-    browser.storage.local.remove(SESSION_STORE_NAME)
+    if (state.isWebExt) {
+      browser.storage.local.remove(SESSION_STORE_NAME)
+    } else {
+      localStorage.removeItem(SESSION_STORE_NAME)
+    }
   }
 }
 
@@ -53,25 +60,40 @@ const getters = {
   }
 }
 
+function loadSessionData(context, data) {
+  request.fromJson(data)
+  return request.get('/auth/session').then(response => {
+    return keyMgr.setKeysFromStore(response.data.store_token, data.keys).then(ok => {
+      context.commit(mt.SESSION_EXISTS, data.uid)
+      request.onUnauthorized(() => {
+        context.commit(mt.SESSION_LOGOUT)
+      })
+      return context.dispatch('user/loadInfo', {}, { root: true })
+    })
+  })
+}
+
 const actions = {
+  sessionLoadFromLocalStorage(context) {
+    context.commit(mt.SESSION_WORKING)
+    var stub = localStorage.getItem(SESSION_STORE_NAME)
+    if (!stub || stub.length === 0) {
+      context.commit(mt.SESSION_LOGOUT)
+      return
+    }
+    var data = JSON.parse(stub)
+    return loadSessionData(context, data)
+  },
   loadFromExtensionStorage(context) {
     context.commit(mt.SESSION_SET_WEBEXT)
     context.commit(mt.SESSION_WORKING)
     return browser.storage.local.get(SESSION_STORE_NAME).then(data => {
       if (!(SESSION_STORE_NAME in data)) {
+        context.commit(mt.SESSION_LOGOUT)
         return
       }
       var sData = data[SESSION_STORE_NAME]
-      request.fromJson(sData)
-      return request.get('/auth/session').then(response => {
-        return keyMgr.setKeysFromStore(response.data.store_token, sData.keys).then(ok => {
-          context.commit(mt.SESSION_EXISTS, sData.uid)
-          request.onUnauthorized(() => {
-            context.commit(mt.SESSION_LOGOUT)
-          })
-          return context.dispatch('user/loadInfo', {}, { root: true })
-        })
-      })
+      return loadSessionData(context, sData)
     })
   },
   login(context, { url, user, pass }) {
