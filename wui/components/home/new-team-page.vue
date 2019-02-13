@@ -1,5 +1,5 @@
 <template>
-    <div class="expandHeight centerFlex">
+    <div class="mt-5 d-flex justify-content-center align-items-center">
       <form class="form-login" @submit="submit">
         <h1 class="h3 mb-3 font-weight-normal">{{$t('create_new_team')}}</h1>
           <div class="form-group">
@@ -13,7 +13,7 @@
 
 <script>
 export default {
-  name: 'new_team_page',
+  name: 'new-team',
   props: {
     visible: Boolean
   },
@@ -32,10 +32,4 @@ export default {
 </script>
 
 <style>
-.dialog-footer {
-  padding: 15px;
-  padding-top: 10px;
-  text-align: right;
-  box-sizing: border-box;
-}
 </style>

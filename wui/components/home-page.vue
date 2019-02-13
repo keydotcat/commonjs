@@ -1,8 +1,8 @@
 <template>
   <div class="expandHeight">
     <home-header v-on:change="changePage"></home-header>
-    <data-content v-if="activePage=='data'"></data-content>
-    <manage-content v-if="activePage=='manage'"></manage-content>
+    <data-content v-if="section=='data'" :page="page"></data-content>
+    <manage-content v-if="section!='data'" :section="section" :page="page"></manage-content>
   </div>
 </template>
 
@@ -16,13 +16,14 @@ export default {
   components: { HomeHeader, DataContent, ManageContent },
   data() {
     return {
-      activePage: 'data'
+      section: 'data',
+      page: 'locations'
     }
   },
   methods: {
-    changePage(page) {
-      console.log('even!', page)
-      this.activePage = page
+    changePage(section, page) {
+      this.section = section
+      this.page = page
     }
   },
   beforeMount() {

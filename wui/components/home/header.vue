@@ -10,17 +10,33 @@
         <li v-if="!$store.state.session.isWebExt" class="nav-item">
           <auto-logout></auto-logout>
         </li>
-        <li class="nav-item" :class="{'active': activePage == 'data' }">
-          <a href="#" class="nav-link" @click="goto('data')">
+        <li class="nav-item dropdown" :class="{'active': section == 'data' }">
+          <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">
             Your data
-            <span class="sr-only" v-if="activePage=='data'">(current)</span>
           </a>
+          <div class="dropdown-menu dropdown-menu-right">
+            <a class="dropdown-item text-right" href="#" @click.prevent="goto('data','locations')">Locations</a>
+            <a class="dropdown-item text-right" href="#" @click.prevent="goto('data','notes')">Notes</a>
+          </div>
         </li>
-        <li class="nav-item" :class="{'active': activePage == 'manage' }">
-          <a href="#" class="nav-link" @click="goto('manage')">
+        <li class="nav-item dropdown" :class="{'active': section == 'user' || section == 'team' }">
+          <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">
             {{$t('configure')}}
-            <span class="sr-only" v-if="activePage=='manage'">(current)</span>
           </a>
+          <div class="dropdown-menu dropdown-menu-right">
+            <h6 class="dropdown-header text-right">User</h6>
+            <a class="dropdown-item text-right" href="#" @click.prevent="goto('user','info')">Information</a>
+            <a class="dropdown-item text-right" href="#" @click.prevent="goto('user','import')">Import</a>
+            <div class="dropdown-divider"></div>
+            <h6 class="dropdown-header text-right">Teams</h6>
+            <a class="dropdown-item text-right" v-for="tid in $store.getters['user/team_ids']" href="#" @click.prevent="goto('team',tid)">
+              {{$store.getters[`team.${tid}/name`]}}
+            </a>
+            <a class="dropdown-item d-flex text-right" href="#" @click.prevent="goto('new-team')">
+              <i class="material-icons mr-1 text-muted ml-auto">add_box</i> Create team
+            </a>
+
+          </div>
         </li>
         <li class="nav-item">
           <a href="#" class="nav-link" @click="logout()">
@@ -33,26 +49,28 @@
 </template>
 
 <script>
-import AutoLogout from './auto-logout'
+  import AutoLogout from './auto-logout'
 
-export default {
-  name: 'home-header',
-  components: { AutoLogout },
-  data() {
-    return {
-      activePage: 'data'
-    }
-  },
-  methods: {
-    logout() {
-      this.$store.dispatch('session/logout')
+  export default {
+    name: 'home-header',
+    components: { AutoLogout },
+    data() {
+      return {
+        section: 'data',
+        page: 'locations'
+      }
     },
-    goto(where) {
-      this.activePage = where
-      this.$emit('change', where)
+    methods: {
+      logout() {
+        this.$store.dispatch('session/logout')
+      },
+      goto(section,page) {
+        this.section = section
+        this.page = page
+        this.$emit('change', section, page)
+      }
     }
   }
-}
 </script>
 
 <style>
