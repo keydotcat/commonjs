@@ -1,6 +1,6 @@
 <template>
   <nav class="navbar navbar-expand-md navbar-light bg-light clearfix">
-    <a class="navbar-brand" href="#">KeyCat</a>
+    <a class="navbar-brand d-flex" href="#"><img class="navico mr-2" src="/favicon.ico" />KeyCat</a>
     <button
       class="navbar-toggler ml-auto"
       type="button"
@@ -55,6 +55,7 @@
 
 <script>
 import AutoLogout from './auto-logout'
+import $ from 'jquery'
 
 export default {
   name: 'home-header',
@@ -73,9 +74,14 @@ export default {
       this.section = section
       this.page = page
       this.$emit('change', section, page)
+      $('.dropdown-toggle').dropdown('hide')
     }
   }
 }
 </script>
 
-<style></style>
+<style>
+.navico {
+  height: 30px;
+}
+</style>

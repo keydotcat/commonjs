@@ -1,10 +1,11 @@
 import keyMgr from '@/commonjs/store/helpers/keymgrwrap'
 import request from '@/commonjs/store/services/request'
-import toastMgr from '@/commonjs/store/helpers/toast'
 import * as mt from '@/commonjs/store/mutation-types'
 
 const state = {
   working: false,
+  serverVersion: '',
+  webVersion: '',
   error: '',
   errorFields: {
     id: '',
@@ -14,7 +15,11 @@ const state = {
 }
 
 const mutations = {
-  [mt.PUB_STOP_WORK](state, payload, asd) {
+  [mt.PUB_VERSION](state, payload) {
+    state.serverVersion = payload.server
+    state.webVersion = payload.web
+  },
+  [mt.PUB_STOP_WORK](state, payload) {
     state.working = false
   },
   [mt.PUB_REGISTER_KO](state, payload) {
@@ -41,18 +46,27 @@ const mutations = {
   }
 }
 
-function getUrlRoot() {
-  if (process.env.NODE_ENV === 'development') {
-    return 'http://localhost:23764/api'
+const getters = {
+  url: state => {
+    if (process.env.NODE_ENV === 'development') {
+      return 'http://localhost:23764/api'
+    }
+    return window.location.origin + window.location.pathname + 'api'
   }
-  return window.location.origin + window.location.pathname + 'api'
 }
 
 const actions = {
+  async loadServerVersion(context, url) {
+    if (!request.url) {
+      request.url = url || context.getters.url
+    }
+    var resp = await request.get('/version')
+    context.commit(mt.PUB_VERSION, resp.data)
+  },
   register(context, payload) {
     context.commit(mt.PUB_START_WORK)
-    request.url = getUrlRoot()
-    keyMgr.generateUserKey(payload.username, payload.password).then(userData => {
+    request.url = context.getters['public/url']
+    return keyMgr.generateUserKey(payload.username, payload.password).then(userData => {
       var adminKeys = {}
       adminKeys[payload.username] = userData.publicKeys
       keyMgr.generateVaultKeys(adminKeys).then(vaultData => {
@@ -65,37 +79,34 @@ const actions = {
           vault_public_keys: vaultData.publicKey,
           vault_keys: vaultData.keys[payload.username]
         }
-        request
+        return request
           .post('/auth/register', registerPayload)
           .then(response => {
             context.commit(mt.PUB_STOP_WORK)
-            toastMgr.success('register.done')
           })
           .catch(err => context.commit(mt.PUB_REGISTER_KO, err.response))
       })
     })
   },
   confirmEmail(context, payload) {
-    request.url = getUrlRoot()
+    request.url = context.getters['public/url']
     context.commit(mt.PUB_START_WORK)
-    request
+    return request
       .get('/auth/confirm_email/' + payload.token)
       .then(response => {
         context.commit(mt.PUB_STOP_WORK)
-        toastMgr.success('confirm_email.done')
       })
       .catch(() => {
         context.commit(mt.PUB_STOP_WORK)
       })
   },
   resendConfirmEmail(context, payload) {
-    request.url = getUrlRoot()
+    request.url = context.getters['public/url']
     context.commit(mt.PUB_START_WORK)
-    request
+    return request
       .post('/auth/request_confirmation_token', { email: payload.email })
       .then(response => {
         context.commit(mt.PUB_STOP_WORK)
-        toastMgr.success('resend_email.done')
       })
       .catch(() => {
         context.commit(mt.PUB_STOP_WORK)
@@ -106,6 +117,7 @@ const actions = {
 export default {
   namespaced: true,
   state,
+  getters,
   mutations,
   actions
 }

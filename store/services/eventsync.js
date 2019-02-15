@@ -5,7 +5,9 @@ import request from '@/commonjs/store/services/request'
 class EventSync {
   connect() {
     this.url = `${request.url}/eventsource`
-    var es = new ess.EventSourcePolyfill(this.url, request.getHeaders())
+    var merged = Object.assign(Object.assign({}, request.getHeaders()), { withCredentials: true })
+    console.log('Merged headers are', merged)
+    var es = new ess.EventSourcePolyfill(this.url, merged)
     es.addEventListener('message', ev => {
       this.onMsg(ev)
     })

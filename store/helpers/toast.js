@@ -10,7 +10,7 @@ class ToastMgr {
     this.errorcb(key, title)
   }
   success(key, title = 'Success') {
-    this.errorcb(key, title)
+    this.okcb(key, title)
   }
 }
 

@@ -19,29 +19,32 @@ const mutations = {
   [mt.SESSION_WORKING](state) {
     state.loading = true
   },
-  [mt.SESSION_LOGIN](state, { url, data, keys }) {
+  [mt.SESSION_LOGIN](state, { url, data, keys, csrf }) {
     var sData = {
       sessionToken: data.session_token,
       uid: data.user_id,
       url: url,
-      keys: keys.data
-    }
-    if (state.isWebExt) {
-      var container = {}
-      container[SESSION_STORE_NAME] = sData
-      browser.storage.local.set(container)
-    } else {
-      localStorage.addItem(SESSION_STORE_NAME, JSON.stringify(sData))
+      keys: keys,
+      csrf: csrf
     }
     request.fromJson(sData)
     state.uid = sData.uid
     state.loading = false
-    eventSync.connect()
+    if (state.isWebExt) {
+      var container = {}
+      container[SESSION_STORE_NAME] = sData
+      browser.storage.local.set(container)
+      eventSync.connect()
+    } else {
+      localStorage.setItem(SESSION_STORE_NAME, JSON.stringify(sData))
+    }
   },
   [mt.SESSION_EXISTS](state, uid) {
     state.uid = uid
     state.loading = false
-    eventSync.connect()
+    if (state.isWebExt) {
+      eventSync.connect()
+    }
   },
   [mt.SESSION_LOGOUT](state) {
     state.uid = ''
@@ -62,7 +65,9 @@ const getters = {
 
 function loadSessionData(context, data) {
   request.fromJson(data)
+  console.log('data is ', data)
   return request.get('/auth/session').then(response => {
+    console.log('resp is ', response)
     return keyMgr.setKeysFromStore(response.data.store_token, data.keys).then(ok => {
       context.commit(mt.SESSION_EXISTS, data.uid)
       request.onUnauthorized(() => {
@@ -74,7 +79,7 @@ function loadSessionData(context, data) {
 }
 
 const actions = {
-  sessionLoadFromLocalStorage(context) {
+  loadFromLocalStorage(context) {
     context.commit(mt.SESSION_WORKING)
     var stub = localStorage.getItem(SESSION_STORE_NAME)
     if (!stub || stub.length === 0) {
@@ -96,21 +101,27 @@ const actions = {
       return loadSessionData(context, sData)
     })
   },
-  login(context, { url, user, pass }) {
+  login(context, { url, user, pass, wantCsrf }) {
     request.url = url
     return keyMgr.hashPassword(user, pass).then(hPass => {
-      var payload = { id: user, password: hPass.data, want_csrf: false }
+      var payload = { id: user, password: hPass, want_csrf: wantCsrf }
       return request
-        .post('/auth/login', payload, { errorPrefix: 'login.error' })
+        .post('/auth/login', payload, { errorPrefix: 'login.error.' })
         .then(response => {
           var srvKeys = { publicKeys: response.data.public_key, secretKeys: response.data.secret_key }
           return keyMgr
             .setKeysFromServer(pass, response.data.store_token, srvKeys)
             .then(keysRet => {
+              console.log('Keys from server', keysRet)
               request.onUnauthorized(() => {
                 context.commit(mt.SESSION_LOGOUT)
               })
-              context.commit(mt.SESSION_LOGIN, { url: url, data: response.data, keys: keysRet })
+              context.commit(mt.SESSION_LOGIN, {
+                url: url,
+                data: response.data,
+                keys: keysRet,
+                csrf: response.data.csrf_required && response.data.csrf
+              })
               return context.dispatch('user/loadInfo', {}, { root: true })
             })
             .catch(err => {

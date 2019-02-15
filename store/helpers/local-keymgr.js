@@ -16,7 +16,8 @@ class LocalKeyMgr {
     this.keyMgr = new KeyMgr()
   }
   generateUserKey(username, password) {
-    return this.keyMgr.generateUserKeys(username, password)
+    return this.keyMgr.generateUserKeys(username, password).
+      then(res => return res.data)
   }
   generateVaultKeys(adminKeys) {
     return promisify(() => {
@@ -24,13 +25,16 @@ class LocalKeyMgr {
     })
   }
   hashPassword(username, password) {
-    return this.keyMgr.hashLoginPassword(username, password)
+    return this.keyMgr.hashLoginPassword(username, password).
+      then(res => return res.data)
   }
   setKeysFromServer(password, storeToken, srvKeys) {
-    return this.keyMgr.setKeysFromServer(password, storeToken, srvKeys)
+    return this.keyMgr.setKeysFromServer(password, storeToken, srvKeys).
+      then(res => return res.data)
   }
   setKeysFromStore(storeToken, storedKeys) {
-    return this.keyMgr.setKeysFromStore(storedKeys, storeToken)
+    return this.keyMgr.setKeysFromStore(storedKeys, storeToken).
+      then(res => return res.data)
   }
   cipherVaultKeysForUser(vaultKeys, pubKey) {
     return promisify(() => {
@@ -53,7 +57,8 @@ class LocalKeyMgr {
     })
   }
   closeKeysWithPassword(username, password) {
-    return this.keyMgr.closeKeysWithPassword(username, password)
+    return this.keyMgr.closeKeysWithPassword(username, password).
+      then(res => return res.data)
   }
 }
 
