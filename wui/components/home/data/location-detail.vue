@@ -17,7 +17,7 @@
         <div class="col">
           <h6 class="card-subtitle m-2 text-muted" v-if="bSelectingVault">
             <div class="form-group">
-              <label>Choose which vault to store the secret </label>
+              <label>Choose which vault to store the secret</label>
               <select class="form-control form-control-sm" v-model="parentVault">
                 <option :value="{ tid: vt.tid, vid: vt.vid }" v-for="vt in allVaults">{{ vt.teamName }} / {{ vt.vid }}</option>
               </select>
@@ -105,6 +105,13 @@ export default {
       urlsInEditMode: {},
       showNewCredentialInput: false,
       credsInEditMode: {}
+    }
+  },
+  mounted() {
+    if( this.bSelectingVault && this.allVaults.length === 1 ) {
+      this.bSelectingVault = false
+      this.parentVault.tid = this.allVaults[0].tid
+      this.parentVault.vid = this.allVaults[0].vid
     }
   },
   computed: {

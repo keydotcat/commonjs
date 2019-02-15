@@ -65,6 +65,13 @@ export default {
       parentVault: v
     }
   },
+  mounted() {
+    if( this.bSelectingVault && this.allVaults.length === 1 ) {
+      this.bSelectingVault = false
+      this.parentVault.tid = this.allVaults[0].tid
+      this.parentVault.vid = this.allVaults[0].vid
+    }
+  },
   computed: {
     allVaults() {
       var vaults = []
