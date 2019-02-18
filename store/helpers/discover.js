@@ -8,7 +8,7 @@ export default {
         if (response.data.name === 'KeyCat') {
           return Promise.resolve(response.data)
         } else {
-          return Promise.reject(false)
+          return Promise.resolve(false)
         }
       })
       .catch(err => {
