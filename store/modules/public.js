@@ -63,50 +63,54 @@ const actions = {
     var resp = await request.get('/version')
     context.commit(mt.PUB_VERSION, resp.data)
   },
-  register(context, payload) {
+  async register(context, payload) {
     context.commit(mt.PUB_START_WORK)
-    request.url = context.getters['public/url']
-    return keyMgr.generateUserKey(payload.username, payload.password).then(userData => {
-      var adminKeys = {}
-      adminKeys[payload.username] = userData.publicKeys
-      keyMgr.generateVaultKeys(adminKeys).then(vaultData => {
-        var registerPayload = {
-          id: payload.username,
-          password: userData.password,
-          user_keys: userData.keys,
-          email: payload.email,
-          fullname: payload.fullname,
-          vault_public_keys: vaultData.publicKey,
-          vault_keys: vaultData.keys[payload.username]
-        }
-        return request
-          .post('/auth/register', registerPayload)
-          .then(response => {
-            context.commit(mt.PUB_STOP_WORK)
-          })
-          .catch(err => context.commit(mt.PUB_REGISTER_KO, err.response))
+    request.url = context.getters['url']
+    console.log('UARS', request.url, context.getters)
+    var userData = await keyMgr.generateUserKey(payload.username, payload.password)
+    var adminKeys = {}
+    adminKeys[payload.username] = userData.publicKeys
+    var vaultData = await keyMgr.generateVaultKeys(adminKeys)
+    var registerPayload = {
+      id: payload.username,
+      password: userData.password,
+      user_keys: userData.keys,
+      email: payload.email,
+      fullname: payload.fullname,
+      vault_public_keys: vaultData.publicKey,
+      vault_keys: vaultData.keys[payload.username]
+    }
+    return request
+      .post('/auth/register', registerPayload)
+      .then(response => {
+        context.commit(mt.PUB_STOP_WORK)
+        return Promise.resolve(true)
       })
-    })
+      .catch(err => {
+        context.commit(mt.PUB_REGISTER_KO, err.response)
+      })
   },
   confirmEmail(context, payload) {
-    request.url = context.getters['public/url']
+    request.url = context.getters['url']
     context.commit(mt.PUB_START_WORK)
     return request
       .get('/auth/confirm_email/' + payload.token)
       .then(response => {
         context.commit(mt.PUB_STOP_WORK)
+        return Promise.resolve(true)
       })
       .catch(() => {
         context.commit(mt.PUB_STOP_WORK)
       })
   },
   resendConfirmEmail(context, payload) {
-    request.url = context.getters['public/url']
+    request.url = context.getters['url']
     context.commit(mt.PUB_START_WORK)
     return request
       .post('/auth/request_confirmation_token', { email: payload.email })
       .then(response => {
         context.commit(mt.PUB_STOP_WORK)
+        return Promise.resolve(true)
       })
       .catch(() => {
         context.commit(mt.PUB_STOP_WORK)
