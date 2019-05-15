@@ -4,7 +4,7 @@
     <user-import v-if="section == 'user' && page == 'import'"></user-import>
     <user-export v-if="section == 'user' && page == 'export'"></user-export>
     <team-content v-if="section == 'team'" :tid="page"></team-content>
-    <new-team v-if="section == 'new-team'"></new-team>
+    <new-team v-on:created="navigateToTeam" v-if="section == 'new-team'"></new-team>
   </div>
 </template>
 
@@ -21,6 +21,11 @@ export default {
   props: {
     section: String,
     page: String
+  },
+  methods: {
+    navigateToTeam(tid) {
+      this.$emit('navigate','team',tid)
+    }
   }
 }
 </script>

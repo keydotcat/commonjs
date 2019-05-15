@@ -73,7 +73,7 @@ export default {
     goto(section, page) {
       this.section = section
       this.page = page
-      this.$emit('change', section, page)
+      this.$emit('navigate', section, page)
       $('.dropdown-toggle').dropdown('hide')
     }
   }

@@ -82,8 +82,8 @@ const actions = {
   createTeam(context, payload) {
     var req = {}
     req[context.state.id] = context.state.publicKeys
-    keyMgr.generateVaultKeys(req).then(vaultKeys => {
-      userSvc
+    return keyMgr.generateVaultKeys(req).then(vaultKeys => {
+      return userSvc
         .createTeam({
           name: payload,
           vault_keys: {
@@ -93,7 +93,9 @@ const actions = {
         })
         .then(teamInfo => {
           toastMgr.success('Team created')
-          context.dispatch('loadInfo')
+          return context.dispatch('loadInfo').then( () => {
+            return teamInfo.id
+          })
         })
     })
   },

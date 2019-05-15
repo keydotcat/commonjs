@@ -7,9 +7,9 @@ export default {
       .then(response => Promise.resolve(response.data))
       .catch(error => Promise.reject(error))
   },
-  createTeam(request) {
+  createTeam(teamRequest) {
     return request
-      .post('/team', request)
+      .post('/team', teamRequest)
       .then(response => Promise.resolve(response.data))
       .catch(error => Promise.reject(error))
   },

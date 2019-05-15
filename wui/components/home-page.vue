@@ -1,8 +1,8 @@
 <template>
   <div class="expandHeight">
-    <home-header v-on:change="changePage"></home-header>
-    <data-content v-if="section == 'data'" :page="page"></data-content>
-    <manage-content v-if="section != 'data'" :section="section" :page="page"></manage-content>
+    <home-header v-on:navigate="changePage"></home-header>
+    <data-content v-on:navigate="changePage" v-if="section == 'data'" :page="page"></data-content>
+    <manage-content v-on:navigate="changePage" v-if="section != 'data'" :section="section" :page="page"></manage-content>
   </div>
 </template>
 
