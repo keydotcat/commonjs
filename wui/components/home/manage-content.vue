@@ -24,7 +24,7 @@ export default {
   },
   methods: {
     navigateToTeam(tid) {
-      this.$emit('navigate','team',tid)
+      this.$emit('navigate', 'team', tid)
     }
   }
 }

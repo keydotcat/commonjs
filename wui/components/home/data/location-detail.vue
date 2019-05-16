@@ -98,7 +98,8 @@ export default {
     return {
       loc: loc,
       bEditingName: false,
-      bSelectingVault: this.secret.secretId.length === 0,
+      //bSelectingVault: this.secret.secretId.length === 0,
+      bSelectingVault: true,
       parentVault: v,
       newUrl: '',
       showNewUrlInput: false,
@@ -109,7 +110,7 @@ export default {
   },
   mounted() {
     if (this.bSelectingVault && this.allVaults.length === 1) {
-      this.bSelectingVault = false
+      //this.bSelectingVault = false
       this.parentVault.tid = this.allVaults[0].tid
       this.parentVault.vid = this.allVaults[0].vid
     }

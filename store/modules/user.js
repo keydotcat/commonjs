@@ -93,7 +93,7 @@ const actions = {
         })
         .then(teamInfo => {
           toastMgr.success('Team created')
-          return context.dispatch('loadInfo').then( () => {
+          return context.dispatch('loadInfo').then(() => {
             return teamInfo.id
           })
         })
