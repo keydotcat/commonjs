@@ -198,17 +198,22 @@ function getVaultKeyFromList(vaults, tid, vid) {
   return gVKeys[key]
 }
 
-function updateOrCreate(context, ftor, tid, vid, sid, data) {
+function updateOrCreate(context, ftor, tid, vid, sid, data, newTeamId, newVaultId) {
   return new Promise((resolve, reject) => {
     if (typeof data.cloneAsObject !== 'function') {
       throw new Error('Expected SecretData object')
     }
-    var vKeys = getVaultKeyFromList(context.rootState[`team.${tid}`].vaults, tid, vid)
+    var targetTeam = newTeamId || tid
+    var targetVault = newVaultId || vid
+    var vKeys = getVaultKeyFromList(context.rootState[`team.${targetTeam}`].vaults, targetTeam, targetVault)
     keyMgr.serializeAndClose(vKeys, data.cloneAsObject()).then(closedData => {
-      ftor({ teamId: tid, vaultId: vid, secretId: sid, payload: closedData })
+      ftor({ teamId: tid, vaultId: vid, secretId: sid, closedData: closedData, newTeamId: newTeamId, newVaultId: newVaultId })
         .then(secret => {
           keyMgr.openAndDeserialize(vKeys, secret.data).then(openData => {
-            context.commit(mt.SECRET_SET, { teamId: tid, secret: secret, openData: data })
+            if( newTeamId && newVaultId ) {
+              context.commit(mt.SECRET_UNSET, { teamId: tid, vaultId: vid, secretId: sid })
+            }
+            context.commit(mt.SECRET_SET, { teamId: targetTeam, secret: secret, openData: data })
             resolve(secret)
           })
         })
@@ -269,8 +274,8 @@ const actions = {
       })
     })
   },
-  update(context, { teamId, vaultId, secretId, secretData }) {
-    return updateOrCreate(context, teamSvc.updateSecret, teamId, vaultId, secretId, secretData)
+  update(context, { teamId, vaultId, secretId, secretData, newTeamId, newVaultId }) {
+    return updateOrCreate(context, teamSvc.updateSecret, teamId, vaultId, secretId, secretData, newTeamId, newVaultId)
   },
   create(context, { teamId, vaultId, secretData }) {
     return updateOrCreate(context, teamSvc.createSecret, teamId, vaultId, '', secretData)

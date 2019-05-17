@@ -50,9 +50,9 @@ export default {
       .then(response => Promise.resolve(response.data))
       .catch(error => Promise.reject(error))
   },
-  createSecret({ teamId, vaultId, payload }) {
+  createSecret({ teamId, vaultId, closedData }) {
     return request
-      .post(`/team/${teamId}/vault/${vaultId}/secret`, { data: payload })
+      .post(`/team/${teamId}/vault/${vaultId}/secret`, { data: closedData })
       .then(response => Promise.resolve(response.data))
       .catch(error => Promise.reject(error))
   },
@@ -62,9 +62,9 @@ export default {
       .then(response => Promise.resolve(response.data))
       .catch(error => Promise.reject(error))
   },
-  updateSecret({ teamId, vaultId, secretId, payload }) {
+  updateSecret({ teamId, vaultId, secretId, closedData, newTeamId, newVaultId }) {
     return request
-      .put(`/team/${teamId}/vault/${vaultId}/secret/${secretId}`, { data: payload })
+      .put(`/team/${teamId}/vault/${vaultId}/secret/${secretId}`, { team: newTeamId, vault: newVaultId, data: closedData })
       .then(response => Promise.resolve(response.data))
       .catch(error => Promise.reject(error))
   },

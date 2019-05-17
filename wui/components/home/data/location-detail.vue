@@ -15,15 +15,14 @@
       </h5>
       <div class="row">
         <div class="col">
-          <h6 class="card-subtitle m-2 text-muted" v-if="bSelectingVault">
+          <h6 class="card-subtitle m-2 text-muted">
             <div class="form-group">
               <label>Choose which vault to store the secret</label>
-              <select class="form-control form-control-sm" v-model="parentVault">
+              <select class="form-control form-control-sm" v-model="targetVault">
                 <option :value="{ tid: vt.tid, vid: vt.vid }" v-for="vt in allVaults">{{ vt.teamName }} / {{ vt.vid }}</option>
               </select>
             </div>
           </h6>
-          <h6 class="card-subtitle m-2 text-muted" v-if="!bSelectingVault">Vault {{ $store.getters[`team.${parentVault.tid}/name`] }} / {{ parentVault.vid }}</h6>
           <h6 class="card-subtitle m-2">URLs</h6>
           <text-list-editor :name="'URL'" v-model="loc.urls"></text-list-editor>
           <h6 class="card-subtitle m-2" :class="{ 'text-danger': !isOkCreds }">Credentials</h6>
@@ -96,11 +95,10 @@ export default {
       vid: this.secret.vaultId
     }
     return {
+      sourceVault: v,
       loc: loc,
       bEditingName: false,
-      //bSelectingVault: this.secret.secretId.length === 0,
-      bSelectingVault: true,
-      parentVault: v,
+      targetVault: v,
       newUrl: '',
       showNewUrlInput: false,
       urlsInEditMode: {},
@@ -109,10 +107,9 @@ export default {
     }
   },
   mounted() {
-    if (this.bSelectingVault && this.allVaults.length === 1) {
-      //this.bSelectingVault = false
-      this.parentVault.tid = this.allVaults[0].tid
-      this.parentVault.vid = this.allVaults[0].vid
+    if (this.allVaults.length === 1) {
+      this.targetVault.tid = this.allVaults[0].tid
+      this.targetVault.vid = this.allVaults[0].vid
     }
   },
   computed: {
@@ -146,10 +143,13 @@ export default {
   methods: {
     saveChanges() {
       var args = {
-        teamId: this.parentVault.tid,
-        vaultId: this.parentVault.vid,
-        secretData: new SecretData(this.loc)
+        teamId: this.sourceVault.tid || this.targetVault.tid,
+        vaultId: this.sourceVault.vid || this.targetVault.vid,
+        secretData: new SecretData(this.loc),
+        newTeamId: this.targetVault.tid,
+        newVaultId: this.targetVault.vid
       }
+      console.log('ARGR', args)
       var action = 'secrets/create'
       if (this.secret.secretId) {
         action = 'secrets/update'
