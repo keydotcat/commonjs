@@ -18,7 +18,7 @@ class ModuleLoader {
       this.store.dispatch(`${mid}/loadInfo`, tid)
     }
   }
-  logout() {
+  clearTeams() {
     for (var tid in this.teams) {
       var mid = 'team.' + tid
       this.store.unregisterModule(mid)
@@ -33,8 +33,13 @@ export default store => {
     if (mutation.type === 'user/' + mt.USER_LOAD_INFO) {
       ml.syncTeams(state.user.teams)
     }
+    if (mutation.type === 'user/' + mt.USER_TEAMS_RELOAD) {
+      console.log('team/TEAM RELOAD')
+      ml.clearTeams()
+      ml.syncTeams(state.user.teams)
+    }
     if (mutation.type === mt.SESSION_LOGOUT) {
-      ml.logout()
+      ml.clearTeams()
     }
   })
 }

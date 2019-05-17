@@ -29,6 +29,9 @@ const mutations = {
     state.publicKeys = ''
     state.email = ''
     state.teams.splice(0, state.teams.length)
+  },
+  [mt.USER_TEAMS_RELOAD](state) {
+    //Do nothing. The auto-team plugins will do it
   }
 }
 

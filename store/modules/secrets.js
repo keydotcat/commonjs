@@ -100,6 +100,7 @@ const mutations = {
   [mt.SECRET_CLEAR_ALL]() {
     state.secrets = {}
     state.labels = {}
+    state.vaultVersion = {}
   },
   [mt.SECRET_SET](state, { teamId, secret, openData }) {
     addSecret(state, teamId, secret, openData)
@@ -307,6 +308,10 @@ const actions = {
   },
   deleteFromServer(context, { teamId, vaultId, secretId }) {
     context.commit(mt.SECRET_UNSET, { teamId: teamId, vaultId: vaultId, secretId: secretId })
+  },
+  reload(context) {
+    context.commit(mt.SECRET_CLEAR_ALL)
+    context.commit('user/'+mt.USER_TEAMS_RELOAD, {}, { root: true })
   },
   async syncWhenNeeded(context, teamVaultIds) {
     var checked = []

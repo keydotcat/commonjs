@@ -6,6 +6,7 @@ export const SESSION_SET_WEBEXT = 'SESSION_SET_WEBEXT'
 
 export const USER_LOAD_INFO = 'USER_LOAD_INFO'
 export const USER_CLEAR = 'USER_CLEAR'
+export const USER_TEAMS_RELOAD = 'USER_RELOAD'
 
 export const TEAM_LOAD_INFO = 'TEAM_LOAD_INFO'
 export const TEAM_LOAD_USERS = 'TEAM_LOAD_USERS'
