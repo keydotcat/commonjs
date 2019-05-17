@@ -210,7 +210,7 @@ function updateOrCreate(context, ftor, tid, vid, sid, data, newTeamId, newVaultI
       ftor({ teamId: tid, vaultId: vid, secretId: sid, closedData: closedData, newTeamId: newTeamId, newVaultId: newVaultId })
         .then(secret => {
           keyMgr.openAndDeserialize(vKeys, secret.data).then(openData => {
-            if( newTeamId && newVaultId ) {
+            if (newTeamId && newVaultId) {
               context.commit(mt.SECRET_UNSET, { teamId: tid, vaultId: vid, secretId: sid })
             }
             context.commit(mt.SECRET_SET, { teamId: targetTeam, secret: secret, openData: data })

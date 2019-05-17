@@ -97,7 +97,6 @@ const actions = {
           return keyMgr
             .setKeysFromServer(pass, response.data.store_token, srvKeys)
             .then(keysRet => {
-              console.log('Keys from server', keysRet)
               request.onUnauthorized(() => {
                 context.commit(mt.SESSION_LOGOUT)
               })

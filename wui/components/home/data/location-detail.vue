@@ -18,8 +18,10 @@
           <h6 class="card-subtitle m-2 text-muted">
             <div class="form-group">
               <label>Choose which vault to store the secret</label>
-              <select class="form-control form-control-sm" v-model="targetVault">
-                <option :value="{ tid: vt.tid, vid: vt.vid }" v-for="vt in allVaults">{{ vt.teamName }} / {{ vt.vid }}</option>
+              <select class="form-control form-control-sm custom-select" v-model="targetVault">
+                <option :value="{ tid: vt.tid, vid: vt.vid }" v-for="vt in allVaults"
+                  >{{ vt.teamName }} / {{ vt.vid }} ({{ vt.numPeople }} {{ vt.numPeople > 1 ? 'users' : 'user' }})</option
+                >
               </select>
             </div>
           </h6>
@@ -120,7 +122,8 @@ export default {
           vaults.push({
             tid: tid,
             vid: vault.id,
-            teamName: this.$store.state[`team.${tid}`].name
+            teamName: this.$store.state[`team.${tid}`].name,
+            numPeople: vault.users.length
           })
         })
       })
@@ -149,7 +152,6 @@ export default {
         newTeamId: this.targetVault.tid,
         newVaultId: this.targetVault.vid
       }
-      console.log('ARGR', args)
       var action = 'secrets/create'
       if (this.secret.secretId) {
         action = 'secrets/update'

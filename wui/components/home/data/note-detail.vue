@@ -15,15 +15,16 @@
       </h5>
       <div class="row">
         <div class="col">
-          <h6 class="card-subtitle m-2 text-muted" v-if="bSelectingVault">
+          <h6 class="card-subtitle m-2 text-muted">
             <div class="form-group">
               <label>Choose which vault to store the secret </label>
-              <select class="form-control form-control-sm" v-model="parentVault">
-                <option :value="{ tid: vt.tid, vid: vt.vid }" v-for="vt in allVaults">{{ vt.teamName }} / {{ vt.vid }}</option>
+              <select class="form-control form-control-sm" v-model="targetVault">
+                <option :value="{ tid: vt.tid, vid: vt.vid }" v-for="vt in allVaults"
+                  >{{ vt.teamName }} / {{ vt.vid }} ({{ vt.numPeople }} {{ vt.numPeople > 1 ? 'users' : 'user' }})</option
+                >
               </select>
             </div>
           </h6>
-          <h6 class="card-subtitle m-2 text-muted" v-if="!bSelectingVault">Vault {{ $store.getters[`team.${parentVault.tid}/name`] }} / {{ parentVault.vid }}</h6>
           <h6 class="card-subtitle m-2">Contents</h6>
           <div class="form-group pl-2">
             <textarea class="form-control" :rows="linesInNote" v-model="note.data"></textarea>
@@ -61,13 +62,12 @@ export default {
     return {
       note: note,
       bEditingName: false,
-      bSelectingVault: this.secret.secretId.length === 0,
-      parentVault: v
+      sourceVault: v,
+      targetVault: v
     }
   },
   mounted() {
-    if (this.bSelectingVault && this.allVaults.length === 1) {
-      this.bSelectingVault = false
+    if (this.allVaults.length === 1) {
       this.parentVault.tid = this.allVaults[0].tid
       this.parentVault.vid = this.allVaults[0].vid
     }
@@ -80,7 +80,8 @@ export default {
           vaults.push({
             tid: tid,
             vid: vault.id,
-            teamName: this.$store.state[`team.${tid}`].name
+            teamName: this.$store.state[`team.${tid}`].name,
+            numPeople: vault.users.length
           })
         })
       })
@@ -100,9 +101,11 @@ export default {
   methods: {
     saveChanges() {
       var args = {
-        teamId: this.parentVault.tid,
-        vaultId: this.parentVault.vid,
-        secretData: new NoteData(this.note)
+        secretData: new NoteData(this.note),
+        teamId: this.sourceVault.tid || this.targetVault.tid,
+        vaultId: this.sourceVault.vid || this.targetVault.vid,
+        newTeamId: this.targetVault.tid,
+        newVaultId: this.targetVault.vid
       }
       var action = 'secrets/create'
       if (this.secret.secretId) {
