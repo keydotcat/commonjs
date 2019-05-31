@@ -4,11 +4,8 @@ export default class SessionStorage {
   constructor() {
     this.ext = null
   }
-  setExtension() {
-    var self = this
-    import('webextension-polyfill').then(browser => {
-      self.ext = browser
-    })
+  setExtension(browserExt) {
+    this.ext = browserExt
   }
   save(data) {
     if (this.ext) {

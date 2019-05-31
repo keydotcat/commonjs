@@ -13,9 +13,9 @@ const state = {
 }
 
 const mutations = {
-  [mt.SESSION_SET_WEBEXT](state) {
+  [mt.SESSION_SET_WEBEXT](state, browserExt) {
     state.isWebExt = true
-    sessionStore.setExtension()
+    sessionStore.setExtension(browserExt)
   },
   [mt.SESSION_WORKING](state) {
     state.loading = true
@@ -76,8 +76,8 @@ const actions = {
     }
     return loadSessionData(context, data)
   },
-  async loadFromExtensionStorage(context) {
-    context.commit(mt.SESSION_SET_WEBEXT)
+  async loadFromExtensionStorage(context, browserExt) {
+    context.commit(mt.SESSION_SET_WEBEXT, browserExt)
     context.commit(mt.SESSION_WORKING)
     var data = await sessionStore.load()
     if (!data) {
