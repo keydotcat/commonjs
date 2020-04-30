@@ -75,9 +75,9 @@ javascript-strong-password-generator@^1.0.2:
     js-sha512 "^0.6.0"
     systeminformation "^3.33.5"
 
-jquery@^3.3.1:
-  version "3.4.1"
-  resolved "https://registry.yarnpkg.com/jquery/-/jquery-3.4.1.tgz#714f1f8d9dde4bdfa55764ba37ef214630d80ef2"
+jquery@^3.5.0:
+  version "3.5.0"
+  resolved "https://registry.yarnpkg.com/jquery/-/jquery-3.5.0.tgz#9980b97d9e4194611c36530e7dc46a58d7340fc9"
 
 js-sha512@^0.6.0:
   version "0.6.0"
