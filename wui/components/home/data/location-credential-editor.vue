@@ -15,9 +15,7 @@
           <label for="name" class="col-md col-form-label">Name</label>
           <div class="col-md-9">
             <input id="user" class="form-control" :class="{ 'is-invalid': !isOkName }" type="text" v-model="changes.name" placeholder="Name" aria-label="name" />
-            <div v-if="!isOkName" class="invalid-feedback">
-              Please choose credential name.
-            </div>
+            <div v-if="!isOkName" class="invalid-feedback">Please choose credential name.</div>
           </div>
         </div>
         <div class="form-group row">
@@ -32,9 +30,7 @@
               placeholder="Username"
               aria-label="username"
             />
-            <div v-if="!isOkUsername" class="invalid-feedback">
-              Please choose a username.
-            </div>
+            <div v-if="!isOkUsername" class="invalid-feedback">Please choose a username.</div>
           </div>
         </div>
         <div class="form-group row">
@@ -47,9 +43,7 @@
                 <i class="material-icons" v-if="revealPass">visibility</i>
               </button>
             </div>
-            <div v-if="!isOkPassword" class="invalid-feedback">
-              Password empty or passwords do not match
-            </div>
+            <div v-if="!isOkPassword" class="invalid-feedback">Password empty or passwords do not match</div>
           </div>
         </div>
         <div class="form-group row">
@@ -57,9 +51,7 @@
           <div class="input-group col-md-9">
             <input :type="revealPass ? 'text' : 'password'" v-model="password_repeat" class="form-control" aria-label="password" />
             <div class="input-group-append">
-              <button class="btn btn-primary" :class="{ 'btn-info': showGenerate }" type="button" @click="toggleGeneratePanel">
-                Generate
-              </button>
+              <button class="btn btn-primary" :class="{ 'btn-info': showGenerate }" type="button" @click="toggleGeneratePanel">Generate</button>
             </div>
           </div>
         </div>
@@ -67,9 +59,7 @@
           <h6 class="m-2 text-muted">Generate password</h6>
           <div class="container-fluid p-2">
             <div class="row d-flex align-items-center">
-              <div class="col-2">
-                Length
-              </div>
+              <div class="col-2">Length</div>
               <div class="col">
                 <form>
                   <div class="form-group">
@@ -78,13 +68,11 @@
                 </form>
               </div>
               <div class="col-2">
-                <input type="number" v-model="genOpts.len" class="form-control mx-auto" style="width:70px" />
+                <input type="number" v-model="genOpts.len" class="form-control mx-auto" style="width: 70px" />
               </div>
             </div>
             <div class="row d-flex align-items-center">
-              <div class="col-2">
-                Characters
-              </div>
+              <div class="col-2">Characters</div>
               <div class="col d-flex align-content-justify">
                 <div class="btn-group mx-auto" role="group" aria-label="Basic example">
                   <button type="button" class="btn" :disabled="genOpts.unicode" :class="{ 'btn-info': genOpts.lower }" @click="genOpts.lower = !genOpts.lower">a-z</button>

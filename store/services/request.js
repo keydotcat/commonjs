@@ -59,12 +59,12 @@ class RequestBase {
   }
   _rend(prom) {
     return prom
-      .then(response => {
+      .then((response) => {
         return response
       })
-      .catch(err => {
+      .catch((err) => {
         if (err.response && err.response.status === 401) {
-          this.unauthorizedCB.forEach(ftor => {
+          this.unauthorizedCB.forEach((ftor) => {
             ftor(err)
           })
         }

@@ -48,7 +48,7 @@ export default {
   },
   data() {
     //Make an editable copy of the text list
-    var l = this.list.map(l => {
+    var l = this.list.map((l) => {
       return l
     })
     return {

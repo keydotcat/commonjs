@@ -30,7 +30,7 @@ export default {
     }
   },
   watch: {
-    page: function(newV, oldV) {
+    page: function (newV, oldV) {
       this.activePage = newV
     }
   },

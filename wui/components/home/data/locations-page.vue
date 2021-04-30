@@ -88,7 +88,7 @@ export default {
     pagesToFastJump() {
       var pages = []
       var jumps = [-10, -5, -2, -1, 0, 1, 2, 5, 10]
-      jumps.forEach(jump => {
+      jumps.forEach((jump) => {
         var t = this.pageIdx + jump
         if (t >= 0 && t < this.numPages) {
           pages.push(t)

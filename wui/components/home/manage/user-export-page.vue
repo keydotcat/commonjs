@@ -33,8 +33,14 @@ import kdbxweb from 'kdbxweb'
 export default {
   name: 'user-export',
   data() {
+    var vaults = this.$store.getters['user/allVaults'].map((vaultData) => {
+      return {
+        tid: vaultData.tid,
+        vid: vaultData.vid
+      }
+    })
     return {
-      selectedVaults: [],
+      selectedVaults: vaults,
       pass: '',
       pass_repeat: '',
       checked: false
@@ -63,13 +69,26 @@ export default {
       }
       var credentials = new kdbxweb.Credentials(kdbxweb.ProtectedValue.fromString(this.pass))
       var newDb = kdbxweb.Kdbx.create(credentials, this.$store.state.user.id + ' db')
-      var group = newDb.getDefaultGroup()
-      var vaultFilter = this.selectedVaults.map(v => {
+      var vaultFilter = this.selectedVaults.map((v) => {
         return `${v.tid}/${v.vid}`
       })
-      this.$store.getters['secrets/filteredSecrets']({ vaults: vaultFilter }).forEach(secret => {
-        secret.data.creds.forEach(cred => {
-          var e = newDb.createEntry(group)
+      var dbGroups = {}
+      var teams = this.$store.getters['user/teamMap']
+      var getDBGroup = (secret) => {
+        var teamName = teams[secret.teamId].name
+        if (!(teamName in dbGroups)) {
+          dbGroups[teamName] = newDb.createGroup(newDb.getDefaultGroup(), teamName)
+        }
+        const secretGroupKey = `${teamName}/${secret.vaultId}`
+        if (!(secretGroupKey in dbGroups)) {
+          dbGroups[secretGroupKey] = newDb.createGroup(dbGroups[teamName], secret.vaultId)
+        }
+        return dbGroups[secretGroupKey]
+      }
+      this.$store.getters['secrets/filteredSecrets']('location', { vaults: vaultFilter }).forEach((secret) => {
+        var dbGroup = getDBGroup(secret)
+        secret.data.creds.forEach((cred) => {
+          var e = newDb.createEntry(dbGroup)
           e.tags = secret.data.labels
           e._setField('Title', secret.data.creds.length > 0 ? secret.data.name : secret.data.name + ' - ' + cred.username)
           e._setField('URL', secret.data.urls[0])
@@ -78,8 +97,14 @@ export default {
           e._setField('Password', cred.password)
         })
       })
-      newDb.save().then(dataAsArrayBuffer => {
-        var blob = new Blob(new Int8Array(dataAsArrayBuffer), { type: 'octet/stream' })
+      this.$store.getters['secrets/filteredSecrets']('note', { vaults: vaultFilter }).forEach((secret) => {
+        var dbGroup = getDBGroup(secret)
+        var e = newDb.createEntry(dbGroup)
+        e._setField('Title', secret.data.name)
+        e._setField('Notes', secret.data.data)
+      })
+      newDb.save().then((dataAsArrayBuffer) => {
+        var blob = new Blob([dataAsArrayBuffer], { type: 'octet/stream' })
         var url = window.URL.createObjectURL(blob)
         var element = document.createElement('a')
         element.style.display = 'none'

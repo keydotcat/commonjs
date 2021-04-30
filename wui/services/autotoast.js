@@ -20,7 +20,7 @@ function extractErrorMsg(httpError, prefix) {
 }
 
 const AutoToastSvc = {
-  toastAxiosError: err => {
+  toastAxiosError: (err) => {
     var idx = extractErrorMsg(err, err.config['errorPrefix'])
     toastSvc.error(idx)
     return err

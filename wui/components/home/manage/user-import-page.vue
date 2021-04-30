@@ -65,8 +65,8 @@ var fContainer = new FileContainer()
 
 function recurseKdbxGroups(groups, path) {
   var secrets = []
-  groups.forEach(group => {
-    group.entries.forEach(entry => {
+  groups.forEach((group) => {
+    group.entries.forEach((entry) => {
       var pass = ''
       if (typeof entry.fields.Password === 'string') {
         pass = entry.fields.Password
@@ -138,8 +138,8 @@ export default {
         var secrets = []
         var credentials = new kdbxweb.Credentials(kdbxweb.ProtectedValue.fromString(this.importPass))
         kdbxweb.Kdbx.load(fContainer.getData(), credentials).then(
-          db => {
-            recurseKdbxGroups(db.groups, '').forEach(secret => {
+          (db) => {
+            recurseKdbxGroups(db.groups, '').forEach((secret) => {
               secrets.push(secret)
             })
             console.log('Starting cipher and save')
@@ -177,7 +177,7 @@ export default {
 
       var reader = new FileReader()
       //var self = this
-      reader.onload = ev => {
+      reader.onload = (ev) => {
         this.currentStatus = STATUS_LOADED
         fContainer.setData(ev.target.result)
       }

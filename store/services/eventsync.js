@@ -8,7 +8,7 @@ class EventSync {
     var merged = Object.assign(Object.assign({}, request.getHeaders()), { withCredentials: true })
     console.log('Merged headers are', merged)
     var es = new ess.EventSourcePolyfill(this.url, merged)
-    es.addEventListener('message', ev => {
+    es.addEventListener('message', (ev) => {
       this.onMsg(ev)
     })
     es.addEventListener('open', () => {

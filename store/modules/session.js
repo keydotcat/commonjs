@@ -48,15 +48,15 @@ const mutations = {
 }
 
 const getters = {
-  loggedIn: state => {
+  loggedIn: (state) => {
     return state.uid.length > 0
   }
 }
 
 function loadSessionData(context, data) {
   request.fromJson(data)
-  return request.get('/auth/session').then(response => {
-    return keyMgr.setKeysFromStore(response.data.store_token, data.keys).then(ok => {
+  return request.get('/auth/session').then((response) => {
+    return keyMgr.setKeysFromStore(response.data.store_token, data.keys).then((ok) => {
       context.commit(mt.SESSION_EXISTS, data.uid)
       request.onUnauthorized(() => {
         context.commit(mt.SESSION_LOGOUT)
@@ -88,15 +88,15 @@ const actions = {
   },
   login(context, { url, user, pass, wantCsrf }) {
     request.url = url
-    return keyMgr.hashPassword(user, pass).then(hPass => {
+    return keyMgr.hashPassword(user, pass).then((hPass) => {
       var payload = { id: user, password: hPass, want_csrf: wantCsrf }
       return request
         .post('/auth/login', payload, { errorPrefix: 'login.error.' })
-        .then(response => {
+        .then((response) => {
           var srvKeys = { publicKeys: response.data.public_key, secretKeys: response.data.secret_key }
           return keyMgr
             .setKeysFromServer(pass, response.data.store_token, srvKeys)
-            .then(keysRet => {
+            .then((keysRet) => {
               request.onUnauthorized(() => {
                 context.commit(mt.SESSION_LOGOUT)
               })
@@ -108,11 +108,11 @@ const actions = {
               })
               return context.dispatch('user/loadInfo', {}, { root: true })
             })
-            .catch(err => {
+            .catch((err) => {
               return { error: err }
             })
         })
-        .catch(err => {
+        .catch((err) => {
           return { error: request.processError(err) }
         })
     })

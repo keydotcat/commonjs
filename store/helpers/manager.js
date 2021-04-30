@@ -8,7 +8,7 @@ class Manager {
     this.worker = new Worker()
     this.promise_queue = []
     var self = this
-    this.worker.onmessage = function(e) {
+    this.worker.onmessage = function (e) {
       if (self.promise_queue < 1) {
         return
       }
@@ -24,7 +24,7 @@ class Manager {
   }
   newTask(cmd, data) {
     var self = this
-    return new Promise(function(resolve, reject) {
+    return new Promise(function (resolve, reject) {
       try {
         self.promise_queue.push({ cmd: cmd, resolve: resolve, reject: reject })
         var task = {}

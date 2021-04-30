@@ -1,7 +1,7 @@
 import KeyMgr from '@/commonjs/crypto/key_mgr'
 
 function promisify(ftor) {
-  return new Promise(function(resolve, reject) {
+  return new Promise(function (resolve, reject) {
     var res = ftor()
     if ('data' in res) {
       resolve(res.data)
@@ -16,7 +16,7 @@ class LocalKeyMgr {
     this.keyMgr = new KeyMgr()
   }
   generateUserKey(username, password) {
-    return this.keyMgr.generateUserKeys(username, password).then(res => {
+    return this.keyMgr.generateUserKeys(username, password).then((res) => {
       return res.data
     })
   }
@@ -26,17 +26,17 @@ class LocalKeyMgr {
     })
   }
   hashPassword(username, password) {
-    return this.keyMgr.hashLoginPassword(username, password).then(res => {
+    return this.keyMgr.hashLoginPassword(username, password).then((res) => {
       return res.data
     })
   }
   setKeysFromServer(password, storeToken, srvKeys) {
-    return this.keyMgr.setKeysFromServer(password, storeToken, srvKeys).then(res => {
+    return this.keyMgr.setKeysFromServer(password, storeToken, srvKeys).then((res) => {
       return res.data
     })
   }
   setKeysFromStore(storeToken, storedKeys) {
-    return this.keyMgr.setKeysFromStore(storedKeys, storeToken).then(res => {
+    return this.keyMgr.setKeysFromStore(storedKeys, storeToken).then((res) => {
       return res.data
     })
   }
@@ -61,7 +61,7 @@ class LocalKeyMgr {
     })
   }
   closeKeysWithPassword(username, password) {
-    return this.keyMgr.closeKeysWithPassword(username, password).then(res => {
+    return this.keyMgr.closeKeysWithPassword(username, password).then((res) => {
       return res.data
     })
   }

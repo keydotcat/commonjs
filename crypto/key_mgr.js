@@ -265,7 +265,7 @@ export default class KeyMgr {
   }
   openAndDeserializeBulk(vsa) {
     return {
-      data: vsa.map(data => {
+      data: vsa.map((data) => {
         return this.openAndDeserialize(data.v, data.s).data
       })
     }

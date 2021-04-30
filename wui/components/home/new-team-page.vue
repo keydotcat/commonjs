@@ -25,7 +25,7 @@ export default {
   },
   methods: {
     submit() {
-      this.$store.dispatch('user/createTeam', this.team_name).then(tid => {
+      this.$store.dispatch('user/createTeam', this.team_name).then((tid) => {
         this.$emit('created', tid)
       })
     }

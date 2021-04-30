@@ -74,7 +74,7 @@ export default {
       this.passChecked = true
       this.passWorking = true
       if (this.isPassOk && this.isPassRepeatOk) {
-        this.$store.dispatch('user/changePassword', this.newPass).then(ok => {
+        this.$store.dispatch('user/changePassword', this.newPass).then((ok) => {
           this.passWorking = false
         })
       }

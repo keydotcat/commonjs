@@ -4,25 +4,25 @@ export default {
   loadInfo() {
     return request
       .get('/user')
-      .then(response => Promise.resolve(response.data))
-      .catch(error => Promise.reject(error))
+      .then((response) => Promise.resolve(response.data))
+      .catch((error) => Promise.reject(error))
   },
   createTeam(teamRequest) {
     return request
       .post('/team', teamRequest)
-      .then(response => Promise.resolve(response.data))
-      .catch(error => Promise.reject(error))
+      .then((response) => Promise.resolve(response.data))
+      .catch((error) => Promise.reject(error))
   },
   changeEmail(email) {
     return request
       .put('/user', { email: email })
-      .then(response => Promise.resolve(response.data))
-      .catch(error => Promise.reject(error))
+      .then((response) => Promise.resolve(response.data))
+      .catch((error) => Promise.reject(error))
   },
   changePassword(password, keys) {
     return request
       .put('/user', { password: password, user_keys: keys })
-      .then(response => Promise.resolve(response.data))
-      .catch(error => Promise.reject(error))
+      .then((response) => Promise.resolve(response.data))
+      .catch((error) => Promise.reject(error))
   }
 }

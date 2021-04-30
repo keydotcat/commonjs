@@ -61,8 +61,8 @@ const getters = {
   admins(state, getters, rootState) {
     var me = rootState.user.id
     return state.users
-      .filter(u => u.admin)
-      .map(u => {
+      .filter((u) => u.admin)
+      .map((u) => {
         return {
           id: u.id,
           label: `${u.fullname} (${u.id})`,
@@ -73,7 +73,7 @@ const getters = {
   },
   users(state, getters, rootState) {
     var me = rootState.user.id
-    return state.users.map(u => {
+    return state.users.map((u) => {
       return {
         id: u.id,
         label: `${u.fullname} (${u.id})`,
@@ -83,7 +83,7 @@ const getters = {
       }
     })
   },
-  vaults: state => {
+  vaults: (state) => {
     const vs = [...state.vaults].sort((a, b) => {
       if (a.id > b.id) {
         return 1
@@ -98,8 +98,8 @@ const getters = {
 }
 
 function promoteUser(context, uid, pubKey, vaultKeys) {
-  keyMgr.cipherVaultKeysForUser(vaultKeys, pubKey).then(userVaultKeys => {
-    teamSvc.promoteUser(context.state.id, uid, userVaultKeys).then(teamData => {
+  keyMgr.cipherVaultKeysForUser(vaultKeys, pubKey).then((userVaultKeys) => {
+    teamSvc.promoteUser(context.state.id, uid, userVaultKeys).then((teamData) => {
       context.commit(mt.TEAM_LOAD_USERS, teamData)
     })
   })
@@ -107,13 +107,13 @@ function promoteUser(context, uid, pubKey, vaultKeys) {
 
 const actions = {
   loadInfo(context, tid) {
-    teamSvc.loadInfo(tid).then(teamData => {
+    teamSvc.loadInfo(tid).then((teamData) => {
       context.commit(mt.TEAM_LOAD_INFO, teamData)
       context.dispatch('secrets/loadSecretsFromTeam', { teamId: teamData.id, vaults: teamData.vaults }, { root: true })
     })
   },
   invite(context, invite) {
-    teamSvc.invite(context.state.id, invite).then(teamData => {
+    teamSvc.invite(context.state.id, invite).then((teamData) => {
       context.commit(mt.TEAM_LOAD_INFO, teamData)
     })
   },
@@ -141,7 +141,7 @@ const actions = {
   },
   demoteUsers(context, users) {
     for (var i = 0; i < users.length; i++) {
-      teamSvc.demoteUser(context.state.id, users[i].id).then(teamData => {
+      teamSvc.demoteUser(context.state.id, users[i].id).then((teamData) => {
         context.commit(mt.TEAM_LOAD_USERS, teamData)
       })
     }
@@ -161,7 +161,7 @@ const actions = {
     for (var ui = 0; ui < users.length; ui++) {
       var genUK = (uid, pubKeys) => {
         return new Promise((resolve, reject) => {
-          keyMgr.cipherVaultKeysForUser(vaultKeys, pubKeys).then(userVaultKeys => {
+          keyMgr.cipherVaultKeysForUser(vaultKeys, pubKeys).then((userVaultKeys) => {
             resolve({ uid: uid, keys: userVaultKeys[vaultId] })
           })
         })
@@ -169,12 +169,12 @@ const actions = {
       promises.push(genUK(users[ui].id, users[ui].public_key))
     }
     var tid = context.state.id
-    Promise.all(promises).then(values => {
+    Promise.all(promises).then((values) => {
       var userKeys = {}
       for (var i = 0; i < values.length; i++) {
         userKeys[values[i].uid] = values[i].keys
       }
-      teamSvc.addUserToVault(tid, vaultId, userKeys).then(vaultData => {
+      teamSvc.addUserToVault(tid, vaultId, userKeys).then((vaultData) => {
         context.commit(mt.TEAM_LOAD_VAULT, { team: tid, vault: vaultData })
       })
     })
@@ -182,7 +182,7 @@ const actions = {
   removeUsersFromVault(context, { vaultId, users }) {
     var tid = context.state.id
     for (var i = 0; i < users.length; i++) {
-      teamSvc.removeUserFromVault(context.state.id, vaultId, users[i].id).then(vaultData => {
+      teamSvc.removeUserFromVault(context.state.id, vaultId, users[i].id).then((vaultData) => {
         context.commit(mt.TEAM_LOAD_VAULT, { team: tid, vault: vaultData })
       })
     }
@@ -195,12 +195,12 @@ const actions = {
       }
     }
     var tid = context.state.id
-    keyMgr.generateVaultKeys(admins).then(genKeys => {
+    keyMgr.generateVaultKeys(admins).then((genKeys) => {
       var vaultKeys = {
         public_key: genKeys.publicKey,
         keys: genKeys.keys
       }
-      teamSvc.createVault(context.state.id, name, vaultKeys).then(vaultData => {
+      teamSvc.createVault(context.state.id, name, vaultKeys).then((vaultData) => {
         context.commit(mt.TEAM_LOAD_VAULT, { team: tid, vault: vaultData })
       })
     })

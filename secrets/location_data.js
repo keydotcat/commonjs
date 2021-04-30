@@ -53,7 +53,7 @@ export default class LocationData {
     this._data.note = obj.note || ''
     this._data.creds = []
     var sourceCreds = obj.creds || []
-    sourceCreds.forEach(cred => {
+    sourceCreds.forEach((cred) => {
       this._data.creds.push(new Credential(cred))
     })
   }

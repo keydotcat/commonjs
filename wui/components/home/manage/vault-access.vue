@@ -9,9 +9,7 @@
       <h5 class="card-title">Access</h5>
       <div class="card-deck text-left">
         <div class="card box-shadow">
-          <div class="card-header">
-            Allowed
-          </div>
+          <div class="card-header">Allowed</div>
           <div class="card-body">
             <ul class="list-group list-group-flush">
               <li class="list-group-item" v-for="user in allowedUsers" :key="user.id">
@@ -28,9 +26,7 @@
           </div>
         </div>
         <div class="card box-shadow">
-          <div class="card-header">
-            Denied
-          </div>
+          <div class="card-header">Denied</div>
           <div class="card-body">
             <ul class="list-group list-group-flush">
               <li class="list-group-item" v-for="user in deniedUsers" :key="user.id">
@@ -69,7 +65,7 @@ export default {
   computed: {
     allowedUsers() {
       var vaultUsers = this.vault.users
-      return this.$store.getters[`team.${this.tid}/users`].filter(u => {
+      return this.$store.getters[`team.${this.tid}/users`].filter((u) => {
         for (var i = 0; i < vaultUsers.length; i++) {
           if (vaultUsers[i] === u.id) {
             return true
@@ -80,7 +76,7 @@ export default {
     },
     deniedUsers() {
       var vaultUsers = this.vault.users
-      return this.$store.getters[`team.${this.tid}/users`].filter(u => {
+      return this.$store.getters[`team.${this.tid}/users`].filter((u) => {
         for (var i = 0; i < vaultUsers.length; i++) {
           if (vaultUsers[i] === u.id) {
             return false

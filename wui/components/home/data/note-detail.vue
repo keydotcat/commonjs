@@ -19,9 +19,9 @@
             <div class="form-group">
               <label>Choose which vault to store the secret </label>
               <select class="form-control form-control-sm" v-model="targetVault">
-                <option :value="{ tid: vt.tid, vid: vt.vid }" v-for="vt in allVaults"
-                  >{{ vt.teamName }} / {{ vt.vid }} ({{ vt.numPeople }} {{ vt.numPeople > 1 ? 'users' : 'user' }})</option
-                >
+                <option :value="{ tid: vt.tid, vid: vt.vid }" v-for="vt in allVaults">
+                  {{ vt.teamName }} / {{ vt.vid }} ({{ vt.numPeople }} {{ vt.numPeople > 1 ? 'users' : 'user' }})
+                </option>
               </select>
             </div>
           </h6>
@@ -75,8 +75,8 @@ export default {
   computed: {
     allVaults() {
       var vaults = []
-      this.$store.getters['user/team_ids'].forEach(tid => {
-        this.$store.state[`team.${tid}`].vaults.forEach(vault => {
+      this.$store.getters['user/team_ids'].forEach((tid) => {
+        this.$store.state[`team.${tid}`].vaults.forEach((vault) => {
           vaults.push({
             tid: tid,
             vid: vault.id,
@@ -112,7 +112,7 @@ export default {
         action = 'secrets/update'
         args.secretId = this.secret.secretId
       }
-      this.$store.dispatch(action, args).then(secret => {
+      this.$store.dispatch(action, args).then((secret) => {
         this.$emit('done')
       })
     },

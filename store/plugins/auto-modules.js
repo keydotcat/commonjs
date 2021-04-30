@@ -27,7 +27,7 @@ class ModuleLoader {
   }
 }
 
-export default store => {
+export default (store) => {
   var ml = new ModuleLoader(store)
   store.subscribe((mutation, state) => {
     if (mutation.type === 'user/' + mt.USER_LOAD_INFO) {

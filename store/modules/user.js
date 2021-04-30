@@ -36,7 +36,7 @@ const mutations = {
 }
 
 const getters = {
-  team_ids: state => {
+  team_ids: (state) => {
     const teams = [...state.teams].sort((a, b) => {
       if (a.name > b.name) {
         return 1
@@ -46,9 +46,9 @@ const getters = {
       }
       return 0
     })
-    return teams.map(team => team.id)
+    return teams.map((team) => team.id)
   },
-  teams: state => {
+  teams: (state) => {
     const teams = [...state.teams].sort((a, b) => {
       if (a.name > b.name) {
         return 1
@@ -60,10 +60,17 @@ const getters = {
     })
     return teams
   },
+  teamMap: (state) => {
+    var teamMap = {}
+    state.teams.forEach((team) => {
+      teamMap[team.id] = team
+    })
+    return teamMap
+  },
   allVaults: (state, getters, rootState, rootGetters) => {
     var vaults = []
-    getters['team_ids'].forEach(tid => {
-      rootState[`team.${tid}`].vaults.forEach(vault => {
+    getters['team_ids'].forEach((tid) => {
+      rootState[`team.${tid}`].vaults.forEach((vault) => {
         vaults.push({
           tid: tid,
           vid: vault.id,
@@ -77,7 +84,7 @@ const getters = {
 
 const actions = {
   loadInfo(context) {
-    return userSvc.loadInfo().then(info => {
+    return userSvc.loadInfo().then((info) => {
       context.commit(mt.USER_LOAD_INFO, info)
       return { ok: true }
     })
@@ -85,7 +92,7 @@ const actions = {
   createTeam(context, payload) {
     var req = {}
     req[context.state.id] = context.state.publicKeys
-    return keyMgr.generateVaultKeys(req).then(vaultKeys => {
+    return keyMgr.generateVaultKeys(req).then((vaultKeys) => {
       return userSvc
         .createTeam({
           name: payload,
@@ -94,7 +101,7 @@ const actions = {
             keys: vaultKeys.keys
           }
         })
-        .then(teamInfo => {
+        .then((teamInfo) => {
           toastMgr.success('Team created')
           return context.dispatch('loadInfo').then(() => {
             return teamInfo.id
@@ -103,14 +110,14 @@ const actions = {
     })
   },
   changeEmail(context, email) {
-    userSvc.changeEmail(email).then(info => {
+    userSvc.changeEmail(email).then((info) => {
       toastMgr.success('Email change requested')
     })
   },
   changePassword(context, password) {
     return new Promise((resolve, reject) => {
-      keyMgr.closeKeysWithPassword(context.state.id, password).then(data => {
-        userSvc.changePassword(data.password, data.keys).then(info => {
+      keyMgr.closeKeysWithPassword(context.state.id, password).then((data) => {
+        userSvc.changePassword(data.password, data.keys).then((info) => {
           toastMgr.success('Password changed')
         })
         resolve(data)

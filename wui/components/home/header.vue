@@ -19,9 +19,7 @@
           <auto-logout></auto-logout>
         </li>
         <li class="nav-item dropdown" :class="{ active: section == 'data' }">
-          <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">
-            Your data
-          </a>
+          <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown"> Your data </a>
           <div class="dropdown-menu dropdown-menu-right">
             <a class="dropdown-item text-right" href="#" @click.prevent="goto('data', 'locations')">Locations</a>
             <a class="dropdown-item text-right" href="#" @click.prevent="goto('data', 'notes')">Notes</a>
@@ -35,6 +33,7 @@
             <h6 class="dropdown-header text-right">User</h6>
             <a class="dropdown-item text-right" href="#" @click.prevent="goto('user', 'info')">Information</a>
             <a class="dropdown-item text-right" href="#" @click.prevent="goto('user', 'import')">Import</a>
+            <a class="dropdown-item text-right" href="#" @click.prevent="goto('user', 'export')">Export</a>
             <div class="dropdown-divider"></div>
             <h6 class="dropdown-header text-right">Teams</h6>
             <a class="dropdown-item text-right" v-for="tid in $store.getters['user/team_ids']" href="#" @click.prevent="goto('team', tid)">

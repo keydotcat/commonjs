@@ -47,7 +47,7 @@ const mutations = {
 }
 
 const getters = {
-  url: state => {
+  url: (state) => {
     if (process.env.NODE_ENV === 'development') {
       return 'http://localhost:23764/api'
     }
@@ -82,11 +82,11 @@ const actions = {
     }
     return request
       .post('/auth/register', registerPayload)
-      .then(response => {
+      .then((response) => {
         context.commit(mt.PUB_STOP_WORK)
         return Promise.resolve(true)
       })
-      .catch(err => {
+      .catch((err) => {
         context.commit(mt.PUB_REGISTER_KO, err.response)
       })
   },
@@ -95,7 +95,7 @@ const actions = {
     context.commit(mt.PUB_START_WORK)
     return request
       .get('/auth/confirm_email/' + payload.token)
-      .then(response => {
+      .then((response) => {
         context.commit(mt.PUB_STOP_WORK)
         return Promise.resolve(true)
       })
@@ -108,7 +108,7 @@ const actions = {
     context.commit(mt.PUB_START_WORK)
     return request
       .post('/auth/request_confirmation_token', { email: payload.email })
-      .then(response => {
+      .then((response) => {
         context.commit(mt.PUB_STOP_WORK)
         return Promise.resolve(true)
       })

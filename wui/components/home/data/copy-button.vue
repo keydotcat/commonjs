@@ -23,11 +23,11 @@ export default {
     $(this.$el).tooltip('disable')
     var self = this
     this.btn = new Clip(this.$el, {
-      text: function(trigger) {
+      text: function (trigger) {
         return self.copy
       }
     })
-    this.btn.on('success', e => {
+    this.btn.on('success', (e) => {
       self.$emit('copied', this.$el)
       $(this.$el).tooltip('enable')
       $(this.$el).tooltip('show')

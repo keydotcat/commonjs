@@ -16,7 +16,7 @@ const state = () => {
 }
 
 function removeLabelsFromState(state, secret) {
-  secret.data.labels.forEach(label => {
+  secret.data.labels.forEach((label) => {
     if (!(label in state.labels)) {
       return
     }
@@ -32,7 +32,7 @@ function removeLabelsFromState(state, secret) {
 }
 
 function addLabelsToState(state, secret) {
-  secret.data.labels.forEach(label => {
+  secret.data.labels.forEach((label) => {
     if (!(label in state.labels)) {
       Vue.set(state.labels, label, [])
     }
@@ -88,7 +88,7 @@ function deleteVaultSecrets(state, teamId, vaultId) {
       removeLabelsFromState(state, secretObj)
     }
   }
-  toDelete.forEach(key => {
+  toDelete.forEach((key) => {
     Vue.delete(state.secrets, key)
   })
 }
@@ -106,7 +106,7 @@ const mutations = {
     addSecret(state, teamId, secret, openData)
   },
   [mt.SECRET_SET_BULK](state, secretList) {
-    secretList.forEach(data => {
+    secretList.forEach((data) => {
       addSecret(state, data.teamId, data.secret, data.openData)
     })
   },
@@ -128,7 +128,7 @@ const mutations = {
 function filterPass(secret, filter) {
   if (filter.labels && filter.labels.length > 0) {
     var found =
-      secret.data.labels.filter(label => {
+      secret.data.labels.filter((label) => {
         return filter.labels.indexOf(label) > -1
       }).length > 0
     if (!found) {
@@ -149,7 +149,7 @@ function filterPass(secret, filter) {
 }
 
 const getters = {
-  filteredSecrets: state => {
+  filteredSecrets: (state) => {
     return (type, filter) => {
       var filtered = []
       for (var sid in state.secrets) {
@@ -161,11 +161,11 @@ const getters = {
       return filtered
     }
   },
-  allLabels: state => {
+  allLabels: (state) => {
     return Object.keys(state.labels).sort()
   },
-  forUrl: state => {
-    return origin => {
+  forUrl: (state) => {
+    return (origin) => {
       var oD = UrlParse.getDomain(origin)
       if (!oD) {
         return []
@@ -187,7 +187,7 @@ var gVKeys = {}
 function getVaultKeyFromList(vaults, tid, vid) {
   var key = `${tid}.${vid}`
   if (!(key in gVKeys)) {
-    vaults.forEach(vault => {
+    vaults.forEach((vault) => {
       if (vid === vault.id) {
         gVKeys[key] = {
           publicKeys: vault.public_key,
@@ -207,10 +207,10 @@ function updateOrCreate(context, ftor, tid, vid, sid, data, newTeamId, newVaultI
     var targetTeam = newTeamId || tid
     var targetVault = newVaultId || vid
     var vKeys = getVaultKeyFromList(context.rootState[`team.${targetTeam}`].vaults, targetTeam, targetVault)
-    keyMgr.serializeAndClose(vKeys, data.cloneAsObject()).then(closedData => {
+    keyMgr.serializeAndClose(vKeys, data.cloneAsObject()).then((closedData) => {
       ftor({ teamId: tid, vaultId: vid, secretId: sid, closedData: closedData, newTeamId: newTeamId, newVaultId: newVaultId })
-        .then(secret => {
-          keyMgr.openAndDeserialize(vKeys, secret.data).then(openData => {
+        .then((secret) => {
+          keyMgr.openAndDeserialize(vKeys, secret.data).then((openData) => {
             if (newTeamId && newVaultId) {
               context.commit(mt.SECRET_UNSET, { teamId: tid, vaultId: vid, secretId: sid })
             }
@@ -218,7 +218,7 @@ function updateOrCreate(context, ftor, tid, vid, sid, data, newTeamId, newVaultI
             resolve(secret)
           })
         })
-        .catch(err => {
+        .catch((err) => {
           reject(err)
         })
     })
@@ -226,14 +226,14 @@ function updateOrCreate(context, ftor, tid, vid, sid, data, newTeamId, newVaultI
 }
 
 function unpackTeamSecrets(context, teamId, vaults, resp) {
-  var vsa = resp.secrets.map(secret => {
+  var vsa = resp.secrets.map((secret) => {
     return {
       v: getVaultKeyFromList(vaults, teamId, secret.vault),
       s: secret.data
     }
   })
   context.commit(mt.SECRET_SET_LOADING, 1)
-  return keyMgr.openAndDeserializeBulk(vsa).then(dataList => {
+  return keyMgr.openAndDeserializeBulk(vsa).then((dataList) => {
     dataList.forEach((data, ip) => {
       context.commit(mt.SECRET_SET, { teamId: teamId, secret: resp.secrets[ip], openData: data })
     })
@@ -246,8 +246,8 @@ async function reloadVaultSecrets(context, teamId, vaultId, vaultVersion) {
   var vKeys = getVaultKeyFromList(context.rootState[`team.${teamId}`].vaults, teamId, vaultId)
   context.commit(mt.SECRET_PURGE_VAULT, { teamId, vaultId })
   var secretsResp = await teamSvc.loadVaultSecrets(teamId, vaultId)
-  secretsResp.secrets.forEach(secret => {
-    keyMgr.openAndDeserialize(vKeys, secret.data).then(opened => {
+  secretsResp.secrets.forEach((secret) => {
+    keyMgr.openAndDeserialize(vKeys, secret.data).then((opened) => {
       context.commit(mt.SECRET_SET, { teamId: teamId, secret: secret, openData: opened })
     })
   })
@@ -256,15 +256,15 @@ async function reloadVaultSecrets(context, teamId, vaultId, vaultVersion) {
 
 const actions = {
   loadSecretsFromTeam(context, { teamId, vaults }) {
-    teamSvc.loadSecrets(teamId).then(resp => {
-      var vsa = resp.secrets.map(secret => {
+    teamSvc.loadSecrets(teamId).then((resp) => {
+      var vsa = resp.secrets.map((secret) => {
         return {
           v: getVaultKeyFromList(vaults, teamId, secret.vault),
           s: secret.data
         }
       })
       context.commit(mt.SECRET_SET_LOADING, vsa.length)
-      keyMgr.openAndDeserializeBulk(vsa).then(dataList => {
+      keyMgr.openAndDeserializeBulk(vsa).then((dataList) => {
         context.commit(
           mt.SECRET_SET_BULK,
           dataList.map((data, ip) => {
@@ -283,26 +283,26 @@ const actions = {
   },
   createList(context, { teamId, vaultId, secretList }) {
     var vKeys = getVaultKeyFromList(context.rootState[`team.${teamId}`].vaults, teamId, vaultId)
-    var proms = secretList.map(data => {
+    var proms = secretList.map((data) => {
       return keyMgr.serializeAndClose(vKeys, data.cloneAsObject())
     })
-    return Promise.all(proms).then(closedList => {
-      var payload = closedList.map(c => {
+    return Promise.all(proms).then((closedList) => {
+      var payload = closedList.map((c) => {
         return { data: c }
       })
-      return teamSvc.createSecretList({ teamId: teamId, vaultId: vaultId, payload: payload }).then(resp => {
+      return teamSvc.createSecretList({ teamId: teamId, vaultId: vaultId, payload: payload }).then((resp) => {
         return unpackTeamSecrets(context, teamId, context.rootState[`team.${teamId}`].vaults, resp)
       })
     })
   },
   delete(context, { teamId, vaultId, secretId }) {
-    teamSvc.deleteSecret(teamId, vaultId, secretId).then(resp => {
+    teamSvc.deleteSecret(teamId, vaultId, secretId).then((resp) => {
       context.commit(mt.SECRET_UNSET, { teamId: teamId, vaultId: vaultId, secretId: secretId })
     })
   },
   setFromServer(context, { teamId, vaultId, secret }) {
     var vKeys = getVaultKeyFromList(context.rootState[`team.${teamId}`].vaults, teamId, vaultId)
-    keyMgr.openAndDeserialize(vKeys, secret.data).then(opened => {
+    keyMgr.openAndDeserialize(vKeys, secret.data).then((opened) => {
       context.commit(mt.SECRET_SET, { teamId: teamId, secret: secret, openData: opened })
     })
   },
@@ -311,7 +311,7 @@ const actions = {
   },
   reload(context) {
     context.commit(mt.SECRET_CLEAR_ALL)
-    context.commit('user/'+mt.USER_TEAMS_RELOAD, {}, { root: true })
+    context.commit('user/' + mt.USER_TEAMS_RELOAD, {}, { root: true })
   },
   async syncWhenNeeded(context, teamVaultIds) {
     var checked = []
@@ -336,7 +336,7 @@ const actions = {
         toDel.push(key)
       }
     }
-    toDel.forEach(key => {
+    toDel.forEach((key) => {
       var sp = key.split('/')
       var tid = sp[0]
       var vid = sp.splice(1).join('/')
