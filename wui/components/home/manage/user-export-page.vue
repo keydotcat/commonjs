@@ -69,8 +69,8 @@ export default {
       }
       var credentials = new kdbxweb.Credentials(kdbxweb.ProtectedValue.fromString(this.pass))
       var newDb = kdbxweb.Kdbx.create(credentials, this.$store.state.user.id + ' db')
-      newDb.setVersion(3);
-      newDb.setKdf(kdbxweb.Consts.KdfId.Aes);
+      newDb.setVersion(3)
+      newDb.setKdf(kdbxweb.Consts.KdfId.Aes)
       var vaultFilter = this.selectedVaults.map((v) => {
         return `${v.tid}/${v.vid}`
       })
